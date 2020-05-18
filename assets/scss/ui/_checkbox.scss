@@ -1,0 +1,32 @@
+input[type="checkbox"] {
+  display: none !important;
+
+  & + label {
+    position: relative;
+    display: inline-block;
+    padding-left: 25px;
+    min-height: 20px;
+    line-height: 20px;
+    margin: 8px 4px;
+    cursor: pointer;
+    &::before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 1px solid $color-gray;
+      color: transparent;
+      border-radius: 2px;
+      content: "\f00c";
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      text-align: center;
+      transition: all ease 0.1s;
+    }
+  }
+  &:checked + label::before {
+    color: $color-main;
+  }
+}

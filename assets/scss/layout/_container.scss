@@ -1,0 +1,8 @@
+.container {
+  width: 100%;
+  margin: 16px 0;
+  padding: 0 8vw;
+  @include mq-max("md") {
+    padding: 0 5vw;
+  }
+}

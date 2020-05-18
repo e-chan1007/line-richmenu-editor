@@ -1,0 +1,40 @@
+.select-wrap {
+  position: relative;
+  &.has-icon {
+    i.fas,
+    i.far {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+    }
+    select {
+      padding: 8px 16px 8px 36px;
+    }
+  }
+  select {
+    padding: 6px 12px;
+    border: 1px solid $color-gray;
+    border-radius: 4px;
+    background-color: $color-white;
+    transition: all ease 0.2s;
+    width: 100%;
+
+    &:focus:not([disabled]) {
+      border: 1px solid $color-main;
+      box-shadow: 0 0 4px 0 $color-main;
+      outline-style: none;
+    }
+
+    &[disabled] {
+      background-color: $color-gray-bg;
+    }
+  }
+  &::after {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    content: "\f0d7";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+  }
+}

@@ -1,22 +1,40 @@
-# richmenu-editor
+# LINE リッチメニューエディタ
 
-> LINE RichMenu Editor(unofficial)
+リッチメニューをブラウザ上で編集できるツールです。
 
-## Build Setup
+## 使い方
 
-```bash
-# install dependencies
-$ yarn install
+master ブランチに push したものがそのまま[本番サイト](https://richmenu.app.e-chan.cf/)にデプロイされます。
+開発環境で実行される際は `npm run dev` もしくは `yarn dev` コマンドをルートディレクトリで実行してください。
 
-# serve with hot reload at localhost:3000
-$ yarn dev
+## 機能
 
-# build for production and launch server
-$ yarn build
-$ yarn start
+- リッチメニューオブジェクトの構築
+- リッチメニューオブジェクトのプレビュー(クリックで試せます)
+- JSON ファイルのインポート/エクスポート
+- API へのアクセス
 
-# generate static project
-$ yarn generate
-```
+※API へのアクセスに必要なチャンネルアクセストークンはあらかじめ取得しておいてください。
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+# LINE Richmenu Editor
+
+The tool which can edit rich menus on your browser.
+
+## How to use
+
+The production page is deployed on [there](https://richmenu.app.e-chan.cf/).
+It's built from the master branch.
+
+When you want to use this on your computer, run the command `npm run dev` or `yarn dev` in the root directory.
+
+## Features
+
+You can
+
+- Build rich menus
+- Preview rich menus
+- Import / Export JSON file
+- Access to API\*
+  with this tool.
+
+\*You have to get an channel-access-token from LINE before you use.
