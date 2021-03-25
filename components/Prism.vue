@@ -1,10 +1,12 @@
 <template>
-  <div class="line-numbers">
+  <div class="line-numbers" tabindex="-1" @keydown="$emit('keydown', $event)">
     <pre><code ref="code" :class="['lang-' + lang]" >{{value}}</code></pre>
   </div>
 </template>
 
 <script>
+import * as richmenu from "~/assets/js/richmenu-object.ts";
+
 export default {
   props: {
     lang: {

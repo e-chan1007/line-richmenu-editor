@@ -19,21 +19,15 @@
             ref="alertWrongImage"
             :opening="wrongImage.length > 0"
             color="danger"
-          >エラー:
+            >エラー:
             <ul>
-              <li
-                v-for="(error, index) in wrongImage"
-                :key="index"
-              >
+              <li v-for="(error, index) in wrongImage" :key="index">
                 {{ error }}
               </li>
             </ul>
           </e-alert>
 
-          <e-form-group
-            label="メニュー名"
-            :required="true"
-          >
+          <e-form-group label="メニュー名" :required="true">
             <input
               v-model.trim="richMenu.name"
               type="text"
@@ -42,10 +36,7 @@
             />
           </e-form-group>
 
-          <e-form-group
-            label="開閉ボタンのテキスト"
-            :required="true"
-          >
+          <e-form-group label="開閉ボタンのテキスト" :required="true">
             <input
               v-model.trim="richMenu.chatBarText"
               type="text"
@@ -81,21 +72,17 @@
           </e-form-group>
 
           <e-collapsable-list>
-            <template slot="header">タップ領域 ({{ richMenu.areas.length }} / 20)</template>
+            <template slot="header"
+              >タップ領域 ({{ richMenu.areas.length }} / 20)</template
+            >
 
             <template slot="header-right">
-              <button
-                :disabled="richMenu.areas.length === 20"
-                @click="addArea"
-              >
+              <button :disabled="richMenu.areas.length === 20" @click="addArea">
                 <i class="fas fa-plus"></i>&nbsp;追加
               </button>
             </template>
 
-            <template
-              v-for="(area, index) in richMenu.areas"
-              slot="content"
-            >
+            <template v-for="(area, index) in richMenu.areas" slot="content">
               <e-collapsable-list-item :key="index">
                 <template slot="header">
                   <i :class="area.action.type.icon"></i>&nbsp;
@@ -103,10 +90,7 @@
                   {{ area.action.type.name }}アクション
                 </template>
                 <template slot="header-right">
-                  <button
-                    class="is-danger"
-                    @click="deleteArea(index)"
-                  >
+                  <button class="is-danger" @click="deleteArea(index)">
                     <i class="fas fa-trash"></i>&nbsp;削除
                   </button>
                 </template>
@@ -121,39 +105,43 @@
             </template>
           </e-collapsable-list>
           <div class="form-row button-group">
-            <a
-              class="button"
-              @click="copyJson"
+            <a class="button" @click="copyJson">
+              <i class="fas fa-clipboard"></i>&nbsp;コピー</a
             >
-              <i class="fas fa-clipboard"></i>&nbsp;コピー</a>
-            <a
-              class="button"
-              @click="reset"
+            <a class="button" @click="loadJsonFromClipboard">
+              <i class="fas fa-clipboard"></i>&nbsp;ペースト</a
             >
-              <i class="fas fa-trash"></i>&nbsp;リセット</a>
-            <label class="button for-upload"><i class="fas fa-file-import"></i>&nbsp;インポート<input
+            <a class="button" @click="reset">
+              <i class="fas fa-trash"></i>&nbsp;リセット</a
+            >
+            <label class="button for-upload"
+              ><i class="fas fa-file-import"></i>&nbsp;インポート<input
                 type="file"
                 accept="application/json"
                 @change="loadJson"
-              /></label>
-            <a
-              class="button"
-              @click="downloadJson"
+            /></label>
+            <a class="button" @click="downloadJson">
+              <i class="fas fa-file-export"></i>&nbsp;エクスポート</a
             >
-              <i class="fas fa-file-export"></i>&nbsp;エクスポート</a>
-            <a
-              class="button"
-              @click="showsApiModal = true"
+            <a class="button" @click="showsApiModal = true">
+              <i class="fas fa-terminal"></i>&nbsp;API</a
             >
-              <i class="fas fa-terminal"></i>&nbsp;API</a>
           </div>
           <e-alert ref="alertCopied">
             コピーしました
+          </e-alert>
+          <e-alert
+            ref="alertWrongJSON"
+            :opening="loadedInvalidJSON"
+            color="danger"
+            >エラー:
+            ファイル形式が間違っているか、リッチメニューではありません。
           </e-alert>
           <prism
             lang="json"
             :value="json"
             class="prism-100per"
+            @keydown="onKeyDownOnPrism"
           ></prism>
         </div>
 
@@ -179,39 +167,23 @@
           </div>
         </div>
 
-        <e-modal
-          :condition="showsApiModal"
-          @close="showsApiModal = false"
-        >
+        <e-modal :condition="showsApiModal" @close="showsApiModal = false">
           <h1><i class="fas fa-terminal"></i>&nbsp;API操作画面</h1>
           <h3><i class="fas fa-user"></i>&nbsp;API情報</h3>
-          <e-form-group
-            label="チャンネルアクセストークン"
-            :required="true"
-          >
-            <input
-              v-model.trim="api.accessToken"
-              type="text"
-              required
-            />
+          <e-form-group label="チャンネルアクセストークン" :required="true">
+            <input v-model.trim="api.accessToken" type="text" required />
           </e-form-group>
           <e-form-group label="リッチメニューID">
-            <input
-              v-model.trim="api.richMenuId"
-              type="text"
-            />
+            <input v-model.trim="api.richMenuId" type="text" />
           </e-form-group>
 
           <e-alert
             ref="alertWrongApiParameter"
             :opening="wrongApiParameter.length > 0"
             color="danger"
-          >エラー:
+            >エラー:
             <ul>
-              <li
-                v-for="(error, index) in wrongApiParameter"
-                :key="index"
-              >
+              <li v-for="(error, index) in wrongApiParameter" :key="index">
                 {{ error }}
               </li>
             </ul>
@@ -219,32 +191,21 @@
           <h3><i class="fas fa-paper-plane"></i>&nbsp;操作</h3>
 
           <div class="button-group">
-            <a
-              class="button"
-              @click="callApiToCreate"
+            <a class="button" @click="callApiToCreate">
+              <i class="fas fa-cloud-upload-alt"></i>&nbsp;アップロード</a
             >
-              <i class="fas fa-cloud-upload-alt"></i>&nbsp;アップロード</a>
-            <a
-              class="button"
-              @click="callApiToGet"
+            <a class="button" @click="callApiToGet">
+              <i class="fas fa-cloud-download-alt"></i>&nbsp;ダウンロード</a
             >
-              <i class="fas fa-cloud-download-alt"></i>&nbsp;ダウンロード</a>
-            <a
-              class="button"
-              @click="callApiToSetDefault"
+            <a class="button" @click="callApiToSetDefault">
+              <i class="fas fa-cog"></i>&nbsp;デフォルトに設定</a
             >
-              <i class="fas fa-cog"></i>&nbsp;デフォルトに設定</a>
-            <a
-              class="button"
-              @click="callApiToDelete"
+            <a class="button" @click="callApiToDelete">
+              <i class="fas fa-trash"></i>&nbsp;削除</a
             >
-              <i class="fas fa-trash"></i>&nbsp;削除</a>
           </div>
           <div style="margin: 16px 0; max-height: 8em; overflow-y: scroll;">
-            <prism
-              lang="json"
-              :value="api.log"
-            ></prism>
+            <prism lang="json" :value="api.log"></prism>
           </div>
         </e-modal>
       </div>
@@ -266,6 +227,7 @@ export default {
       wrongImage: [],
       wrongApiParameter: [],
       showsApiModal: false,
+      loadedInvalidJSON: false,
       api: {
         accessToken: "",
         richMenuId: "",
@@ -338,7 +300,11 @@ export default {
       }
       result[propertyArray[propertyArray.length - 1]] = value;
     },
-
+    onKeyDownOnPrism(event) {
+      if (event.ctrlKey && event.code === "KeyV") {
+        this.loadJsonFromClipboard();
+      }
+    },
     onImageSelected(event) {
       if (event.target.files.length < 1) return;
       const file = event.target.files[0];
@@ -487,6 +453,16 @@ export default {
       navigator.clipboard.writeText(this.json);
       this.$refs.alertCopied.open = true;
     },
+    loadJsonFromClipboard() {
+      navigator.clipboard.readText().then((text) => {
+        try {
+          this.jsonToRichMenu(JSON.parse(text));
+          this.loadedInvalidJSON = false;
+        } catch (e) {
+          this.loadedInvalidJSON = true;
+        }
+      });
+    },
     loadJson(event) {
       if (event.target.files.length < 1) return;
       const file = event.target.files[0];
@@ -509,33 +485,38 @@ export default {
       aToDownload.click();
     },
     jsonToRichMenu(json) {
-      const richMenuObject = json;
-      this.richMenu = new richmenu.RichMenuObject();
-      this.richMenu.size = new richmenu.RichMenuSize(
-        richMenuObject.size.width,
-        richMenuObject.size.height
-      );
-      this.richMenu.selected = richMenuObject.selected;
-      this.richMenu.name = richMenuObject.name;
-      this.richMenu.chatBarText = richMenuObject.chatBarText;
-      richMenuObject.areas.forEach((area) => {
-        const richMenuAreaBounds = new richmenu.RichMenuAreaBounds(
-          area.bounds.x,
-          area.bounds.y,
-          area.bounds.width,
-          area.bounds.height
+      try {
+        const richMenuObject = json;
+        this.richMenu = new richmenu.RichMenuObject();
+        this.richMenu.size = new richmenu.RichMenuSize(
+          richMenuObject.size.width,
+          richMenuObject.size.height
         );
-        const richMenuAction = new richmenu.RichMenuAction(area.action.type);
-        Object.keys(area.action).forEach((key) => {
-          if (key !== "type") richMenuAction[key] = area.action[key];
+        this.richMenu.selected = richMenuObject.selected;
+        this.richMenu.name = richMenuObject.name;
+        this.richMenu.chatBarText = richMenuObject.chatBarText;
+        richMenuObject.areas.forEach((area) => {
+          const richMenuAreaBounds = new richmenu.RichMenuAreaBounds(
+            area.bounds.x,
+            area.bounds.y,
+            area.bounds.width,
+            area.bounds.height
+          );
+          const richMenuAction = new richmenu.RichMenuAction(area.action.type);
+          Object.keys(area.action).forEach((key) => {
+            if (key !== "type") richMenuAction[key] = area.action[key];
+          });
+          const richMenuArea = new richmenu.RichMenuArea(
+            richMenuAreaBounds,
+            richMenuAction
+          );
+          this.richMenu.areas.push(richMenuArea);
         });
-        const richMenuArea = new richmenu.RichMenuArea(
-          richMenuAreaBounds,
-          richMenuAction
-        );
-        this.richMenu.areas.push(richMenuArea);
-      });
-      this.onUpdate();
+        this.loadedInvalidJSON = false;
+        this.onUpdate();
+      } catch (e) {
+        this.loadedInvalidJSON = true;
+      }
     },
     callApiToCreate() {
       this.wrongApiParameter.splice(0, this.wrongApiParameter.length);
