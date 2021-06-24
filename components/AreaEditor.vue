@@ -1,10 +1,7 @@
 <template>
   <div>
     <div class="form-row has-label between">
-      <e-form-group
-        label="起点X座標"
-        :short="true"
-      >
+      <e-form-group label="起点X座標" :short="true">
         <input
           v-model.number="area.bounds.x"
           type="number"
@@ -13,10 +10,7 @@
           required
         />
       </e-form-group>
-      <e-form-group
-        label="起点Y座標"
-        :short="true"
-      >
+      <e-form-group label="起点Y座標" :short="true">
         <input
           v-model.number="area.bounds.y"
           type="number"
@@ -25,10 +19,7 @@
           required
         />
       </e-form-group>
-      <e-form-group
-        label="幅"
-        :short="true"
-      >
+      <e-form-group label="幅" :short="true">
         <input
           v-model.number="area.bounds.width"
           type="number"
@@ -37,10 +28,7 @@
           required
         />
       </e-form-group>
-      <e-form-group
-        label="高さ"
-        :short="true"
-      >
+      <e-form-group label="高さ" :short="true">
         <input
           v-model.number="area.bounds.height"
           type="number"
@@ -68,17 +56,14 @@
     </e-form-group>
 
     <e-form-group label="ラベル">
-      <input
-        v-model.trim="area.action.label"
-        type="text"
-        maxlength="20"
-      />
+      <input v-model.trim="area.action.label" type="text" maxlength="20" />
     </e-form-group>
 
     <e-form-group
       v-if="
         area.action.type === RichMenuActionType.postback ||
-          area.action.type === RichMenuActionType.datetimepicker
+          area.action.type === RichMenuActionType.datetimepicker ||
+          area.action.type === RichMenuActionType.richmenuswitch
       "
       label="Webhookに返す文字列"
       :required="true"
@@ -150,10 +135,7 @@
       label="モード"
       type="select"
     >
-      <select
-        v-model="area.action.mode"
-        @change="onUpdate"
-      >
+      <select v-model="area.action.mode" @change="onUpdate">
         <option value="date">
           日付のみ
         </option>
@@ -202,6 +184,19 @@
           area.action.mode === 'datetime' ? 'datetime-local' : area.action.mode
         "
         @input="setDateTime('min', $event)"
+      />
+    </e-form-group>
+
+    <e-form-group
+      v-if="area.action.type === RichMenuActionType.richmenuswitch"
+      label="リッチメニューエイリアス"
+      :required="true"
+    >
+      <input
+        v-model.trim="area.action.richMenuAliasId"
+        type="text"
+        required
+        maxlength="100"
       />
     </e-form-group>
   </div>

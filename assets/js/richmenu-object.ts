@@ -79,6 +79,11 @@ const RichMenuActionType: IRichMenuActionType = {
     id: "datetimepicker",
     name: "日時選択",
     icon: "fas fa-calendar-day"
+  },
+  richmenuswitch: {
+    id: "richmenuswitch",
+    name: "リッチメニュー切替",
+    icon: "fas fa-exchange-alt"
   }
 };
 
@@ -90,10 +95,11 @@ class RichMenuAction {
   public text?: String;
   public uri?: String;
   public altUri: { desktop: String };
-  public mode: String = "date";
+  public mode?: String = "date";
   public initial?: String;
   public max?: String;
   public min?: String;
+  public richMenuAliasId?: String;
 
   constructor(type: string = "") {
     this.type = RichMenuActionType[type];

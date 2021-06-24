@@ -1,23 +1,14 @@
 <template>
-  <div
-    :class="{ 'e-form-group': true, 'is-short': short }"
-    :data-type="type"
-  >
+  <div :class="{ 'e-form-group': true, 'is-short': short }" :data-type="type">
     <template v-if="type === 'file'">
       <label>
-        <span
-          v-if="required"
-          class="label-required"
-        >必須</span>
+        <span v-if="required" class="label-required">必須</span>
         {{ label }}
       </label>
       <div class="form">
         <label class="is-input-file">
-          <slot /><input
-            type="file"
-            :accept="fileAccept"
-            @change="fileChanged"
-          /></label>
+          <slot /><input type="file" :accept="fileAccept" @change="fileChanged"
+        /></label>
       </div>
     </template>
     <template v-else-if="type === 'checkbox'">
@@ -25,27 +16,21 @@
     </template>
     <template v-else-if="type === 'select'">
       <label>
-        <span
-          v-if="required"
-          class="label-required"
-        >必須</span>
-        {{ label }}</label>
+        <span v-if="required" class="label-required">必須</span>
+        {{ label }}</label
+      >
       <div class="form">
         <div :class="{ 'select-wrap': true, 'has-icon': selectIcon != null }">
-          <i
-            v-if="selectIcon != null"
-            :class="selectIcon"
-          ></i>
+          <i v-if="selectIcon != null" :class="selectIcon"></i>
           <slot />
         </div>
       </div>
     </template>
     <template v-else>
-      <label><span
-          v-if="required"
-          class="label-required"
-        >必須</span>
-        {{ label }}</label>
+      <label
+        ><span v-if="required" class="label-required">必須</span>
+        {{ label }}</label
+      >
       <div class="form">
         <slot />
       </div>
@@ -62,7 +47,7 @@ export default {
     },
     type: {
       type: String,
-      default: ""
+      default: "text"
     },
     short: {
       type: Boolean,

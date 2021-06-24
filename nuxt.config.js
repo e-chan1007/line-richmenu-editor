@@ -2,7 +2,6 @@ const bodyParser = require("body-parser");
 
 module.exports = {
   mode: "spa",
-
   head: {
     title: "リッチメニューエディタ" || "",
     meta: [

@@ -176,6 +176,9 @@
           <e-form-group label="リッチメニューID">
             <input v-model.trim="api.richMenuId" type="text" />
           </e-form-group>
+          <e-form-group label="リッチメニューエイリアス">
+            <input v-model.trim="api.richMenuAliasId" type="text" />
+          </e-form-group>
 
           <e-alert
             ref="alertWrongApiParameter"
@@ -196,6 +199,9 @@
             >
             <a class="button" @click="callApiToGet">
               <i class="fas fa-cloud-download-alt"></i>&nbsp;ダウンロード</a
+            >
+            <a class="button" @click="callApiToCreateAlias">
+              <i class="fas fa-tag"></i>&nbsp;リッチメニューエイリアスを設定</a
             >
             <a class="button" @click="callApiToSetDefault">
               <i class="fas fa-cog"></i>&nbsp;デフォルトに設定</a
@@ -231,6 +237,7 @@ export default {
       api: {
         accessToken: "",
         richMenuId: "",
+        richMenuAliasId: "",
         log: "",
         statusCode: 0
       }
@@ -369,6 +376,7 @@ export default {
             delete area.action.initial;
             delete area.action.max;
             delete area.action.min;
+            delete area.action.richMenuAliasId;
             break;
           case "message":
             delete area.action.data;
@@ -379,6 +387,7 @@ export default {
             delete area.action.initial;
             delete area.action.max;
             delete area.action.min;
+            delete area.action.richMenuAliasId;
             break;
           case "uri":
             delete area.action.data;
@@ -388,6 +397,7 @@ export default {
             delete area.action.initial;
             delete area.action.max;
             delete area.action.min;
+            delete area.action.richMenuAliasId;
             if (area.action.altUri.desktop === "") delete area.action.altUri;
             break;
           case "datetimepicker":
@@ -395,9 +405,21 @@ export default {
             delete area.action.text;
             delete area.action.uri;
             delete area.action.altUri;
+            delete area.action.richMenuAliasId;
             if (area.action.initial === "") delete area.action.initial;
             if (area.action.max === "") delete area.action.max;
             if (area.action.min === "") delete area.action.min;
+            break;
+          case "richmenuswitch":
+            delete area.action.displayText;
+            delete area.action.text;
+            delete area.action.uri;
+            delete area.action.altUri;
+            delete area.action.mode;
+            delete area.action.initial;
+            delete area.action.max;
+            delete area.action.min;
+            delete area.action.altUri;
             break;
         }
       });
@@ -442,6 +464,12 @@ export default {
                 this.$refs.lineWindow.messages.push({
                   from: "user",
                   text: `[日時選択イベント]\n${area.action.data}`
+                });
+                break;
+              case "richmenucswitch":
+                this.$refs.lineWindow.messages.push({
+                  from: "user",
+                  text: `[リッチメニュー切替イベント]\n${area.action.richMenuAliasId}\n${area.action.data}`
                 });
                 break;
             }
@@ -540,6 +568,7 @@ export default {
           },
           body: JSON.stringify({
             accessToken: this.api.accessToken,
+            action: "create",
             json: this.json,
             image: fileReader.result
           })
@@ -671,6 +700,56 @@ ${JSON.stringify(json.delete, null, "  ")}`;
           this.api.log = reason;
         });
     },
+    callApiToCreateAlias() {
+      this.wrongApiParameter.splice(0, this.wrongApiParameter.length);
+      if (this.api.accessToken.length < 1)
+        this.wrongApiParameter.push(
+          "チャンネルアクセストークンを指定してください"
+        );
+      if (this.api.richMenuId.length < 1)
+        this.wrongApiParameter.push("リッチメニューIDを指定してください");
+      if (this.api.richMenuAliasId.length < 1)
+        this.wrongApiParameter.push(
+          "リッチメニューエイリアスを指定してください"
+        );
+      if (this.wrongApiParameter.length > 0) {
+        this.$refs.alertWrongApiParameter.open = true;
+        return;
+      }
+      this.api.log = `// APIを呼び出しています...`;
+      fetch("/api/richmenu", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          accessToken: this.api.accessToken,
+          action: "create_alias",
+          richMenuId: this.api.richMenuId,
+          richMenuAliasId: this.api.richMenuAliasId
+        })
+      })
+        .then((response) => {
+          this.api.statusCode = response.status;
+          return response.json();
+        })
+        .then((json) => {
+          this.api.log = `// HTTP ${this.api.statusCode}: `;
+          if (this.api.statusCode === 200) {
+            this.api.log += "処理が正常に完了しました。\n";
+          } else if (this.api.statusCode === 404) {
+            this.api.log += "IDが一致するリッチメニューが存在しません。";
+            return;
+          } else {
+            this.api.log += "処理中にエラーが発生しました。\n";
+          }
+          this.api.log += `// メニュー設定APIからの応答
+${JSON.stringify(json.createAlias, null, "  ")}`;
+        })
+        .catch((reason) => {
+          this.api.log = reason;
+        });
+    },
     callApiToSetDefault() {
       this.wrongApiParameter.splice(0, this.wrongApiParameter.length);
       if (this.api.accessToken.length < 1)
@@ -702,6 +781,11 @@ ${JSON.stringify(json.delete, null, "  ")}`;
           this.api.log = `// HTTP ${this.api.statusCode}: `;
           if (this.api.statusCode === 200) {
             this.api.log += "処理が正常に完了しました。\n";
+            localStorage.setItem("api.richMenuId", this.api.richMenuId);
+            localStorage.setItem(
+              "api.richMenuAliasId",
+              this.api.richMenuAliasId
+            );
           } else if (this.api.statusCode === 404) {
             this.api.log += "IDが一致するリッチメニューが存在しません。";
             return;
