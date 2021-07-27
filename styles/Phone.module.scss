@@ -1,0 +1,37 @@
+$device-border-black: #333;
+$device-bg-black: #555;
+$device-bg-white: #f0f0f0;
+
+.device {
+  aspect-ratio: 0.5;
+  border: 2px solid $device-border-black;
+  border-radius: 16px;
+  background-color: $device-bg-white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 8px;
+  min-height: 640px;
+  max-height: 80vh;
+
+  &.is-dark {
+    background-color: $device-bg-black !important;
+  }
+
+  &__speaker {
+    width: 25%;
+    height: 4px;
+    margin: 8px 0 0 0;
+    background-color: $device-border-black;
+    border-radius: 2px;
+  }
+
+  &__screen {
+    width: 100%;
+    flex: 1;
+    margin: 8px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+}

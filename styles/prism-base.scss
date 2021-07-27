@@ -1,0 +1,59 @@
+/**
+ * VS theme by Andrew Lock (https://andrewlock.net)
+ * Inspired by Visual Studio syntax coloring
+ */
+.prism-base {
+  padding: 2px 8px;
+  overflow-x: auto;
+
+  code[class*="language-"],
+  pre[class*="language-"] {
+    font-family: Menlo, Monaco, Consolas, "Andale Mono", "Ubuntu Mono",
+      "Courier New", monospace;
+    direction: ltr;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    font-size: 0.9em;
+    line-height: 1.5;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  pre > code[class*="language-"] {
+    font-size: 1em;
+  }
+
+  /* Code blocks */
+  pre[class*="language-"] {
+    padding: 1em;
+    margin: 0.5em 0;
+    overflow: auto;
+  }
+
+  /* Inline code */
+  :not(pre) > code[class*="language-"] {
+    padding: 0.2em;
+    padding-top: 1px;
+    padding-bottom: 1px;
+  }
+
+  .token.namespace {
+    opacity: 0.7;
+  }
+
+  .token.important,
+  .token.bold {
+    font-weight: bold;
+  }
+
+  .token.italic {
+    font-style: italic;
+  }
+}

@@ -1,0 +1,85 @@
+$color-light: (
+  bg: #a0b5d9,
+  bubble_bg_user: #9de693,
+  bubble_bg_bot: #fff,
+);
+$color-dark: (
+  bg: #1a1a1a,
+  bubble_bg_user: #9de693,
+  bubble_bg_bot: #2a2a2a,
+);
+
+.line {
+  width: 100%;
+  height: 100%;
+  background-color: map-get($color-light, bg);
+  display: flex;
+  flex-direction: column;
+  $root: &;
+  &.is-dark {
+    background-color: map-get($color-dark, bg);
+    #{$root}__chatarea {
+      &__bubble:not(.is-user) {
+        color: white !important;
+        background-color: map-get($color-dark, bubble_bg_bot);
+        &::after {
+          background-color: map-get($color-dark, bubble_bg_bot);
+        }
+      }
+    }
+  }
+  &__chatarea {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 8px;
+    overflow-y: auto;
+
+    &__bubble {
+      display: inline-block;
+      align-self: flex-start;
+      border-radius: 18px;
+      background-color: map-get($color-light, bubble_bg_bot);
+      max-width: 90%;
+      height: min-content;
+      margin-bottom: 8px;
+      padding: 8px 16px;
+      font-size: 0.8em;
+      position: relative;
+      word-wrap: break-word;
+
+      &::after {
+        position: absolute;
+        content: "";
+        background-color: map-get($color-light, bubble_bg_bot);
+        width: 16px;
+        height: 16px;
+        top: 0;
+        left: 0;
+        clip-path: polygon(0 0, 100% 40%, 40% 100%);
+      }
+
+      &.is-user {
+        align-self: flex-end;
+        background-color: map-get($color-light, bubble_bg_user);
+        color: black !important;
+        &::after {
+          left: auto;
+          right: 0;
+          background-color: map-get($color-light, bubble_bg_user);
+          clip-path: polygon(0 40%, 100% 0, 60% 100%);
+        }
+      }
+    }
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    /* スクロールのつまみ部分の設定 */
+    &::-webkit-scrollbar-thumb {
+      border-radius: 8px;
+      background: #68728e;
+    }
+  }
+}

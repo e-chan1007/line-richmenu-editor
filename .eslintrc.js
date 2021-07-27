@@ -87,7 +87,7 @@ module.exports = {
     "function-call-argument-newline": ["error", "consistent"],
     "function-paren-newline": "off",
     "implicit-arrow-linebreak": "off",
-    indent: ["error", 2],
+    "indent": "off",
     "jsx-quotes": ["error", "prefer-double"],
     "key-spacing": [
       "error",
@@ -109,7 +109,7 @@ module.exports = {
     "max-len": [
       "error",
       {
-        code: 120,
+        code: 140,
         ignoreTrailingComments: true,
         ignoreComments: true,
         ignoreUrls: true,
@@ -162,6 +162,11 @@ module.exports = {
     "arrow-parens": ["error", "as-needed"],
     "arrow-spacing": "error",
     "no-var": "error",
+    "array-element-newline": ["error", "consistent"],
+    "react/jsx-indent": ["error", 2],
+    "no-empty-function": "off",
+    "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-use-before-define": ["error"]
   }
