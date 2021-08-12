@@ -56,10 +56,29 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
         },
         mode: uiMode === "system" ? systemMode : uiMode
       },
+      typography: { fontFamily: "RobotoFlex, Source Han Sans, sans-serif" },
       components: {
-        MuiTextField: { defaultProps: { variant: "standard" } },
+        MuiCssBaseline: {
+          styleOverrides: `
+            @font-face {
+              font-family: "Source Han Sans";
+              font-style: normal;
+              font-display: swap;
+              src: local("Source Han Sans JP VF"), local("Source Han Sans JP"), local("Source Han Sans"), url(/fonts/SourceHanSansJP-VF.ttf.woff2) format("woff2-variations");
+            }
+
+            @font-face {
+              font-family: "RobotoFlex";
+              font-style: normal;
+              font-display: swap;
+              src: local("RobotoFlex"), local("Roboto"), url(/fonts/RobotoFlex.ttf) format("woff2-variations");
+            }
+          `
+        },
+        MuiButton: { defaultProps: { variant: (uiMode === "system" ? systemMode : uiMode) === "light" ? "contained" : "outlined" } },
         MuiFormControl: { defaultProps: { variant: "standard" } },
-        MuiSelect: { defaultProps: { variant: "standard" } }
+        MuiSelect: { defaultProps: { variant: "standard" } },
+        MuiTextField: { defaultProps: { variant: "standard" } }
       }
     }),
     [uiMode, systemMode]

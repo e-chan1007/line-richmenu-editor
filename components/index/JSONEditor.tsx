@@ -101,7 +101,7 @@ export default function JSONEditor(): JSX.Element {
   }, [editorElementRef]);
 
   useEffect(() => {
-    if (monacoRef.current) monacoRef.current.setValue(jsonEditorValue);
+    // if (monacoRef.current) monacoRef.current.setValue(jsonEditorValue);
     let jsonEditorValueAsObject;
     try {
       jsonEditorValueAsObject = JSON.parse(jsonEditorValue);

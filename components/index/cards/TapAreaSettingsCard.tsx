@@ -43,7 +43,7 @@ export default function TapAreaSettingsPanel(
           {(() => {
             const addAreaButton = <Button
               sx={{ mx: 2, mt: -1 }}
-              variant={theme.palette.mode === "light" ? "contained" : "outlined"}
+
               startIcon={<AddIcon />}
               onClick={() => {
                 setEditingAreaIndex(areas.length);
@@ -72,7 +72,8 @@ export default function TapAreaSettingsPanel(
                     setActiveAreaIndex(index);
                     setEditingAreaIndex(index);
                     setIsBoundsDialogOpened(true);
-                  }}>
+                  }}
+                  variant="text">
                     領域を編集
                   </Button>
                   <Button onClick={e => {
@@ -80,7 +81,8 @@ export default function TapAreaSettingsPanel(
                     setActiveAreaIndex(index);
                     setEditingAreaIndex(index);
                     setIsActionDialogOpened(true);
-                  }}>
+                  }}
+                  variant="text">
                     アクションを編集
                   </Button>
                   <Button color="error" onClick={e => {
@@ -88,7 +90,8 @@ export default function TapAreaSettingsPanel(
                     setActiveAreaIndex(index);
                     setEditingAreaIndex(index);
                     setIsDeleteDialogOpened(true);
-                  }}>
+                  }}
+                  variant="text">
                     削除
                   </Button>
                 </Stack>);

@@ -186,7 +186,7 @@ export default function TapAreaBoundsDialog(
         }
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setIsDialogOpened(false)}>キャンセル</Button>
+        <Button onClick={() => setIsDialogOpened(false)} variant="text">キャンセル</Button>
         <Button onClick={() => {
           const newAreas = [...areas];
           if (!newAreas[editingAreaIndex]) {
@@ -208,7 +208,8 @@ export default function TapAreaBoundsDialog(
           setAreas(newAreas);
           setActiveAreaIndex(editingAreaIndex);
           setIsDialogOpened(false);
-        }} disabled={boundsRangeError.some(error => error)}>保存</Button>
+        }} disabled={boundsRangeError.some(error => error)}
+        variant="text">保存</Button>
       </DialogActions>
     </Dialog>
   );

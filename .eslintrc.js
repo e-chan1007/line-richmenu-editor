@@ -118,7 +118,6 @@ module.exports = {
         ignoreRegExpLiterals: true
       }
     ],
-    "multiline-ternary": ["error", "never"],
     "new-parens": ["error", "always"],
     "newline-per-chained-call": ["error", { ignoreChainWithDepth: 5 }],
     "no-empty": [

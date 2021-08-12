@@ -178,7 +178,7 @@ export default function TapAreaActionDialog(
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setIsDialogOpened(false)}>キャンセル</Button>
+        <Button onClick={() => setIsDialogOpened(false)} variant="text">キャンセル</Button>
         <Button onClick={() => {
           const newAreas = [...areas];
           newAreas[editingAreaIndex].action = { ...newAreas[editingAreaIndex].action, ...action };
@@ -208,7 +208,8 @@ export default function TapAreaActionDialog(
               ))
             )))
           || (action.type === "uri" && !/^(https?|line|tel):/.test(action.uri))
-        }>保存</Button>
+        }
+        variant="text">保存</Button>
       </DialogActions>
     </Dialog>
   );

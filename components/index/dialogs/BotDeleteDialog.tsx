@@ -41,7 +41,7 @@ export default function BotDeleteDialog(
         </Alert>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setIsDialogOpened(false)}>キャンセル</Button>
+        <Button onClick={() => { setIsDialogOpened(false); handleMenuClose(); }} variant="text">キャンセル</Button>
         <Button onClick={() => {
           if (botToDelete.richMenus.includes(editingRichMenuId)) changeRichMenuId("DELETED");
           richMenuDatabase.menus.where("richMenuId").anyOfIgnoreCase(botToDelete.richMenus).delete();
@@ -51,7 +51,7 @@ export default function BotDeleteDialog(
           setAccounts(newAccounts);
           handleMenuClose();
           setIsDialogOpened(false);
-        }} color="error">削除</Button>
+        }} color="error" variant="text">削除</Button>
       </DialogActions>
     </Dialog>
   );

@@ -29,6 +29,7 @@
     "dexie": "^3.0.3",
     "eslint-plugin-react": "^7.24.0",
     "file-loader": "^6.2.0",
+    "jszip": "^3.7.0",
     "monaco-editor": "^0.26.1",
     "monaco-editor-webpack-plugin": "^4.1.1",
     "next": "11.0.1",

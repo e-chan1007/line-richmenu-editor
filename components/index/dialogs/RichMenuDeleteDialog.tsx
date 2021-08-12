@@ -45,7 +45,7 @@ export default function RichMenuDeleteDialog(
         </Alert>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setIsDialogOpened(false)}>キャンセル</Button>
+        <Button onClick={() => { setIsDialogOpened(false); handleMenuClose(); }} variant="text">キャンセル</Button>
         <Button onClick={() => {
           const richMenuIdToDelete = richMenuId;
           richMenuDatabase.menus.delete(editingRichMenuId);
@@ -55,7 +55,7 @@ export default function RichMenuDeleteDialog(
           if (richMenuIdToDelete === editingRichMenuId) changeRichMenuId("DELETED");
           handleMenuClose();
           setIsDialogOpened(false);
-        }} color="error">削除</Button>
+        }} color="error" variant="text">削除</Button>
       </DialogActions>
     </Dialog>
   );

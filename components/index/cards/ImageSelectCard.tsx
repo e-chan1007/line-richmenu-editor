@@ -54,7 +54,7 @@ export default function ImageSelectCard(): JSX.Element {
           画像設定
           <label style={{ margin: theme.spacing(2) }}>
             <input accept=".jpg,.jpeg,.png" type="file" style={{ display: "none" }} onChange={onImageSelected}/>
-            <Button variant={theme.palette.mode === "light" ? "contained" : "outlined"} startIcon={<FolderOpenIcon />} component="span" sx={{ mt: -1 }}>
+            <Button startIcon={<FolderOpenIcon />} component="span" sx={{ mt: -1 }}>
               画像を選択
             </Button>
           </label>

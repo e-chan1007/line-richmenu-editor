@@ -51,7 +51,6 @@
       "type": "string",
       "title": "name",
       "description": "リッチメニューの名前。リッチメニューの管理に役立ちます。ユーザーには表示されません。\n最大文字数：300",
-      "minLength": 1,
       "maxLength": 300,
       "examples": ["Nice richmenu"]
     },
@@ -60,7 +59,6 @@
       "type": "string",
       "title": "chatBarText",
       "description": "トークルームメニューに表示されるテキストです。\n最大文字数：14",
-      "minLength": 1,
       "maxLength": 14,
       "examples": ["Tap to open"]
     },

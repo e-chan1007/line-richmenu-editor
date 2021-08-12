@@ -42,14 +42,14 @@ export default function TapAreaDeleteDialog(
         <p>この領域を削除しますか?</p>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setIsDialogOpened(false)}>キャンセル</Button>
+        <Button onClick={() => setIsDialogOpened(false)} variant="text">キャンセル</Button>
         <Button onClick={() => {
           const newAreas = [...areas];
           newAreas.splice(editingAreaIndex, 1);
           setAreas(newAreas);
           setIsDialogOpened(false);
           setActiveAreaIndex(null);
-        }} color="error">削除</Button>
+        }} color="error" variant="text">削除</Button>
       </DialogActions>
     </Dialog>
   );

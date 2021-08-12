@@ -7,7 +7,7 @@ const withTM = require("next-transpile-modules")([
 
 module.exports = withTM({
   cssModules: true,
-  webpack: (config, options) => {
+  webpack: config => {
     config.plugins.push(
       new MonacoWebpackPlugin({
         languages: [
@@ -16,6 +16,11 @@ module.exports = withTM({
         filename: "static/[name].worker.js"
       })
     );
+    config.module.rules.push({
+      test: /\.(ttf|woff2)$/i,
+      loader: "file-loader",
+      options: { name: "[path][name].[ext]" }
+    });
     return config;
   }
 });

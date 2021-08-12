@@ -48,6 +48,6 @@ export type EditingRichMenuContextType = {
   loadFromDB: (richMenuId: string) => void
 }
 
-export type StoragedRichMenu = Omit<EditingRichMenuContextType, "menuImage" | "setters" | "reset" | "loadFromDB", "isRichMenuIdReplaced"> & {
+export type StoragedRichMenu = Omit<EditingRichMenuContextType, "menuImage" | "setters" | "reset" | "loadFromDB" | "isRichMenuIdReplaced"> & {
   menuImage: Omit<MenuImage, "image"> & { imageSrc?: string }
 };

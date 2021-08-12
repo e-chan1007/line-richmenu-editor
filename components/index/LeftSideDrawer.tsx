@@ -16,9 +16,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { useTheme } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
+import ContentCopyIcon from "@material-ui/icons/ContentCopy";
 import DeleteIcon from "@material-ui/icons/Delete";
+import DriveFileMoveIcon from "@material-ui/icons/DriveFileMove";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import FileDownloadIcon from "@material-ui/icons/FileDownload";
 import FolderIcon from "@material-ui/icons/Folder";
 import axios from "axios";
 import { BotAccount, BotAccountContext } from "contexts/BotAccountContext";
@@ -28,12 +31,14 @@ import richMenuDatabase from "databases/RichMenu";
 import React, { useContext, useEffect, useState } from "react";
 import BotDeleteDialog from "./dialogs/BotDeleteDialog";
 import RichMenuDeleteDialog from "./dialogs/RichMenuDeleteDialog";
+import RichMenuExportDialog from "./dialogs/RichMenuExportDialog";
+import RichMenuImportDialog from "./dialogs/RichMenuImportDialog";
 
 export default function LeftSideDrawer(
   { setIsBotSettingsDialogOpen }: {setIsBotSettingsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>}
 ): JSX.Element {
   const theme = useTheme();
-  const { accounts: _accounts, setAccounts: _setAccounts } = useContext(BotAccountContext);
+  const { accounts: _accounts, setAccounts: _setAccounts, setEditingBotId } = useContext(BotAccountContext);
   const { richMenuId: editingRichMenuId, menu: editingRichMenu, reset: resetRichMenu, loadFromDB: loadRichMenuFromDB }
   = useContext(EditingRichMenuContext);
   const [contextMenu, setContextMenu] = useState<{
@@ -44,6 +49,8 @@ export default function LeftSideDrawer(
   } | null>(null);
   const [isRichMenuDeleteDialogOpened, setIsRichMenuDeleteDialogOpened] = useState(false);
   const [isBotDeleteDialogOpened, setIsBotDeleteDialogOpened] = useState(false);
+  const [isRichMenuImportDialogOpened, setIsRichMenuImportDialogOpened] = useState(false);
+  const [isRichMenuExportDialogOpened, setIsRichMenuExportDialogOpened] = useState(false);
 
   const handleContextMenu = (event: React.MouseEvent) => {
     const findTarget = (target: HTMLElement) => {
@@ -66,7 +73,7 @@ export default function LeftSideDrawer(
       } : null
     );
   };
-  const handleClose = () => {
+  const handleMenuClose = () => {
     setContextMenu(null);
   };
   const [accounts, setAccounts] = useState<(Weaken<BotAccount, "richMenus"> & {isOpened: boolean, richMenus: RichMenuResponse[]})[]>([]);
@@ -100,9 +107,8 @@ export default function LeftSideDrawer(
           .sort(({ richMenuId: a }, { richMenuId: b }) => (
             account.richMenus.indexOf(a) - account.richMenus.indexOf(b)
           ))
-      })))).sort(({ botName: a }, { botName: b }) => a > b ? 1 : -1));
-      console.log("set1");
-    }, 8);
+      })))).sort(({ botName: a }, { botName: b }) => a.localeCompare(b)));
+    }, 16);
   }, [_accounts, editingRichMenu, editingRichMenuId]);
 
 
@@ -134,7 +140,7 @@ export default function LeftSideDrawer(
             <div key={`${i}`} data-target={`${account.basicId}`}>
               <ListItem secondaryAction={
                 <Tooltip title="新しいリッチメニュー">
-                  <IconButton edge="end" aria-label="delete" onClick={() => { createNewRichMenu(_accounts[i]); }}>
+                  <IconButton edge="end" aria-label="delete" onClick={() => { createNewRichMenu(_accounts.find(({ basicId }) => basicId === account.basicId)); }}>
                     <AddIcon />
                   </IconButton>
                 </Tooltip>
@@ -166,14 +172,20 @@ export default function LeftSideDrawer(
                       sx={{ pl: 4 }}
                       key={i}
                       selected={editingRichMenuId === richMenu.richMenuId}
-                      onClick={() => loadRichMenuFromDB(richMenu.richMenuId)}
+                      onClick={() => {
+                        loadRichMenuFromDB(richMenu.richMenuId);
+                        setEditingBotId(account.basicId);
+                      }}
                       data-target={richMenu.richMenuId}>
-                      <ListItemText primary={richMenu.name || "(名称未設定のリッチメニュー)"} secondary={richMenu.richMenuId.startsWith("richmenu-") ? richMenu.richMenuId.slice(0, 20) + "..." : "(未アップロード)"}/>
+                      <ListItemText primary={richMenu.name || "(名称未設定のリッチメニュー)"} secondary={richMenu.richMenuId.startsWith("richmenu-") ? richMenu.richMenuId.slice(0, 24) + "..." : "(未アップロード)"}/>
                     </ListItemButton>
                   ))}
                   {account.richMenus.length === 0 && (
                     <ListItem><ListItemText primary="リッチメニューはありません" /></ListItem>
                   )}
+                  <ListItemButton sx={{ pl: 4 }} onClick={e => e.stopPropagation()}>
+                    <ListItemText primary="API操作(Bot別)"/>
+                  </ListItemButton>
                 </List>
               </Collapse>
             </div>
@@ -181,13 +193,10 @@ export default function LeftSideDrawer(
           <ListItemButton sx={{ pl: 4, my: 2 }} onClick={() => setIsBotSettingsDialogOpen(true)}>
             <ListItemText primary="Botアカウントを追加"/>
           </ListItemButton>
+          <Divider />
           <ListSubheader component="div" sx={{ background: "transparent" }}>
             その他の機能
           </ListSubheader>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemText primary="API操作"/>
-          </ListItemButton>
-          <Divider />
           <ListItemButton sx={{ pl: 4 }} dense>
             <ListItemText primary="プライバシーポリシー"/>
           </ListItemButton>
@@ -197,17 +206,26 @@ export default function LeftSideDrawer(
         </Box>
         <Menu
           open={contextMenu !== null && contextMenu.type === "bot"}
-          onClose={handleClose}
+          onClose={handleMenuClose}
           anchorReference="anchorPosition"
           anchorPosition={
             contextMenu !== null? { top: contextMenu.mouseY, left: contextMenu.mouseX }: null
           }
         >
-          <MenuItem onClick={e => { createNewRichMenu(_accounts[contextMenu.target]); handleClose(); }}>
+          <MenuItem onClick={() => {
+            createNewRichMenu(_accounts.find(({ basicId }) => basicId === contextMenu.target));
+            handleMenuClose();
+          }}>
             <ListItemIcon>
               <AddIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>新しいリッチメニュー</ListItemText>
+          </MenuItem>
+          <MenuItem onClick={() => { setIsRichMenuImportDialogOpened(true); }}>
+            <ListItemIcon>
+              <DriveFileMoveIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>リッチメニューをインポート</ListItemText>
           </MenuItem>
           <Divider />
           <MenuItem onClick={() => { setIsBotDeleteDialogOpened(true); }} >
@@ -219,12 +237,28 @@ export default function LeftSideDrawer(
         </Menu>
         <Menu
           open={contextMenu !== null && contextMenu.type === "menu"}
-          onClose={handleClose}
+          onClose={handleMenuClose}
           anchorReference="anchorPosition"
           anchorPosition={
             contextMenu !== null? { top: contextMenu.mouseY, left: contextMenu.mouseX }: null
           }
         >
+          {contextMenu?.target?.startsWith?.("richmenu-") && (<>
+            <MenuItem onClick={() => { navigator.clipboard.writeText(contextMenu.target); handleMenuClose(); }}>
+              <ListItemIcon>
+                <ContentCopyIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>リッチメニューのIDをコピー</ListItemText>
+            </MenuItem>
+          </>
+          )}
+          <MenuItem onClick={() => { setIsRichMenuExportDialogOpened(true); }}>
+            <ListItemIcon>
+              <FileDownloadIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>ファイルとして出力</ListItemText>
+          </MenuItem>
+          <Divider />
           <MenuItem onClick={() => { setIsRichMenuDeleteDialogOpened(true); }}>
             <ListItemIcon>
               <DeleteIcon color="error" fontSize="small" />
@@ -238,12 +272,22 @@ export default function LeftSideDrawer(
         isDialogOpened={isRichMenuDeleteDialogOpened}
         setIsDialogOpened={setIsRichMenuDeleteDialogOpened}
         richMenuId={contextMenu?.target}
-        handleMenuClose={handleClose} />
+        handleMenuClose={handleMenuClose} />
+      <RichMenuImportDialog
+        isDialogOpened={isRichMenuImportDialogOpened}
+        setIsDialogOpened={setIsRichMenuImportDialogOpened}
+        botId={contextMenu?.target}
+        handleMenuClose={handleMenuClose} />
+      <RichMenuExportDialog
+        isDialogOpened={isRichMenuExportDialogOpened}
+        setIsDialogOpened={setIsRichMenuExportDialogOpened}
+        richMenuId={contextMenu?.target}
+        handleMenuClose={handleMenuClose} />
       <BotDeleteDialog
         isDialogOpened={isBotDeleteDialogOpened}
         setIsDialogOpened={setIsBotDeleteDialogOpened}
         botId={contextMenu?.target}
-        handleMenuClose={handleClose} />
+        handleMenuClose={handleMenuClose} />
     </>
   );
 }
