@@ -45,7 +45,7 @@ export default function BotSettingsDialog(
           <Alert severity="error" sx={{ my: 2 }}>該当するアカウントが見つかりませんでした。</Alert>
         )}
         {existedAccount && (
-          <Alert severity="error" sx={{ my: 2 }}>{existedAccount.botName}はすでに登録されています。</Alert>
+          <Alert severity="error" sx={{ my: 2 }}>{existedAccount?.botName}はすでに登録されています。</Alert>
         )}
       </DialogContent>
       <DialogActions>

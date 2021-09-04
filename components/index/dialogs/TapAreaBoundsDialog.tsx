@@ -150,9 +150,9 @@ export default function TapAreaBoundsDialog(
               {...boundsInputProps}
             /></FormControl>
           <FormControl>
-            <Tooltip title={isBoundsPosAbsolute ? "座標を指定" : "大きさを指定"}>
+            <Tooltip title={isBoundsPosAbsolute ? "座標で指定" : "サイズで指定"}>
               <Button onClick={() => { setBoundsAreaPosAbsolute(!isBoundsPosAbsolute); }} color="inherit" sx={{ color: theme.palette.action.active }}>
-                {isBoundsPosAbsolute ? ("POS") : ("SIZE")}
+                {isBoundsPosAbsolute ? ("座標") : ("サイズ")}
               </Button>
             </Tooltip>
           </FormControl>
@@ -186,7 +186,12 @@ export default function TapAreaBoundsDialog(
         }
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setIsDialogOpened(false)} variant="text">キャンセル</Button>
+        <Button onClick={() => {
+          setIsDialogOpened(false);
+          setTimeout(() => {
+            setBounds([-1, -1, -1, -1, false]);
+          }, 100);
+        }} variant="text">キャンセル</Button>
         <Button onClick={() => {
           const newAreas = [...areas];
           if (!newAreas[editingAreaIndex]) {
@@ -208,6 +213,9 @@ export default function TapAreaBoundsDialog(
           setAreas(newAreas);
           setActiveAreaIndex(editingAreaIndex);
           setIsDialogOpened(false);
+          setTimeout(() => {
+            setBounds([-1, -1, -1, -1, false]);
+          }, 100);
         }} disabled={boundsRangeError.some(error => error)}
         variant="text">保存</Button>
       </DialogActions>

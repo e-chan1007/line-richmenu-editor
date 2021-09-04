@@ -36,7 +36,7 @@ export const EditingRichMenuContext = createContext<EditingRichMenuContextType>(
 export function EditingRichMenuContextProvider({ children }: {children: React.ReactNode}): JSX.Element {
   const context = useContext(EditingRichMenuContext);
   const { setIsPageLoading } = useContext(PageLoadingStateContext);
-  const { setAccounts } = useContext(BotAccountContext);
+  const { setAccounts, setEditingBotId } = useContext(BotAccountContext);
 
   const [richMenuId, setRichMenuId] = useState(context.richMenuId);
   const [richMenuAliases, setRichMenuAliases] = useState(context.richMenuAliases);
@@ -118,13 +118,16 @@ export function EditingRichMenuContextProvider({ children }: {children: React.Re
   }), [areas, chatBarText, isRichMenuIdReplaced, menuImage, name, richMenuAliases, richMenuId, selected, size]);
 
   useEffect(() => {
-    setIsPageLoading(true);
-    const editingMenuId = window.localStorage.getItem("editingMenuId");
-    if (editingMenuId) {
-      newContext.loadFromDB(editingMenuId);
-    } else {
-      setIsPageLoading(false);
-    }
+    (async () => {
+      setIsPageLoading(true);
+      const editingMenuId = window.localStorage.getItem("editingMenuId");
+      if (editingMenuId) {
+        newContext.loadFromDB(editingMenuId);
+        setEditingBotId((await botAccountDatabase.accounts.where("richMenus").equalsIgnoreCase(editingMenuId).first()).basicId);
+      } else {
+        setIsPageLoading(false);
+      }
+    })();
   }, []);
 
   useEffect(() => {

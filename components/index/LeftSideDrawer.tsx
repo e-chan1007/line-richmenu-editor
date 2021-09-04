@@ -127,6 +127,7 @@ export default function LeftSideDrawer(
       { ...account, richMenus: [...account.richMenus, newRichMenuId] }
     );
     _setAccounts(newAccounts);
+    setEditingBotId(account.basicId);
   };
 
   return (
@@ -161,7 +162,7 @@ export default function LeftSideDrawer(
                       <FolderIcon />
                     </ListItemIcon>
                   )}
-                  <ListItemText primary={`${account.botName}`} />
+                  <ListItemText primary={`${account?.botName}`} />
                   {account.isOpened ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 </ListItemButton>
               </ListItem>

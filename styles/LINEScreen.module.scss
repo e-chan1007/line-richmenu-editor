@@ -19,7 +19,7 @@ $color-dark: (
   &.is-dark {
     background-color: map-get($color-dark, bg);
     #{$root}__chatarea {
-      &__bubble:not(.is-user) {
+      &__row__bubble:not(.is-user) {
         color: white !important;
         background-color: map-get($color-dark, bubble_bg_bot);
         &::after {
@@ -35,39 +35,54 @@ $color-dark: (
     padding: 0 8px;
     overflow-y: auto;
 
-    &__bubble {
-      display: inline-block;
-      align-self: flex-start;
-      border-radius: 18px;
-      background-color: map-get($color-light, bubble_bg_bot);
-      max-width: 90%;
-      height: min-content;
+    &__row {
+      display: flex;
+      flex-direction: row;
       margin-bottom: 8px;
-      padding: 8px 16px;
-      font-size: 0.8em;
-      position: relative;
-      word-wrap: break-word;
-
-      &::after {
-        position: absolute;
-        content: "";
-        background-color: map-get($color-light, bubble_bg_bot);
-        width: 16px;
-        height: 16px;
-        top: 0;
-        left: 0;
-        clip-path: polygon(0 0, 100% 40%, 40% 100%);
-      }
 
       &.is-user {
-        align-self: flex-end;
-        background-color: map-get($color-light, bubble_bg_user);
-        color: black !important;
+        flex-direction: row-reverse;
+      }
+
+      &__icon {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        border-radius: 36px;
+      }
+
+      &__bubble {
+        display: inline-block;
+        border-radius: 18px;
+        background-color: map-get($color-light, bubble_bg_bot);
+        max-width: 90%;
+        height: min-content;
+        margin: 4px 12px 0;
+        padding: 8px 16px;
+        font-size: 0.8em;
+        position: relative;
+        word-wrap: break-word;
+
         &::after {
-          left: auto;
-          right: 0;
+          position: absolute;
+          content: "";
+          background-color: map-get($color-light, bubble_bg_bot);
+          width: 16px;
+          height: 16px;
+          top: 0;
+          left: 0;
+          clip-path: polygon(0 0, 100% 40%, 40% 100%);
+        }
+
+        &.is-user {
           background-color: map-get($color-light, bubble_bg_user);
-          clip-path: polygon(0 40%, 100% 0, 60% 100%);
+          color: black !important;
+          &::after {
+            left: auto;
+            right: 0;
+            background-color: map-get($color-light, bubble_bg_user);
+            clip-path: polygon(0 40%, 100% 0, 60% 100%);
+          }
         }
       }
     }

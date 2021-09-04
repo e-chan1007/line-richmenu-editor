@@ -75,7 +75,7 @@ export default function TapAreaActionDialog(
             </Select>
           </FormControl>
           <TextField label="ラベル" value={action.label} onChange={e => setActionProp("label", e.target.value)} inputProps={{ maxLength: 40 }}/>
-          {(action.type === "postback" || action.type === "datetimepicker") && (
+          {(action.type === "postback" || action.type === "datetimepicker" || action.type === "richmenuswitch") && (
             <TextField label="Webhookに送信するテキスト" value={action.data} onChange={e => setActionProp("data", e.target.value)} inputProps={{ maxLength: 300 }} required/>
           )}
           {action.type === "postback" && (

@@ -57,7 +57,7 @@ export default function APIControlCard(): JSX.Element {
           )}
         </APIController>
 
-        <Alert severity="info">リッチメニューエイリアスはBot別API管理画面にあります</Alert>
+        <Alert severity="info" sx={{ mt: 2 }}>Bot別API管理画面にあります</Alert>
       </CardContent>
     </Card>
   );

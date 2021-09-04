@@ -9,6 +9,7 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import DeleteIcon from "@material-ui/icons/Delete";
 import KeyboardAltOutlinedIcon from "@material-ui/icons/KeyboardAltOutlined";
 import { actionTypes } from "constants/RichMenuAction";
+import { BotAccount, BotAccountContext } from "contexts/BotAccountContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import React, { MouseEvent, useContext, useEffect, useRef, useState } from "react";
 import styles from "styles/LINEScreen.module.scss";
@@ -21,9 +22,11 @@ export default function LINEScreen(
   }
 ): JSX.Element {
   const theme = useTheme();
-  const { menuImage, menu: { areas, chatBarText } } = useContext(EditingRichMenuContext);
+  const { menuImage, richMenuId, menu: { areas, chatBarText } } = useContext(EditingRichMenuContext);
+  const { accounts, editingBotId } = useContext(BotAccountContext);
   const [messages, setMessages] = useState<{from: "user" | "bot", text: string}[]>([]);
   const [imageScale, setImageScale] = useState(1);
+  const [richMenuCursor, setRichMenuCursor] = useState("default");
   const chatAreaRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const onRichMenuClicked = (event: MouseEvent<HTMLImageElement>) => {
@@ -42,6 +45,20 @@ export default function LINEScreen(
       setMessages(newMessages);
     }
   };
+  const onRichMenuHovered = (event: MouseEvent<HTMLImageElement>) => {
+    const posX = (event.clientX - imageRef.current.getBoundingClientRect().left) * imageScale,
+      posY = (event.clientY - imageRef.current.getBoundingClientRect().top) * imageScale;
+    const clickedArea = areas.find(area =>
+      area.bounds.x <= posX && posX <= area.bounds.x + area.bounds.width &&
+      area.bounds.y <= posY && posY <= area.bounds.y + area.bounds.height
+    );
+    setRichMenuCursor(clickedArea ? "pointer": "default");
+  };
+  useEffect(() => {
+    setMessages([]);
+    setActiveAreaIndex(null);
+  }, [editingBotId, richMenuId]);
+
   useEffect(() => {
     chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
   }, [chatAreaRef, messages]);
@@ -55,13 +72,13 @@ export default function LINEScreen(
     return function cleanup() {
       window.removeEventListener("resize", setScale);
     };
-  });
+  }, []);
   return (
     <div className={theme.palette.mode === "dark" ? [styles.line, styles["is-dark"]].join(" ") : styles.line}>
       <Toolbar variant="dense" disableGutters sx={{ px: 2 }}>
         <Stack direction="row" spacing={2} sx={{ width: "100%" }} alignItems="center">
           <ArrowBackIosNewIcon />
-          <Typography sx={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis" }}>{"プレビュー"}</Typography>
+          <Typography sx={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis" }}>{accounts.find(({ basicId }) => basicId === editingBotId)?.botName}</Typography>
           <Tooltip title="履歴を削除">
             <IconButton onClick={() => setMessages([])}>
               <DeleteIcon />
@@ -69,10 +86,19 @@ export default function LINEScreen(
           </Tooltip>
         </Stack>
       </Toolbar>
+
       <div className={theme.palette.mode === "dark" ? [styles.line__chatarea, styles["is-dark"]].join(" ") : styles.line__chatarea} ref={chatAreaRef}>
         {messages.map(({ from, text }, i) => (
-          <div className={from === "bot" ? styles.line__chatarea__bubble : [styles.line__chatarea__bubble, styles["is-user"]].join(" ")} key={i}>
-            {text}
+          <div key={i} className={from === "bot" ? styles.line__chatarea__row : [styles.line__chatarea__row, styles["is-user"]].join(" ")}>
+            {(from === "bot" && accounts.find(({ basicId }) => basicId === editingBotId).pictureUrl) && (
+              <img
+                className={styles.line__chatarea__row__icon}
+                src={accounts.find(({ basicId }) => basicId === editingBotId).pictureUrl}
+                alt={accounts.find(({ basicId }) => basicId === editingBotId)?.botName} />
+            )}
+            <div className={from === "bot" ? styles.line__chatarea__row__bubble : [styles.line__chatarea__row__bubble, styles["is-user"]].join(" ")}>
+              {text}
+            </div>
           </div>
         ))}
       </div>
@@ -82,9 +108,10 @@ export default function LINEScreen(
           alt="リッチメニュー"
           src={menuImage?.image?.src}
           onClick={onRichMenuClicked}
-          style={{ width: "100%", visibility: menuImage?.image?.src ? "visible" : "hidden" }}
+          onMouseMove={onRichMenuHovered}
+          style={{ width: "100%", visibility: menuImage?.image?.src ? "visible" : "hidden", cursor: richMenuCursor }}
           ref={imageRef}
-          draggable={false}/>
+          draggable={false} />
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{
           position: "absolute",
           width: "100%",
