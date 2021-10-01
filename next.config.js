@@ -5,7 +5,10 @@ const withTM = require("next-transpile-modules")([
   "monaco-editor"
 ]);
 
-module.exports = withTM({
+const withPWA = require("next-pwa");
+
+module.exports = withPWA(withTM({
+  pwa: { dest: "public" },
   cssModules: true,
   webpack: config => {
     config.plugins.push(
@@ -23,4 +26,4 @@ module.exports = withTM({
     });
     return config;
   }
-});
+}));

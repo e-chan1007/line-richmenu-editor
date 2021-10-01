@@ -71,7 +71,7 @@ export const apiList = new APIList([
     label: "デフォルトに指定",
     description: "リッチメニューを個別に指定していないすべてのユーザーに表示",
     endpoints: ({ richMenuId }: { richMenuId: string }) => richMenuId.startsWith("richmenu-") ? ["POST https://api.line.me/v2/bot/user/all/richmenu/{richMenuId}"] : [],
-    validateParams: ({ richMenuId }: { richMenuId: string }) => (richMenuId.startsWith("richmenu-") ? { isSucceeded: true, messages: [] } : { isSucceeded: false, messages: ["アップロードされていないリッチメニューを指定することはできません"] }),
+    validateParams: ({ richMenuId }: { richMenuId: string }) => (richMenuId.startsWith("richmenu-") ? { isSucceeded: true, messages: [] } : { isSucceeded: false, messages: ["アップロードされていないリッチメニューに対して実行することはできません"] }),
     callAPI: async (channelAccessToken, { richMenuId }: { richMenuId: string }) => {
       const responses: APIResponse[] = [];
       const setRichMenuAsDefaultResponse = await axios.post(`api.line.me/v2/bot/user/all/richmenu/${richMenuId}`, null, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
@@ -83,13 +83,13 @@ export const apiList = new APIList([
     key: "linkRichMenuToUsers",
     label: "ユーザーとリンク",
     description: "リッチメニューを特定のユーザーに表示",
-    endpoints: ({ richMenuId }: { richMenuId: string }) => richMenuId.startsWith("richmenu-") ? ["POST https://api.line.me/v2/bot/richmenu/bulk/link"] : [],
+    endpoints: ["POST https://api.line.me/v2/bot/richmenu/bulk/link"],
     validateParams: ({ richMenuId, userIds }: { richMenuId: string, userIds: string }) => {
       const messages = [];
       let isSucceeded = true;
       if (!richMenuId.startsWith("richmenu-")) {
         isSucceeded = false;
-        messages.push("アップロードされていないリッチメニューを指定することはできません");
+        messages.push("アップロードされていないリッチメニューに対して実行することはできません");
       }
       if (!userIds || userIds.length === 0) {
         isSucceeded = false;
@@ -101,6 +101,52 @@ export const apiList = new APIList([
       const responses: APIResponse[] = [];
       const linkRichMenuToUserResponse = await axios.post(`api.line.me/v2/bot/richmenu/bulk/link`, { richMenuId, userIds: userIds.split("\n") }, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
       responses.push({ label: "リッチメニューリンクAPI", endpoint: "https://api.line.me/v2/bot/richmenu/bulk/link", status: linkRichMenuToUserResponse.status, result: JSON.stringify(linkRichMenuToUserResponse.data) });
+      return responses;
+    }
+  },
+  {
+    key: "addRichMenuAlias",
+    label: "エイリアスを追加",
+    description: "リッチメニュー切替アクションに使うエイリアスを追加",
+    endpoints: ["POST https://api.line.me/v2/bot/richmenu/alias"],
+    validateParams: ({ richMenuId, alias }: { richMenuId: string, alias: string }) => {
+      const messages = [];
+      let isSucceeded = true;
+      if (!richMenuId.startsWith("richmenu-")) {
+        isSucceeded = false;
+        messages.push("アップロードされていないリッチメニューに対して実行することはできません");
+      }
+      if (!alias || alias.length === 0) {
+        isSucceeded = false;
+        messages.push("リッチメニューエイリアスを指定してください");
+      }
+      return { isSucceeded, messages };
+    },
+    callAPI: async (channelAccessToken, { richMenuId, alias }: { richMenuId: string, alias: string }) => {
+      const responses: APIResponse[] = [];
+      const addRichMenuAliasResponse = await axios.post(`api.line.me/v2/bot/richmenu/alias`, { richMenuId, richMenuAliasId: alias }, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
+      responses.push({ label: "リッチメニューエイリアス作成API", endpoint: "https://api.line.me/v2/bot/richmenu/alias", status: addRichMenuAliasResponse.status, result: JSON.stringify(addRichMenuAliasResponse.data) });
+      return responses;
+    }
+  },
+  {
+    key: "deleteRichMenuAlias",
+    label: "エイリアスを削除",
+    description: "リッチメニューエイリアスを削除",
+    endpoints: ({ alias }: { alias: string }) => [`DELETE https://api.line.me/v2/bot/richmenu/alias/${alias}`],
+    validateParams: ({ alias }: { alias: string }) => {
+      const messages = [];
+      let isSucceeded = true;
+      if (!alias || alias.length === 0) {
+        isSucceeded = false;
+        messages.push("リッチメニューエイリアスを指定してください");
+      }
+      return { isSucceeded, messages };
+    },
+    callAPI: async (channelAccessToken, { alias }: { alias: string }) => {
+      const responses: APIResponse[] = [];
+      const deleteRichMenuAliasResponse = await axios.delete(`api.line.me/v2/bot/richmenu/alias/${alias}`, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
+      responses.push({ label: "リッチメニューエイリアス削除API", endpoint: `https://api.line.me/v2/bot/richmenu/alias/${alias}`, status: deleteRichMenuAliasResponse.status, result: JSON.stringify(deleteRichMenuAliasResponse.data) });
       return responses;
     }
   },

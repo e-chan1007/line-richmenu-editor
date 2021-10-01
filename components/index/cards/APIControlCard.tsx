@@ -37,8 +37,26 @@ export default function APIControlCard(): JSX.Element {
             label="ユーザーID (改行区切りで複数指定可能)"
             multiline
             rows={3}
-            value={controllerContext.dataStore.linkRichMenuToUsers?.params?.userIds as string|| ""}
-            onChange={e => controllerContext.setStoreValue("linkRichMenuToUsers", { ... controllerContext.dataStore.linkRichMenuToUsers, params: { ...controllerContext.dataStore.linkRichMenuToUsers.params, userIds: e.target.value } })}
+            value={controllerContext.dataStore.linkRichMenuToUsers?.params?.userIds as string || ""}
+            onChange={e => controllerContext.setStoreValue("linkRichMenuToUsers", { ...controllerContext.dataStore.linkRichMenuToUsers, params: { ...controllerContext.dataStore.linkRichMenuToUsers.params, userIds: e.target.value } })}
+            sx={{ width: "100%" }}
+          />
+        </APIController>
+
+        <APIController apiSpec={apiList.get("addRichMenuAlias")} {...menuContext}>
+          <TextField
+            label="リッチメニューエイリアス"
+            value={controllerContext.dataStore.addRichMenuAlias?.params?.alias as string || ""}
+            onChange={e => controllerContext.setStoreValue("addRichMenuAlias", { ...controllerContext.dataStore.addRichMenuAlias, params: { ...controllerContext.dataStore.addRichMenuAlias.params, alias: e.target.value } })}
+            sx={{ width: "100%" }}
+          />
+        </APIController>
+
+        <APIController apiSpec={apiList.get("deleteRichMenuAlias")} {...menuContext}>
+          <TextField
+            label="リッチメニューエイリアス"
+            value={controllerContext.dataStore.deleteRichMenuAlias?.params?.alias as string || ""}
+            onChange={e => controllerContext.setStoreValue("deleteRichMenuAlias", { ...controllerContext.dataStore.deleteRichMenuAlias, params: { ...controllerContext.dataStore.deleteRichMenuAlias.params, alias: e.target.value } })}
             sx={{ width: "100%" }}
           />
         </APIController>
@@ -48,16 +66,14 @@ export default function APIControlCard(): JSX.Element {
             <FormControlLabel
               control={<Checkbox
                 checked={controllerContext.dataStore.deleteRichMenu?.params?.checked as boolean}
-                onChange={e => controllerContext.setStoreValue("deleteRichMenu", { ... controllerContext.dataStore.deleteRichMenu, params: { ...controllerContext.dataStore.deleteRichMenu.params, checked: e.target.checked } })}
+                onChange={e => controllerContext.setStoreValue("deleteRichMenu", { ...controllerContext.dataStore.deleteRichMenu, params: { ...controllerContext.dataStore.deleteRichMenu.params, checked: e.target.checked } })}
                 disabled={!menuContext.richMenuId.startsWith("richmenu-")}
               />}
-              label="エディタ上からも削除する" sx={{ mt: 1 }}/>
+              label="エディタ上からも削除する" sx={{ mt: 1 }} />
           ) : (
             <Alert severity="warning" sx={{ mb: 1 }}>このリッチメニューはアップロードされていないため、APIは呼び出されずにエディタ上から削除されます。</Alert>
           )}
         </APIController>
-
-        <Alert severity="info" sx={{ mt: 2 }}>Bot別API管理画面にあります</Alert>
       </CardContent>
     </Card>
   );

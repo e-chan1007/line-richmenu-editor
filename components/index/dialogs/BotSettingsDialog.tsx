@@ -17,7 +17,7 @@ const axios = axiosBase.create({ baseURL: "https://cors.api.e-chan.cf/", headers
 
 export default function BotSettingsDialog(
   { isDialogOpened, setIsDialogOpened }:
-  { isDialogOpened: boolean, setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>})
+  { isDialogOpened: boolean, setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>> })
   : JSX.Element {
   const { editingBotId, accounts, setAccounts } = useContext(BotAccountContext);
   const [channelAccessToken, setChannelAccessToken] = useState(accounts[editingBotId]?.channelAccessToken || "");
@@ -36,9 +36,9 @@ export default function BotSettingsDialog(
       <DialogTitle>Botアカウントを{editingBotId.length > 0 ? "編集" : "追加"}</DialogTitle>
       <DialogContent>
         <Stack direction="row" alignItems="flex-end">
-          <TextField label="チャネルアクセストークン" sx={{ flex: 1 }} value={channelAccessToken} onChange={e => setChannelAccessToken(e.target.value)} onKeyDown={e => e.key === "Enter" && saveButtonRef.current.click() } required/>
-          <Tooltip title={<span>チャネルアクセストークンは、<a href="https://developers.line.biz/console/" target="_blank" rel="noreferrer" style={{ color: "inherit" }}>LINE Developersのコンソール画面</a>から取得してください。エディタでのトークンの取り扱いについては、<a href="#" style={{ color: "white" }}>プライバシーポリシー</a>をご覧ください。</span>} arrow>
-            <InfoIcon sx={{ m: 1 }}/>
+          <TextField label="チャネルアクセストークン" sx={{ flex: 1 }} value={channelAccessToken} onChange={e => setChannelAccessToken(e.target.value)} onKeyDown={e => e.key === "Enter" && saveButtonRef.current.click()} required />
+          <Tooltip title={<span>チャネルアクセストークンは、<a href="https://developers.line.biz/console/" target="_blank" rel="noreferrer" style={{ color: "inherit" }}>LINE Developersのコンソール画面</a>から取得してください。エディタでのトークンの取り扱いについては、<a href="https://e-chan1007.notion.site/a566a179f3db4e78b1ae883be23aad38" target="_blank" rel="noopener noreferrer" style={{ color: "white" }}>プライバシーポリシー</a>をご覧ください。</span>} arrow>
+            <InfoIcon sx={{ m: 1 }} />
           </Tooltip>
         </Stack>
         {!isChannelAccessTokenValid && channelAccessTokenValidated && (

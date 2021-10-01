@@ -112,7 +112,7 @@ export default function LINEScreen(
           style={{ width: "100%", visibility: menuImage?.image?.src ? "visible" : "hidden", cursor: richMenuCursor }}
           ref={imageRef}
           draggable={false} />
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{
+        <svg width="100%" height="100%" style={{
           position: "absolute",
           width: "100%",
           height: "100%",

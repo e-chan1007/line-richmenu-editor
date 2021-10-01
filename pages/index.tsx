@@ -51,7 +51,6 @@ export default function Index(): JSX.Element {
     <MainLayout {...{ onMenuButtonClick: () => setIsDrawerOpen(!isDrawerOpen) }}>
       <Head>
         <title>リッチメニューエディタ</title>
-        <meta name="description" content="LINE Messaging APIで利用できるリッチメニューを作成するエディタです。" />
       </Head>
       <Box display="flex" sx={{ height: "100%" }}>
         <>
@@ -65,8 +64,8 @@ export default function Index(): JSX.Element {
               [`& .MuiDrawer-paper`]: { width: "320px", boxSizing: "border-box" }
             }}
           >
-            <Toolbar variant="dense"/>
-            <LeftSideDrawer {...{ setIsBotSettingsDialogOpen }}/>
+            <Toolbar variant="dense" />
+            <LeftSideDrawer {...{ setIsBotSettingsDialogOpen }} />
           </Drawer>
           {richMenuId ? (
             <Grid container padding="8px">
@@ -80,16 +79,16 @@ export default function Index(): JSX.Element {
                       centered
 
                     >
-                      <Tab label="メニュー設定" icon={<ViewModuleIcon />} value="0"/>
-                      <Tab label="コード編集" icon={<CodeIcon />} value="1"/>
-                      <Tab label="API操作(メニュー別)" icon={<CloudQueueIcon />} value="2"/>
+                      <Tab label="メニュー設定" icon={<ViewModuleIcon />} value="0" />
+                      <Tab label="コード編集" icon={<CodeIcon />} value="1" />
+                      <Tab label="API操作(メニュー別)" icon={<CloudQueueIcon />} value="2" />
                     </TabList>
                   </Box>
                   <TabPanel value="0">
                     <Stack spacing={2}>
                       <BasicSettingsCard key="BasicSettingsCard" />
-                      <ImageSelectCard key="ImageSelectCard" {...{ setIsImageWrong }}/>
-                      <TapAreaSettingsCard key="TapAreaSettingsCard" {...{ activeAreaIndex, setActiveAreaIndex, isImageWrong }}/>
+                      <ImageSelectCard key="ImageSelectCard" {...{ setIsImageWrong }} />
+                      <TapAreaSettingsCard key="TapAreaSettingsCard" {...{ activeAreaIndex, setActiveAreaIndex, isImageWrong }} />
                     </Stack>
                   </TabPanel>
                   <TabPanel value="1" >
@@ -103,17 +102,17 @@ export default function Index(): JSX.Element {
               <Grid item xs={12} lg={4} sx={{ display: "flex", justifyContent: "center", pr: 2 }} >
                 <Box sx={{ width: "80%" }}>
                   <Phone>
-                    <LINEScreen {...{ activeAreaIndex, setActiveAreaIndex }}/>
+                    <LINEScreen {...{ activeAreaIndex, setActiveAreaIndex }} />
                   </Phone>
                 </Box>
               </Grid>
             </Grid>
-          ): isPageLoading || (
+          ) : isPageLoading || (
             <>
               <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
                 <Typography variant="h4">リッチメニューエディタ</Typography>
                 <p>左メニューからリッチメニューを作成してください。</p>
-                <Divider sx={{ width: "256px", my: 2 }}/>
+                <Divider sx={{ width: "256px", my: 2 }} />
                 <Button variant="text" onClick={() => setIsBotSettingsDialogOpen(true)}>Botを追加する</Button>
                 <div>
                   <Button variant="text" href="https://developers.line.biz/ja/docs/messaging-api/using-rich-menus/" target="_blank" rel="noreferrer">

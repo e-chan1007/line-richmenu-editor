@@ -40,7 +40,7 @@ export default function RichMenuImportDialog(
   const [botToInsertRichMenu, setBotToInsertRichMenu] = useState<BotAccount>(null);
   const [tabIndex, setTabIndex] = useState("0");
   const currentAccount = useMemo(() => accounts.find(({ basicId }) => basicId === botId), [accounts, botId]);
-  const { data: remoteRichMenuList } = useSWR<{richmenus: {[key: string]: string}[]}>(() => (currentAccount.channelAccessToken) ? `https://cors.api.e-chan.cf/api.line.me/v2/bot/richmenu/list`: null, url => axios.get(url, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` } }).then(({ data }) => data), { dedupingInterval: 5000 });
+  const { data: remoteRichMenuList } = useSWR<{ richmenus: { [key: string]: string }[] }>(() => (currentAccount.channelAccessToken) ? `https://cors.api.e-chan.cf/api.line.me/v2/bot/richmenu/list` : null, url => axios.get(url, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` } }).then(({ data }) => data), { dedupingInterval: 5000 });
   const [selectedRichMenuIndex, setSelectedRichMenuIndex] = useState(0);
   const [isFileSelected, setIsFileSelected] = useState(false);
   const [isJSONValid, setIsJSONValid] = useState(true);
@@ -121,10 +121,10 @@ export default function RichMenuImportDialog(
               label="メニュー"
               fullWidth
             >
-              { remoteRichMenuList &&
+              {remoteRichMenuList &&
                 remoteRichMenuList.richmenus.sort(({ name: a }, { name: b }) => a.localeCompare(b)).map((richMenu, i) => (
                   <MenuItem value={i} key={i}>
-                    {[(<ListItemText primary={richMenu.name} secondary={richMenu.richMenuId} key={i}/>)]}
+                    {[(<ListItemText primary={richMenu.name} secondary={richMenu.richMenuId} key={i} />)]}
                   </MenuItem>
                 ))}
             </Select>
@@ -147,7 +147,6 @@ export default function RichMenuImportDialog(
           handleMenuClose();
         }} variant="text">キャンセル</Button>
         <Button onClick={() => {
-          console.log({ isMenuOverriden });
           const newRichMenuId = (
             isMenuOverriden ?
               resetRichMenu(remoteRichMenuList?.richmenus?.[selectedRichMenuIndex]?.richMenuId) :
@@ -188,7 +187,7 @@ export default function RichMenuImportDialog(
           }
         }}
         variant="text"
-        disabled={ !((tabIndex === "0" && isFileSelected && isJSONValid) || (tabIndex === "1" && jsonToAdd !== ""))}>インポート</Button>
+        disabled={!((tabIndex === "0" && isFileSelected && isJSONValid) || (tabIndex === "1" && jsonToAdd !== ""))}>インポート</Button>
       </DialogActions>
     </Dialog>
   );

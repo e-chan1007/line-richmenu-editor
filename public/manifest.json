@@ -1,0 +1,25 @@
+{
+  "name": "リッチメニューエディタ",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    }
+  ],
+  "description": "LINE公式アカウントのトーク画面下部に表示される、リッチメニューを作成するツールです。GUI・コードの両方で直感的に編集でき、アップロードまで一貫して行うことができます。",
+  "start_url": "/",
+  "theme_color": "#ff9800",
+  "background_color": "#ffffff",
+  "short_name": "リッチメニュー"
+}

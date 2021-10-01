@@ -35,12 +35,12 @@ import RichMenuExportDialog from "./dialogs/RichMenuExportDialog";
 import RichMenuImportDialog from "./dialogs/RichMenuImportDialog";
 
 export default function LeftSideDrawer(
-  { setIsBotSettingsDialogOpen }: {setIsBotSettingsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>}
+  { setIsBotSettingsDialogOpen }: { setIsBotSettingsDialogOpen: React.Dispatch<React.SetStateAction<boolean>> }
 ): JSX.Element {
   const theme = useTheme();
   const { accounts: _accounts, setAccounts: _setAccounts, setEditingBotId } = useContext(BotAccountContext);
   const { richMenuId: editingRichMenuId, menu: editingRichMenu, reset: resetRichMenu, loadFromDB: loadRichMenuFromDB }
-  = useContext(EditingRichMenuContext);
+    = useContext(EditingRichMenuContext);
   const [contextMenu, setContextMenu] = useState<{
     type: "menu" | "bot";
     mouseX: number;
@@ -76,7 +76,7 @@ export default function LeftSideDrawer(
   const handleMenuClose = () => {
     setContextMenu(null);
   };
-  const [accounts, setAccounts] = useState<(Weaken<BotAccount, "richMenus"> & {isOpened: boolean, richMenus: RichMenuResponse[]})[]>([]);
+  const [accounts, setAccounts] = useState<(Weaken<BotAccount, "richMenus"> & { isOpened: boolean, richMenus: RichMenuResponse[] })[]>([]);
   useEffect(() => {
     (async () => {
       const accounts = await botAccountDatabase.accounts.toArray();
@@ -155,7 +155,7 @@ export default function LeftSideDrawer(
                 selected={account.richMenus.some(({ richMenuId }) => richMenuId === editingRichMenuId)}>
                   {account.pictureUrl ? (
                     <ListItemAvatar sx={{ width: 24 }}>
-                      <Avatar src={account.pictureUrl} sx={{ width: 24, height: 24 }}/>
+                      <Avatar src={account.pictureUrl} sx={{ width: 24, height: 24 }} />
                     </ListItemAvatar>
                   ) : (
                     <ListItemIcon>
@@ -178,31 +178,25 @@ export default function LeftSideDrawer(
                         setEditingBotId(account.basicId);
                       }}
                       data-target={richMenu.richMenuId}>
-                      <ListItemText primary={richMenu.name || "(名称未設定のリッチメニュー)"} secondary={richMenu.richMenuId.startsWith("richmenu-") ? richMenu.richMenuId.slice(0, 24) + "..." : "(未アップロード)"}/>
+                      <ListItemText primary={richMenu.name || "(名称未設定のリッチメニュー)"} secondary={richMenu.richMenuId.startsWith("richmenu-") ? richMenu.richMenuId.slice(0, 24) + "..." : "(未アップロード)"} />
                     </ListItemButton>
                   ))}
                   {account.richMenus.length === 0 && (
                     <ListItem><ListItemText primary="リッチメニューはありません" /></ListItem>
                   )}
-                  <ListItemButton sx={{ pl: 4 }} onClick={e => e.stopPropagation()}>
-                    <ListItemText primary="API操作(Bot別)"/>
-                  </ListItemButton>
                 </List>
               </Collapse>
             </div>
           ))}
           <ListItemButton sx={{ pl: 4, my: 2 }} onClick={() => setIsBotSettingsDialogOpen(true)}>
-            <ListItemText primary="Botアカウントを追加"/>
+            <ListItemText primary="Botアカウントを追加" />
           </ListItemButton>
           <Divider />
-          <ListSubheader component="div" sx={{ background: "transparent" }}>
-            その他の機能
-          </ListSubheader>
-          <ListItemButton sx={{ pl: 4 }} dense>
-            <ListItemText primary="プライバシーポリシー"/>
+          <ListItemButton sx={{ pl: 4 }} dense component="a" href="https://e-chan1007.notion.site/a566a179f3db4e78b1ae883be23aad38" target="_blank" rel="noopener noreferrer">
+            <ListItemText primary="プライバシーポリシー" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }} dense>
-            <ListItemText primary="エディタについて"/>
+          <ListItemButton sx={{ pl: 4 }} dense component="a" href="https://e-chan1007.notion.site/66731af48ed34b77a68279c6fdd39374" target="_blank" rel="noopener noreferrer">
+            <ListItemText primary="エディタについて" />
           </ListItemButton>
         </Box>
         <Menu
@@ -210,7 +204,7 @@ export default function LeftSideDrawer(
           onClose={handleMenuClose}
           anchorReference="anchorPosition"
           anchorPosition={
-            contextMenu !== null? { top: contextMenu.mouseY, left: contextMenu.mouseX }: null
+            contextMenu !== null ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : null
           }
         >
           <MenuItem onClick={() => {
@@ -241,7 +235,7 @@ export default function LeftSideDrawer(
           onClose={handleMenuClose}
           anchorReference="anchorPosition"
           anchorPosition={
-            contextMenu !== null? { top: contextMenu.mouseY, left: contextMenu.mouseX }: null
+            contextMenu !== null ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : null
           }
         >
           {contextMenu?.target?.startsWith?.("richmenu-") && (<>

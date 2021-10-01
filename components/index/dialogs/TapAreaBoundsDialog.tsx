@@ -36,7 +36,7 @@ export default function TapAreaBoundsDialog(
   : JSX.Element {
   const theme = useTheme();
   const { menuImage, menu: { areas }, setters: { setAreas } } = useContext(EditingRichMenuContext);
-  const [bounds, setBounds] = useState<(number|boolean)[]>([-1, -1, -1, -1, false]);
+  const [bounds, setBounds] = useState<(number | boolean)[]>([-1, -1, -1, -1, false]);
   const [boundsRangeError, setBoundsRangeError] = useState<(AreaRangeError)[]>([null, null, null, null]);
   const [isBoundsPosAbsolute, setBoundsAreaPosAbsolute] = useState(false);
   const detectAreaRangeError = () => {
@@ -79,7 +79,7 @@ export default function TapAreaBoundsDialog(
     setBounds([...newBounds, true]);
     detectAreaRangeError();
   };
-  const boundsInputProps: InputProps ={
+  const boundsInputProps: InputProps = {
     inputMode: "numeric",
     endAdornment: (<InputAdornment position="end">px</InputAdornment>)
   };
@@ -89,15 +89,23 @@ export default function TapAreaBoundsDialog(
     else if (boundsRangeError.some(v => v !== null)) setBoundsRangeError([null, null, null, null]);
   }, [bounds, isBoundsPosAbsolute]);
   useEffect(() => {
-    if (editingAreaIndex < areas.length) {
-      const { x, y, width, height } = areas[editingAreaIndex].bounds;
-      setBounds([x, y, width, height, true]);
-    } else {
-      setBounds([-1, -1, -1, -1, false]);
+    if (isDialogOpened) {
+      if (editingAreaIndex < areas.length) {
+        const { x, y, width, height } = areas[editingAreaIndex].bounds;
+
+        setBounds([x, y, width, height, true]);
+      } else {
+        setBounds([-1, -1, -1, -1, false]);
+      }
     }
-  }, [areas, editingAreaIndex]);
+  }, [areas, editingAreaIndex, isDialogOpened]);
   return (
-    <Dialog onClose={() => setIsDialogOpened(false)} open={isDialogOpened} scroll="body" maxWidth="md">
+    <Dialog onClose={() => setIsDialogOpened(false)} onBackdropClick={() => {
+      setIsDialogOpened(false);
+      setTimeout(() => {
+        setBounds([-1, -1, -1, -1, false]);
+      }, 100);
+    }} open={isDialogOpened} scroll="body" maxWidth="md">
       <DialogTitle>タップ領域を{editingAreaIndex < areas.length ? "編集" : "追加"}</DialogTitle>
       <DialogContent sx={{ width: "688px" }}>
         <Typography variant="subtitle1">画像サイズ: {menuImage?.image.width}px × {menuImage?.image.height}px</Typography>
@@ -151,7 +159,7 @@ export default function TapAreaBoundsDialog(
             /></FormControl>
           <FormControl>
             <Tooltip title={isBoundsPosAbsolute ? "座標で指定" : "サイズで指定"}>
-              <Button onClick={() => { setBoundsAreaPosAbsolute(!isBoundsPosAbsolute); }} color="inherit" sx={{ color: theme.palette.action.active }}>
+              <Button onClick={() => { setBoundsAreaPosAbsolute(!isBoundsPosAbsolute); }}>
                 {isBoundsPosAbsolute ? ("座標") : ("サイズ")}
               </Button>
             </Tooltip>
@@ -173,14 +181,14 @@ export default function TapAreaBoundsDialog(
           boundsRangeError.some(error => error) && (<Alert severity="error" sx={{ mt: 1 }}>
             <AlertTitle>エラー</AlertTitle>
             {boundsRangeError.map((error, i) => error &&
-                  (<li key={i}>
-                    <strong>{boundsPosAlias(i)}</strong>を
-                    {error.type === "EMPTY" ? "指定" : (<>
-                      <strong>{error.requirement + ((i >= 2 && isBoundsPosAbsolute) ? (bounds[i-2] as number) : 0)}px
-                        {error.type === "ABOVE" ? "以下" : "以上"}</strong>に
-                    </>)}
-                    してください
-                  </li>)
+              (<li key={i}>
+                <strong>{boundsPosAlias(i)}</strong>を
+                {error.type === "EMPTY" ? "指定" : (<>
+                  <strong>{error.requirement + ((i >= 2 && isBoundsPosAbsolute) ? (bounds[i - 2] as number) : 0)}px
+                    {error.type === "ABOVE" ? "以下" : "以上"}</strong>に
+                </>)}
+                してください
+              </li>)
             )}
           </Alert>)
         }
