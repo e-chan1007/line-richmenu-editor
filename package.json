@@ -24,7 +24,7 @@
     "@zeit/next-css": "^1.0.1",
     "ajv": "^8.6.2",
     "ajv-errors": "^3.0.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "dayjs": "^1.10.6",
     "dexie": "^3.0.3",
     "eslint-plugin-react": "^7.24.0",
