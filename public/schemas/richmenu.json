@@ -1,0 +1,429 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://richmenu.app.e-chan.cf/schemas/richmenu.json",
+  "type": "object",
+  "title": "LINE Messaging API リッチメニュー",
+  "description": "リッチメニューの構造 ( https://developers.line.biz/ja/reference/messaging-api/#rich-menu-structure )",
+  "required": ["size", "selected", "name", "chatBarText", "areas"],
+  "properties": {
+    "size": {
+      "$id": "#/properties/size",
+      "type": "object",
+      "title": "size",
+      "description": "sizeオブジェクト。トークルームに表示されるリッチメニューの幅と高さを表します。使用できるリッチメニューの画像の幅サイズは800px以上2500px以下で、高さサイズは250px以上です。ただし幅/高さのアスペクト比は、1.45以上になるようにします。",
+      "examples": [
+        {
+          "width": 2500,
+          "height": 1686
+        }
+      ],
+      "required": ["width", "height"],
+      "properties": {
+        "width": {
+          "$id": "#/properties/size/properties/width",
+          "type": "integer",
+          "title": "width",
+          "description": "リッチメニューの幅。800以上、2500以下の値を指定します。ただし、幅/高さのアスペクト比が1.45以上になるようにします。",
+          "minimum": 800,
+          "maximum": 2500,
+          "examples": [520]
+        },
+        "height": {
+          "$id": "#/properties/size/properties/height",
+          "type": "integer",
+          "title": "height",
+          "minimum": 250,
+          "description": "リッチメニューの高さ。250以上の値を指定します。ただし、幅/高さのアスペクト比が1.45以上になるようにします。",
+          "examples": [1040]
+        }
+      },
+      "additionalProperties": false
+    },
+    "selected": {
+      "$id": "#/properties/selected",
+      "type": "boolean",
+      "title": "select",
+      "description": "デフォルトでリッチメニューを表示する場合はtrueです。それ以外はfalseです。",
+      "examples": [false]
+    },
+    "name": {
+      "$id": "#/properties/name",
+      "type": "string",
+      "title": "name",
+      "description": "リッチメニューの名前。リッチメニューの管理に役立ちます。ユーザーには表示されません。\n最大文字数：300",
+      "maxLength": 300,
+      "examples": ["Nice richmenu"]
+    },
+    "chatBarText": {
+      "$id": "#/properties/chatBarText",
+      "type": "string",
+      "title": "chatBarText",
+      "description": "トークルームメニューに表示されるテキストです。\n最大文字数：14",
+      "maxLength": 14,
+      "examples": ["Tap to open"]
+    },
+    "areas": {
+      "$id": "#/properties/areas",
+      "type": "array",
+      "title": "areas",
+      "description": "タップ領域の座標とサイズを定義する、領域オブジェクトの配列。\n最大領域オブジェクト数：20",
+      "maxItems": 20,
+      "examples": [
+        [
+          {
+            "bounds": {
+              "x": 0,
+              "y": 0,
+              "width": 2500,
+              "height": 1686
+            },
+            "action": {
+              "type": "postback",
+              "label": "Buy",
+              "data": "action=buy&itemid=123"
+            }
+          }
+        ]
+      ],
+      "items": {
+        "$id": "#/properties/areas/items",
+        "oneOf": [
+          {
+            "$id": "#/properties/areas/items/oneOf/0",
+            "type": "object",
+            "title": "領域オブジェクト",
+            "examples": [
+              {
+                "bounds": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 2500,
+                  "height": 1686
+                },
+                "action": {
+                  "type": "postback",
+                  "label": "Buy",
+                  "data": "action=buy&itemid=123"
+                }
+              }
+            ],
+            "required": ["bounds", "action"],
+            "properties": {
+              "bounds": {
+                "$id": "#/properties/areas/items/oneOf/0/properties/bounds",
+                "type": "object",
+                "title": "bounds",
+                "description": "領域の境界をピクセルで表すオブジェクト。",
+                "examples": [
+                  {
+                    "x": 0,
+                    "y": 0,
+                    "width": 2500,
+                    "height": 1686
+                  }
+                ],
+                "required": ["x", "y", "width", "height"],
+                "properties": {
+                  "x": {
+                    "$id": "#/properties/areas/items/oneOf/0/properties/bounds/properties/x",
+                    "type": "integer",
+                    "title": "x",
+                    "description": "画像の左端を基準としたタップ領域の位置(横方向の相対位置)。0以上の値を設定してください。",
+                    "minimum": 0,
+                    "examples": [0]
+                  },
+                  "y": {
+                    "$id": "#/properties/areas/items/oneOf/0/properties/bounds/properties/y",
+                    "type": "integer",
+                    "title": "y",
+                    "description": "画像の上端を基準としたタップ領域の位置(縦方向の相対位置)。0以上の値を設定してください。",
+                    "minimum": 0,
+                    "examples": [0]
+                  },
+                  "width": {
+                    "$id": "#/properties/areas/items/oneOf/0/properties/bounds/properties/width",
+                    "type": "integer",
+                    "title": "width",
+                    "description": "タップ領域の幅",
+                    "minimum": 0,
+                    "examples": [2500]
+                  },
+                  "height": {
+                    "$id": "#/properties/areas/items/oneOf/0/properties/bounds/properties/height",
+                    "type": "integer",
+                    "title": "height",
+                    "description": "タップ領域の高さ",
+                    "minimum": 0,
+                    "examples": [1686]
+                  }
+                },
+                "additionalProperties": false
+              },
+              "action": {
+                "$id": "#/properties/areas/items/oneOf/0/properties/action",
+                "type": "object",
+                "title": "action",
+                "description": "領域がタップされたときに実行されるアクション。",
+                "examples": [
+                  {
+                    "type": "postback",
+                    "label": "Buy",
+                    "data": "action=buy&itemid=123"
+                  }
+                ],
+                "oneOf": [
+                  {
+                    "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/0",
+                    "title": "ポストバックアクション",
+                    "description": "このアクションが関連づけられたコントロールがタップされると、dataプロパティに指定された文字列を含むポストバックイベントが、Webhookを介して返されます。",
+                    "required": ["type", "data"],
+                    "additionalProperties": false,
+                    "examples": [
+                      {
+                        "type": "postback",
+                        "label": "Buy",
+                        "data": "action=buy&itemid=111",
+                        "displayText": "Buy"
+                      }
+                    ],
+                    "properties": {
+                      "type": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/0/properties/type",
+                        "type": "string",
+                        "title": "type",
+                        "enum": ["postback"],
+                        "examples": ["postback"]
+                      },
+                      "label": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/0/properties/label",
+                        "type": "string",
+                        "title": "label",
+                        "description": "アクションのラベル。リッチメニューでは省略可能です。ユーザーデバイスのアクセシビリティ機能が有効な場合に読み上げられます。\n・最大文字数：20\n・iOS版LINE 8.2.0以降でサポートされます。",
+                        "maxLength": 20,
+                        "examples": ["Buy"]
+                      },
+                      "data": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/0/properties/data",
+                        "type": "string",
+                        "title": "data",
+                        "description": "Webhookを介して、ポストバックイベントのpostback.dataプロパティで返される文字列\n最大文字数：300",
+                        "maxLength": 300,
+                        "examples": ["action=buy&itemid=111"]
+                      },
+                      "displayText": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/0/properties/displayText",
+                        "type": "string",
+                        "title": "displayText",
+                        "description": "アクションの実行時に、ユーザーのメッセージとしてLINEのトーク画面に表示されるテキスト。\n最大文字数：300",
+                        "maxLength": 300,
+                        "examples": ["Buy"]
+                      }
+                    }
+                  },
+                  {
+                    "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/1",
+                    "title": "メッセージアクション",
+                    "description": "このアクションが関連づけられたコントロールがタップされると、textプロパティの文字列がユーザーからのメッセージとして送信されます。",
+                    "required": ["type", "text"],
+                    "additionalProperties": false,
+                    "examples": [
+                      {
+                        "type": "message",
+                        "label": "Yes",
+                        "text": "Yes"
+                      }
+                    ],
+                    "properties": {
+                      "type": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/1/type",
+                        "type": "string",
+                        "title": "type",
+                        "enum": ["message"],
+                        "examples": ["message"]
+                      },
+                      "label": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/1/label",
+                        "type": "string",
+                        "title": "label",
+                        "description": "アクションのラベル。リッチメニューでは省略可能です。ユーザーデバイスのアクセシビリティ機能が有効な場合に読み上げられます。\n・最大文字数：20\n・iOS版LINE 8.2.0以降でサポートされます。",
+                        "maxLength": 20,
+                        "examples": ["Yes"]
+                      },
+                      "text": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/1/text",
+                        "type": "string",
+                        "title": "text",
+                        "description": "アクションの実行時に送信されるテキスト",
+                        "maxLength": 300,
+                        "examples": ["Yes"]
+                      }
+                    }
+                  },
+                  {
+                    "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/2",
+                    "title": "URIアクション",
+                    "description": "このアクションが関連づけられたコントロールがタップされると、LINE内ブラウザでuriプロパティのURIが開きます。",
+                    "required": ["type", "uri"],
+                    "additionalProperties": false,
+                    "examples": [
+                      {
+                        "type": "uri",
+                        "label": "メニューを見る",
+                        "uri": "https://example.com/menu"
+                      }
+                    ],
+                    "properties": {
+                      "type": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/2/type",
+                        "type": "string",
+                        "title": "type",
+                        "enum": ["uri"],
+                        "examples": ["uri"]
+                      },
+                      "label": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/2/label",
+                        "type": "string",
+                        "title": "label",
+                        "description": "アクションのラベル。リッチメニューでは省略可能です。ユーザーデバイスのアクセシビリティ機能が有効な場合に読み上げられます。\n・最大文字数：20\n・iOS版LINE 8.2.0以降でサポートされます。",
+                        "maxLength": 20,
+                        "examples": ["詳しくはこちら"]
+                      },
+                      "uri": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/2/uri",
+                        "type": "string",
+                        "title": "uri",
+                        "description": "アクションの実行時に開かれるURI(最大文字数：1000)\n使用できるスキームは、http、https、line、およびtelです。",
+                        "maxLength": 1000,
+                        "pattern": "^(https?|line)://|tel:",
+                        "examples": ["http://example.com/page/222"]
+                      }
+                    }
+                  },
+                  {
+                    "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/3",
+                    "title": "日時選択アクション",
+                    "description": "このアクションが関連づけられたコントロールがタップされると、日時選択ダイアログでユーザーが選択した日時を含むポストバックイベントが、Webhookを介して返されます。日時選択アクションはタイムゾーンの違いに対応していません。",
+                    "required": ["type", "data", "mode"],
+                    "additionalProperties": false,
+                    "examples": [
+                      {
+                        "type": "datetimepicker",
+                        "label": "Select date",
+                        "data": "storeId=12345",
+                        "mode": "datetime",
+                        "initial": "2017-12-25t00:00",
+                        "max": "2018-01-24t23:59",
+                        "min": "2017-12-25t00:00"
+                      }
+                    ],
+                    "properties": {
+                      "type": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/3/properties/type",
+                        "type": "string",
+                        "title": "type",
+                        "enum": ["datetimepicker"],
+                        "examples": ["datetimepicker"]
+                      },
+                      "label": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/3/properties/label",
+                        "type": "string",
+                        "title": "label",
+                        "description": "アクションのラベル。リッチメニューでは省略可能です。ユーザーデバイスのアクセシビリティ機能が有効な場合に読み上げられます。\n・最大文字数：20\n・iOS版LINE 8.2.0以降でサポートされます。",
+                        "maxLength": 20,
+                        "examples": ["Select date"]
+                      },
+                      "data": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/3/properties/data",
+                        "type": "string",
+                        "title": "data",
+                        "description": "Webhookを介して、ポストバックイベントのpostback.dataプロパティで返される文字列\n最大文字数：300",
+                        "maxLength": 300,
+                        "examples": ["storeId=12345"]
+                      },
+                      "mode": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/3/properties/mode",
+                        "type": "string",
+                        "title": "mode",
+                        "description": "アクションモード\ndate：日付を選択します。\ntime：時刻を選択します。\ndatetime：日付と日時を選択します。",
+                        "enum": ["date", "time", "datetime"],
+                        "examples": ["datetime"]
+                      },
+                      "initial": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/3/properties/initial",
+                        "type": "string",
+                        "title": "initial",
+                        "description": "日付または時刻の初期値",
+                        "examples": ["2017-12-25t00:00"]
+                      },
+                      "max": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/3/properties/max",
+                        "type": "string",
+                        "title": "max",
+                        "description": "選択可能な日付または時刻の最大値。minの値より大きい必要があります。",
+                        "examples": ["2018-01-24t23:59"]
+                      },
+                      "min": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/3/properties/min",
+                        "type": "string",
+                        "title": "min",
+                        "description": "選択可能な日付または時刻の最小値。maxの値より小さい必要があります。",
+                        "examples": ["2017-12-25t00:00"]
+                      }
+                    }
+                  },
+                  {
+                    "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/4",
+                    "title": "リッチメニュー切替アクション",
+                    "description": "リッチメニューにのみ設定できるアクションです。このアクションが関連づけられたリッチメニューがタップされると、リッチメニューの切替が行われ、ユーザーが選択したリッチメニューエイリアスIDを含むポストバックイベントが、Webhookを介して返されます。詳しくは、『Messaging APIドキュメント』の「複数のリッチメニューを切り替える」を参照してください。",
+                    "required": ["type", "richMenuAliasId", "data"],
+                    "additionalProperties": false,
+                    "examples": [
+                      {
+                        "type": "richmenuswitch",
+                        "richMenuAliasId": "richmenu-alias-b",
+                        "data": "richmenu-changed-to-b"
+                      }
+                    ],
+                    "properties": {
+                      "type": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/4/properties/type",
+                        "type": "string",
+                        "title": "type",
+                        "enum": ["richmenuswitch"],
+                        "examples": ["richmenuswitch"]
+                      },
+                      "label": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/4/properties/label",
+                        "type": "string",
+                        "title": "label",
+                        "description": "アクションのラベル。リッチメニューでは省略可能です。ユーザーデバイスのアクセシビリティ機能が有効な場合に読み上げられます。\n・最大文字数：20\n・iOS版LINE 8.2.0以降でサポートされます。",
+                        "maxLength": 20
+                      },
+                      "richMenuAliasId": {
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/4/properties/richMenuAliasId",
+                        "type": "string",
+                        "title": "richMenuAliasId",
+                        "description": "切替先のリッチメニューエイリアスID。",
+                        "examples": ["richmenu-alias-b"]
+                      },
+                      "data": {
+                        "$id": "#/properties/data",
+                        "type": "string",
+                        "title": "data",
+                        "description": "Webhookを介して、ポストバックイベントのpostback.dataプロパティで返される文字列\n・最大文字数：300",
+                        "maxLength": 300,
+                        "examples": ["richmenu-changed-to-b"]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,36 +1,35 @@
 {
   "compilerOptions": {
-    "target": "es2018",
+    "target": "es2021",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": [
-      "esnext",
-      "esnext.asynciterable",
-      "dom"
-    ],
-    "esModuleInterop": true,
-    "allowJs": true,
-    "sourceMap": true,
-    "strict": true,
-    "noEmit": true,
-    "experimentalDecorators": true,
-    "baseUrl": ".",
-    "paths": {
-      "~/*": [
-        "./*"
-      ],
-      "@/*": [
-        "./*"
-      ]
-    },
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
     "types": [
       "@types/node",
-      "@nuxt/types"
+      "@types/react",
+      "@types/react-dom"
     ]
   },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
   "exclude": [
-    "node_modules",
-    ".nuxt",
-    "dist"
+    "node_modules"
   ]
 }
