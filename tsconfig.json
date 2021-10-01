@@ -10,6 +10,8 @@
     "baseUrl": ".",
     "skipLibCheck": true,
     "strict": false,
+    "importHelpers": true,
+    "removeComments": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -22,7 +24,8 @@
       "@types/node",
       "@types/react",
       "@types/react-dom"
-    ]
+    ],
+    "incremental": true
   },
   "include": [
     "next-env.d.ts",

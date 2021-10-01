@@ -1,15 +1,20 @@
+// @ts-check
 // next.config.js
 
-const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
-const withTM = require("next-transpile-modules")([
+import MonacoWebpackPlugin from "monaco-editor-webpack-plugin";
+import _withTM from "next-transpile-modules";
+import withPWA from "next-pwa";
+
+const withTM = _withTM([
   "monaco-editor"
 ]);
 
-const withPWA = require("next-pwa");
-
-module.exports = withPWA(withTM({
-  pwa: { dest: "public" },
+export default withPWA(withTM({
   cssModules: true,
+  eslint: { ignoreDuringBuilds: true },
+  pwa: { dest: "public", disable: process.env.NODE_ENV === "development" },
+  outputFileTracing: false,
+  swcMinify: false,
   webpack: config => {
     config.plugins.push(
       new MonacoWebpackPlugin({

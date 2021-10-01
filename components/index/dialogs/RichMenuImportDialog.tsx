@@ -27,12 +27,12 @@ import useSWR from "swr";
 
 export default function RichMenuImportDialog(
   { botId, isDialogOpened, setIsDialogOpened, handleMenuClose }:
-  {
-    botId: string,
-    isDialogOpened: boolean,
-    setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
-    handleMenuClose: () => void
-  })
+    {
+      botId: string,
+      isDialogOpened: boolean,
+      setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
+      handleMenuClose: () => void
+    })
   : JSX.Element {
   const { accounts, setAccounts } = useContext(BotAccountContext);
   const { setIsPageLoading } = useContext(PageLoadingStateContext);
@@ -117,7 +117,7 @@ export default function RichMenuImportDialog(
           <TabPanel value="1">
             <Select
               value={selectedRichMenuIndex}
-              onChange={event => setSelectedRichMenuIndex(event.target.value)}
+              onChange={event => setSelectedRichMenuIndex(event.target.value as number)}
               label="メニュー"
               fullWidth
             >
@@ -186,8 +186,8 @@ export default function RichMenuImportDialog(
             })();
           }
         }}
-        variant="text"
-        disabled={!((tabIndex === "0" && isFileSelected && isJSONValid) || (tabIndex === "1" && jsonToAdd !== ""))}>インポート</Button>
+          variant="text"
+          disabled={!((tabIndex === "0" && isFileSelected && isJSONValid) || (tabIndex === "1" && jsonToAdd !== ""))}>インポート</Button>
       </DialogActions>
     </Dialog>
   );

@@ -18,7 +18,6 @@ import { ThemeColorContext } from "pages/_app";
 import richMenuSchema from "public/schemas/richmenu.json";
 import React, { useContext, useEffect, useRef, useState } from "react";
 
-
 export default function JSONEditor(): JSX.Element {
   const { editorMode, systemMode } = useContext(ThemeColorContext);
   const { setters } = useContext(EditingRichMenuContext);
@@ -48,13 +47,7 @@ export default function JSONEditor(): JSX.Element {
             monacoRef.current = editor;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            window.MonacoEnvironment.getWorkerUrl = (
-              _moduleId: string,
-              label: string
-            ) => {
-              if (label === "json") { return "_next/static/json.worker.js"; }
-              return "_next/static/editor.worker.js";
-            };
+            window.MonacoEnvironment.getWorkerUrl = () => "_next/static/json.worker.js";
             windowResizeListener = () => editor.layout();
             window.addEventListener("resize", windowResizeListener);
             setIsMonacoLoading(false);
@@ -62,6 +55,9 @@ export default function JSONEditor(): JSX.Element {
             monacoChangeModelListener = editor.onDidChangeModelContent(() => setJSONEditorValue(monacoRef.current.getValue()));
           });
           monaco.editor.create(editorElementRef.current, {
+            automaticLayout: true,
+            formatOnType: true,
+            formatOnPaste: true,
             value: jsonEditorValue,
             language: "json",
             theme: { light: "vs", dark: "vs-dark" }[editorMode === "system" ? systemMode : editorMode],

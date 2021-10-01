@@ -18,7 +18,7 @@ import prismVSStyles from "styles/prism-vs.module.scss";
 import prismVSDarkStyles from "styles/prism-vsc-dark-plus.module.scss";
 
 export default function APIController(
-  { children, apiSpec, ...params }: {children?: React.ReactNode, apiSpec: APISpecification, [key: string]: unknown}
+  { children, apiSpec, ...params }: { children?: React.ReactNode, apiSpec: APISpecification, [key: string]: unknown }
 ): JSX.Element {
   const controllerContext = useContext(APIControllerContext);
   const { editorMode, systemMode } = useContext(ThemeColorContext);
@@ -26,7 +26,7 @@ export default function APIController(
   const [expanded, setExpanded] = useState<string | false>(false);
   const [isAPICalling, setIsAPICalling] = useState(false);
   const [results, setResults] = useState<APIResponse[]>(controllerContext.dataStore[apiSpec.key]?.results || []);
-  const [editableValues, setEditableValues] = useState<{[key: string]: unknown}>(controllerContext.dataStore[apiSpec.key]?.params || {});
+  const [editableValues, setEditableValues] = useState<{ [key: string]: unknown }>(controllerContext.dataStore[apiSpec.key]?.params || {});
 
   const paramsValidateResult = useMemo(() => apiSpec.validateParams({ ...params, ...editableValues }), [params, editableValues]);
 
@@ -37,8 +37,8 @@ export default function APIController(
   }, [editorMode, systemMode]);
   const prismHTML = useMemo(() => results.length ? Prism.highlight(results.map(result =>
     `// ${result.label}の応答: ${result.status}(${(result.status >= 200 && result.status < 300) ? "成功" : "エラー"})\n// ${result.endpoint}\n${result.result}`
-  ).join("\n\n"), Prism.languages.javascript, "javascript"): "", [results, prismTheme]);
-  const handleChange = (panel: string) => (_, isExpanded: boolean) => {
+  ).join("\n\n"), Prism.languages.javascript, "javascript") : "", [results, prismTheme]);
+  const handleChange = (panel: string) => (_: unknown, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -104,7 +104,7 @@ export default function APIController(
           onClick={() => {
             setIsAPICalling(true);
             apiSpec.callAPI(
-              accounts.find(({ basicId }) => basicId === editingBotId).channelAccessToken,
+              accounts.find(({ basicId }) => basicId === editingBotId)?.channelAccessToken,
               { ...params, ...editableValues }
             ).then(result => setResults(result)).finally(() => setIsAPICalling(false));
           }}

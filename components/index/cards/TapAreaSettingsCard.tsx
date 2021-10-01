@@ -105,16 +105,16 @@ export default function TapAreaSettingsPanel(
                       secondaryAction={!isAreaActionButtonWrapped && areaActionButtons(index)}
                     >
                       <ListItemText
-                        primary={ (() => {
+                        primary={(() => {
                           if (area.action.label) return `${area.action.label} (${actionTypes[area.action.type].label}アクション)`;
                           else if (area.action.type === "") return "アクション未設定の領域";
                           return `${actionTypes[area.action.type].label}アクション`;
-                        })() }
+                        })()}
                         secondary={`X: ${area.bounds.x}px Y: ${area.bounds.y}px W: ${area.bounds.width}px H: ${area.bounds.height}px`} />
                     </ListItem>
                   </ListItemButton>
                   {isAreaActionButtonWrapped && <ListItem>{areaActionButtons(index)}</ListItem>}
-                  <Divider/>
+                  <Divider />
                 </React.Fragment>
               );
             })}
@@ -133,21 +133,21 @@ export default function TapAreaSettingsPanel(
                   ...dialogCommonProps,
                   isDialogOpened: isActionDialogOpened,
                   setIsDialogOpened: setIsActionDialogOpened
-                }}/>
+                }} />
               <TapAreaBoundsDialog {
                 ...{
                   ...dialogCommonProps,
                   isDialogOpened: isBoundsDialogOpened,
                   setIsDialogOpened: setIsBoundsDialogOpened,
                   setActiveAreaIndex
-                }}/>
+                }} />
               <TapAreaDeleteDialog {
                 ...{
                   ...dialogCommonProps,
                   isDialogOpened: isDeleteDialogOpened,
                   setIsDialogOpened: setIsDeleteDialogOpened,
                   setActiveAreaIndex
-                }}/>
+                }} />
             </>);
         })()}
       </CardContent>

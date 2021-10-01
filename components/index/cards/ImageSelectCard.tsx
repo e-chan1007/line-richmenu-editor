@@ -15,12 +15,12 @@ export default function ImageSelectCard(): JSX.Element {
   const { setters: { setMenuImage, setSize } } = useContext(EditingRichMenuContext);
   const theme = useTheme();
   const onImageSelected = (event: ChangeEvent<HTMLInputElement>): void => {
-    const file = event.target.files[0];
+    const file = (event.target.files as FileList)[0];
     if (!file) return;
     const fileReader = new FileReader();
     fileReader.onloadend = () => {
       const base64Binary = (fileReader.result as string).split(",", 2)[1];
-      let fileType: "JPEG" | "PNG";
+      let fileType: "JPEG" | "PNG" | undefined;
       if (base64Binary.startsWith(JPEG_HEADER)) fileType = "JPEG";
       else if (base64Binary.startsWith(PNG_HEADER)) fileType = "PNG";
       const fileData = {
@@ -53,7 +53,7 @@ export default function ImageSelectCard(): JSX.Element {
         <Typography variant="h5" component="div">
           画像設定
           <label style={{ margin: theme.spacing(2) }}>
-            <input accept=".jpg,.jpeg,.png" type="file" style={{ display: "none" }} onChange={onImageSelected}/>
+            <input accept=".jpg,.jpeg,.png" type="file" style={{ display: "none" }} onChange={onImageSelected} />
             <Button startIcon={<FolderOpenIcon />} component="span" sx={{ mt: -1 }}>
               画像を選択
             </Button>

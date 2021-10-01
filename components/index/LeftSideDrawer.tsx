@@ -193,10 +193,10 @@ export default function LeftSideDrawer(
           </ListItemButton>
           <Divider />
           <ListItemButton sx={{ pl: 4 }} dense component="a" href="https://e-chan1007.notion.site/a566a179f3db4e78b1ae883be23aad38" target="_blank" rel="noopener noreferrer">
-            <ListItemText primary="プライバシーポリシー" />
+            <ListItemText primary="エディタについて" />
           </ListItemButton>
           <ListItemButton sx={{ pl: 4 }} dense component="a" href="https://e-chan1007.notion.site/66731af48ed34b77a68279c6fdd39374" target="_blank" rel="noopener noreferrer">
-            <ListItemText primary="エディタについて" />
+            <ListItemText primary="プライバシーポリシー" />
           </ListItemButton>
         </Box>
         <Menu
