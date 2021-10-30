@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "generate": "next build && next export && mkdir -p ./out/_next/node_modules/monaco-editor && cp -r ./node_modules/monaco-editor/* ./out/_next/node_modules/monaco-editor",
     "start": "next start",
     "lint": "next lint"
   },
