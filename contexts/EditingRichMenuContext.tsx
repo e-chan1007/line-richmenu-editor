@@ -33,7 +33,7 @@ export const EditingRichMenuContext = createContext<EditingRichMenuContextType>(
   loadFromDB: () => { }
 });
 
-export function EditingRichMenuContextProvider({ children }: { children: React.ReactNode }): JSX.Element {
+export function EditingRichMenuContextProvider({ children }: { children: React.ReactNode }) {
   const context = useContext(EditingRichMenuContext);
   const { setIsPageLoading } = useContext(PageLoadingStateContext);
   const { setAccounts, setEditingBotId } = useContext(BotAccountContext);
@@ -149,8 +149,8 @@ export function EditingRichMenuContextProvider({ children }: { children: React.R
           if (oldBotAccount) {
             oldBotAccount.richMenus.splice(oldBotAccount.richMenus.findIndex(
               richMenuId => richMenuId === oldRichMenuId),
-              1,
-              newContext.richMenuId);
+            1,
+            newContext.richMenuId);
             await botAccountDatabase.accounts.update(oldBotAccount.basicId, {
               richMenuId: newContext.richMenuId,
               richMenus: oldBotAccount.richMenus

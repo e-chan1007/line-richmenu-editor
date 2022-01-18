@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import React, { useContext } from "react";
 
-export default function BasicSettingsCard(): JSX.Element {
+export default function BasicSettingsCard() {
   const { menu: { name, chatBarText, selected }, setters: { setName, setChatBarText, setSelected } } = useContext(EditingRichMenuContext);
   return (
     <Card>

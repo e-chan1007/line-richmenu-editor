@@ -10,7 +10,7 @@ export default function TapAreaController(
     readonly?: boolean,
     width?: number,
   }
-): JSX.Element {
+) {
   const { menuImage } = useContext(EditingRichMenuContext);
   const [diffColor, setDiffColor] = useState(["black", "black", "black", "black"]);
   const [viewBounds, setViewBounds] = useState([0, 0, viewWidth, 128]);

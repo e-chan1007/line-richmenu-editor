@@ -20,7 +20,7 @@ export default function LINEScreen(
     activeAreaIndex: number,
     setActiveAreaIndex: React.Dispatch<React.SetStateAction<number>>
   }
-): JSX.Element {
+) {
   const theme = useTheme();
   const { menuImage, richMenuId, menu: { areas, chatBarText } } = useContext(EditingRichMenuContext);
   const { accounts, editingBotId } = useContext(BotAccountContext);

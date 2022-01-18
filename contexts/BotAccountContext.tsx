@@ -21,7 +21,7 @@ export const BotAccountContext = createContext<{
   setEditingBotId: () => {}
 });
 
-export function BotAccountContextProvider({ children }: {children: React.ReactNode}): JSX.Element {
+export function BotAccountContextProvider({ children }: {children: React.ReactNode}) {
   const context = useContext(BotAccountContext);
   const [accounts, setAccounts] = useState(context.accounts);
   const [editingBotId, setEditingBotId] = useState(context.editingBotId);

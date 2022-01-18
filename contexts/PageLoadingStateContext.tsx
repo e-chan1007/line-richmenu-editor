@@ -4,7 +4,7 @@ type PageLoadingStateContextType = {isPageLoading: boolean, setIsPageLoading: Re
 
 export const PageLoadingStateContext = createContext<PageLoadingStateContextType>({ isPageLoading: true, setIsPageLoading: () => {} });
 
-export function PageLoadingStateContextProvider({ children }: {children: React.ReactNode}): JSX.Element {
+export function PageLoadingStateContextProvider({ children }: {children: React.ReactNode}) {
   const context = useContext(PageLoadingStateContext);
   const [isPageLoading, setIsPageLoading] = useState(context.isPageLoading);
   const newContext = { isPageLoading, setIsPageLoading };

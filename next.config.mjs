@@ -2,6 +2,7 @@
 // next.config.js
 
 import MonacoWebpackPlugin from "monaco-editor-webpack-plugin";
+import webpack from "webpack";
 import _withTM from "next-transpile-modules";
 import withPWA from "next-pwa";
 
@@ -12,7 +13,7 @@ const withTM = _withTM([
 export default withPWA(withTM({
   cssModules: true,
   eslint: { ignoreDuringBuilds: true },
-  pwa: { dest: "public", disable: process.env.NODE_ENV === "development" },
+  pwa: { dest: "public", disable: true },
   outputFileTracing: false,
   swcMinify: false,
   webpack: config => {

@@ -28,7 +28,7 @@ export const APIControllerContext = createContext<APIControllerContextType>({
   setIsAPICalling: () => {}
 });
 
-export function APIControllerContextProvider({ children }: {children: React.ReactNode}): JSX.Element {
+export function APIControllerContextProvider({ children }: {children: React.ReactNode}) {
   const context = useContext(APIControllerContext);
   const [dataStore, _setStoreValue] = useState(context.dataStore);
   const setStoreValue = (key: string, value: DataStoreType) => {

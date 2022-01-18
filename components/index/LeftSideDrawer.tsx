@@ -36,7 +36,7 @@ import RichMenuImportDialog from "./dialogs/RichMenuImportDialog";
 
 export default function LeftSideDrawer(
   { setIsBotSettingsDialogOpen }: { setIsBotSettingsDialogOpen: React.Dispatch<React.SetStateAction<boolean>> }
-): JSX.Element {
+) {
   const theme = useTheme();
   const { accounts: _accounts, setAccounts: _setAccounts, setEditingBotId } = useContext(BotAccountContext);
   const { richMenuId: editingRichMenuId, menu: editingRichMenu, reset: resetRichMenu, loadFromDB: loadRichMenuFromDB }

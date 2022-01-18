@@ -24,8 +24,7 @@ export default function TapAreaSettingsPanel(
   {
     activeAreaIndex: number,
     setActiveAreaIndex: React.Dispatch<React.SetStateAction<number>>
-  })
-  : JSX.Element {
+  }) {
   const theme = useTheme();
   const { menuImage, menu: { areas }, setters: { setAreas } } = useContext(EditingRichMenuContext);
   const [editingAreaIndex, setEditingAreaIndex] = useState(0);

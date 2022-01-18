@@ -31,7 +31,7 @@ export const ThemeColorContext = createContext<ThemeColorContextType>({
   setSystemMode: () => {}
 });
 
-export default function App({ Component, pageProps }: AppProps): JSX.Element {
+export default function App({ Component, pageProps }: AppProps) {
   const [uiMode, setUIMode] = useState<"system" | UIMode>("system");
   const [editorMode, setEditorMode] = useState<"system" | UIMode>("dark");
   const [systemMode, setSystemMode] = useState<UIMode>("light");

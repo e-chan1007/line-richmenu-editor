@@ -3,7 +3,7 @@ import { useTheme } from "@material-ui/core/styles";
 import React from "react";
 import styles from "styles/Phone.module.scss";
 
-export default function Phone({ children }: {children: JSX.Element}): JSX.Element {
+export default function Phone({ children }: {children}) {
   const theme = useTheme();
   return (
     <Stack sx={{ mb: 2 }} direction="row" justifyContent="center">

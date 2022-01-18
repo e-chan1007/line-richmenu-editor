@@ -17,8 +17,7 @@ const axios = axiosBase.create({ baseURL: "https://cors.api.e-chan.cf/", headers
 
 export default function BotSettingsDialog(
   { isDialogOpened, setIsDialogOpened }:
-  { isDialogOpened: boolean, setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>> })
-  : JSX.Element {
+  { isDialogOpened: boolean, setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>> }) {
   const { editingBotId, accounts, setAccounts } = useContext(BotAccountContext);
   const [channelAccessToken, setChannelAccessToken] = useState(accounts[editingBotId]?.channelAccessToken || "");
   const [isChannelAccessTokenValid, setIsChannelAccessTokenValid] = useState(false);

@@ -2,7 +2,7 @@ import Document, { Head, Html, Main, NextScript } from "next/document";
 import React from "react";
 
 export default class MyDocument extends Document {
-  render(): JSX.Element {
+  render() {
     return (
       <Html lang="ja">
         <Head>
@@ -18,6 +18,7 @@ export default class MyDocument extends Document {
           <link rel="icon" href="/icon.svg" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="apple-touch-icon" href="/icon-192x192.png" />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vscode-codicons/dist/codicon.css" />
         </Head>
         <body>
           <Main />

@@ -17,8 +17,7 @@ export default function RichMenuDeleteDialog(
     isDialogOpened: boolean,
     setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
     handleMenuClose: () => void
-  })
-  : JSX.Element {
+  }) {
   const { accounts, setAccounts } = useContext(BotAccountContext);
   const { richMenuId: editingRichMenuId, setters: { changeRichMenuId } } = useContext(EditingRichMenuContext);
   const [richMenuToDelete, setRichMenuToDelete] = useState<StoragedRichMenu>(null);

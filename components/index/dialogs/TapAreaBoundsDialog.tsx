@@ -32,8 +32,7 @@ export default function TapAreaBoundsDialog(
     isDialogOpened: boolean,
     setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
     setActiveAreaIndex: React.Dispatch<React.SetStateAction<number>>
-  })
-  : JSX.Element {
+  }) {
   const theme = useTheme();
   const { menuImage, menu: { areas }, setters: { setAreas } } = useContext(EditingRichMenuContext);
   const [bounds, setBounds] = useState<(number | boolean)[]>([-1, -1, -1, -1, false]);

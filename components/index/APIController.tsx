@@ -19,7 +19,7 @@ import prismVSDarkStyles from "styles/prism-vsc-dark-plus.module.scss";
 
 export default function APIController(
   { children, apiSpec, ...params }: { children?: React.ReactNode, apiSpec: APISpecification, [key: string]: unknown }
-): JSX.Element {
+) {
   const controllerContext = useContext(APIControllerContext);
   const { editorMode, systemMode } = useContext(ThemeColorContext);
   const { accounts, editingBotId } = useContext(BotAccountContext);

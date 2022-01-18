@@ -8,7 +8,7 @@ type JSONEditorContextType = {
 
 export const JSONEditorContext = createContext<JSONEditorContextType>({ jsonEditorValue: "{}", setJSONEditorValue: () => {} });
 
-export function JSONEditorContextProvider({ children }: {children: React.ReactNode}): JSX.Element {
+export function JSONEditorContextProvider({ children }: {children: React.ReactNode}) {
   const { menu } = useContext(EditingRichMenuContext);
   const context = useContext(JSONEditorContext);
   const [jsonEditorValue, setJSONEditorValue] = useState(context.jsonEditorValue);

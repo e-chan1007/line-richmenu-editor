@@ -18,7 +18,7 @@ import { ThemeColorContext } from "pages/_app";
 import richMenuSchema from "public/schemas/richmenu.json";
 import React, { useContext, useEffect, useRef, useState } from "react";
 
-export default function JSONEditor(): JSX.Element {
+export default function JSONEditor() {
   const { editorMode, systemMode } = useContext(ThemeColorContext);
   const { setters } = useContext(EditingRichMenuContext);
   const { jsonEditorValue, setJSONEditorValue } = useContext(JSONEditorContext);

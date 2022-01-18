@@ -10,7 +10,7 @@ import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import React, { useContext, useEffect } from "react";
 import APIController from "../APIController";
 
-export default function APIControlCard(): JSX.Element {
+export default function APIControlCard() {
   const menuContext = useContext(EditingRichMenuContext);
   const controllerContext = useContext(APIControllerContext);
   useEffect(() => {

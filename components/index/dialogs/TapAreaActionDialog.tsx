@@ -28,8 +28,7 @@ export default function TapAreaActionDialog(
     editingAreaIndex: number,
     isDialogOpened: boolean,
     setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>
-  })
-  : JSX.Element {
+  }) {
   const { menuImage, menu: { areas }, setters: { setAreas } } = useContext(EditingRichMenuContext);
   const [bounds, setBounds] = useState<(number|boolean)[]>([]);
   const [action, setAction] = useState<Action>({ } as Action);

@@ -15,7 +15,7 @@ const LIMIT_MAX_WIDTH = 2500; // px
 const LIMIT_MAX_HEIGHT = 1724; // px
 const LIMIT_ASPECT_RATIO = 1.45;
 
-export default function ImageChecker(): JSX.Element {
+export default function ImageChecker() {
   const { menuImage } = useContext(EditingRichMenuContext);
   const theme = useTheme();
   return menuImage ? (

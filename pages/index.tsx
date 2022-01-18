@@ -31,7 +31,7 @@ import MainLayout from "layouts/main";
 import Head from "next/head";
 import React, { useContext, useEffect, useState } from "react";
 
-export default function Index(): JSX.Element {
+export default function Index() {
   const theme = useTheme();
   const { dataStore: apiStore, _setStoreValue: setAPIStore } = useContext(APIControllerContext);
   const { richMenuId, isRichMenuIdReplaced } = useContext(EditingRichMenuContext);

@@ -11,7 +11,7 @@ import ImageChecker from "../ImageChecker";
 const JPEG_HEADER = "/9j";
 const PNG_HEADER = "iVBORw0KGgo";
 
-export default function ImageSelectCard(): JSX.Element {
+export default function ImageSelectCard() {
   const { setters: { setMenuImage, setSize } } = useContext(EditingRichMenuContext);
   const theme = useTheme();
   const onImageSelected = (event: ChangeEvent<HTMLInputElement>): void => {

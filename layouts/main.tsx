@@ -30,7 +30,7 @@ export default function MainLayout({
 }: {
   children: React.ReactNode,
   onMenuButtonClick?: (event: React.MouseEvent) => void}
-): JSX.Element {
+) {
   const theme = useTheme();
   const settingsButtonRef = useRef();
   const [isSettingsPopoverOpened, setIsSettingsPopoverOpened] = useState(false);

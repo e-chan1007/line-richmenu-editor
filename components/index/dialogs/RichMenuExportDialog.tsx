@@ -21,8 +21,7 @@ export default function RichMenuExportDialog(
     isDialogOpened: boolean,
     setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
     handleMenuClose: () => void
-  })
-  : JSX.Element {
+  }) {
   const [richMenuToExport, setRichMenuToExport] = useState<StoragedRichMenu>(null);
   useEffect(() => {
     (async () => {

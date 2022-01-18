@@ -17,8 +17,7 @@ export default function BotDeleteDialog(
     isDialogOpened: boolean,
     setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
     handleMenuClose: () => void
-  })
-  : JSX.Element {
+  }) {
   const { accounts, setAccounts } = useContext(BotAccountContext);
   const [botToDelete, setBotToDelete] = useState<BotAccount>(null);
   const { richMenuId: editingRichMenuId, setters: { changeRichMenuId } } = useContext(EditingRichMenuContext);
