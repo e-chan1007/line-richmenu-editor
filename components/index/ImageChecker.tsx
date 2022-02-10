@@ -1,10 +1,10 @@
-import Alert from "@material-ui/core/Alert";
-import { useTheme } from "@material-ui/core/styles";
-import AspectRatioIcon from "@material-ui/icons/AspectRatio";
-import DescriptionIcon from "@material-ui/icons/Description";
-import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
-import PhotoSizeSelectActualIcon from "@material-ui/icons/PhotoSizeSelectActual";
-import PhotoSizeSelectLargeIcon from "@material-ui/icons/PhotoSizeSelectLarge";
+import Alert from "@mui/material/Alert";
+import { useTheme } from "@mui/material/styles";
+import AspectRatioIcon from "@mui/icons-material/AspectRatio";
+import DescriptionIcon from "@mui/icons-material/Description";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
+import PhotoSizeSelectLargeIcon from "@mui/icons-material/PhotoSizeSelectLarge";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import React, { useContext } from "react";
 

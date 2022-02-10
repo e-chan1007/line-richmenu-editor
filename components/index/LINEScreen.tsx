@@ -1,13 +1,13 @@
-import IconButton from "@material-ui/core/IconButton";
-import Stack from "@material-ui/core/Stack";
-import { useTheme } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
-import ArrowBackIosNewIcon from "@material-ui/icons/ArrowBackIosNew";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import DeleteIcon from "@material-ui/icons/Delete";
-import KeyboardAltOutlinedIcon from "@material-ui/icons/KeyboardAltOutlined";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
+import { useTheme } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import DeleteIcon from "@mui/icons-material/Delete";
+import KeyboardAltOutlinedIcon from "@mui/icons-material/KeyboardAltOutlined";
 import { actionTypes } from "constants/RichMenuAction";
 import { BotAccount, BotAccountContext } from "contexts/BotAccountContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
@@ -80,7 +80,7 @@ export default function LINEScreen(
           <ArrowBackIosNewIcon />
           <Typography sx={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis" }}>{accounts.find(({ basicId }) => basicId === editingBotId)?.botName}</Typography>
           <Tooltip title="履歴を削除">
-            <IconButton onClick={() => setMessages([])}>
+            <IconButton onClick={() => setMessages([])} size="large">
               <DeleteIcon />
             </IconButton>
           </Tooltip>

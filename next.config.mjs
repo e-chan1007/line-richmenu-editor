@@ -13,9 +13,8 @@ const withTM = _withTM([
 export default withPWA(withTM({
   cssModules: true,
   eslint: { ignoreDuringBuilds: true },
-  pwa: { dest: "public", disable: true },
+  pwa: { dest: "public", disable: process.env.NODE_ENV !== "production" },
   outputFileTracing: false,
-  swcMinify: false,
   webpack: config => {
     config.plugins.push(
       new MonacoWebpackPlugin({

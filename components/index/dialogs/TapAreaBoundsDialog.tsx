@@ -1,20 +1,20 @@
-import Alert from "@material-ui/core/Alert";
-import AlertTitle from "@material-ui/core/AlertTitle";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControl from "@material-ui/core/FormControl";
-import IconButton from "@material-ui/core/IconButton";
-import Input, { InputProps } from "@material-ui/core/Input";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import InputLabel from "@material-ui/core/InputLabel";
-import Stack from "@material-ui/core/Stack";
-import { useTheme } from "@material-ui/core/styles";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
-import FullscreenIcon from "@material-ui/icons/Fullscreen";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
+import Input, { InputProps } from "@mui/material/Input";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputLabel from "@mui/material/InputLabel";
+import Stack from "@mui/material/Stack";
+import { useTheme } from "@mui/material/styles";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import React, { useContext, useEffect, useState } from "react";
 import TapAreaController from "../TapAreaController";
@@ -165,7 +165,9 @@ export default function TapAreaBoundsDialog(
           </FormControl>
           <FormControl>
             <Tooltip title="領域をリセット">
-              <IconButton onClick={() => { setBounds([0, 0, menuImage?.image.width, menuImage?.image.height, true]); }}>
+              <IconButton
+                onClick={() => { setBounds([0, 0, menuImage?.image.width, menuImage?.image.height, true]); }}
+                size="large">
                 <FullscreenIcon />
               </IconButton>
             </Tooltip>

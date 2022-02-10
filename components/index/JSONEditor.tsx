@@ -1,15 +1,15 @@
 // etc
-import Alert from "@material-ui/core/Alert";
-import Box from "@material-ui/core/Box";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Stack from "@material-ui/core/Stack";
-import ContentCopyIcon from "@material-ui/icons/ContentCopy";
-import ContentCutIcon from "@material-ui/icons/ContentCut";
-import ContentPasteIcon from "@material-ui/icons/ContentPaste";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Stack from "@mui/material/Stack";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ContentCutIcon from "@mui/icons-material/ContentCut";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import Ajv from "ajv";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import { JSONEditorContext } from "contexts/JSONEditorContext";

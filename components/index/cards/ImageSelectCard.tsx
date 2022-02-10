@@ -1,9 +1,9 @@
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import { useTheme } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import FolderOpenIcon from "@material-ui/icons/FolderOpen";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import React, { ChangeEvent, useContext } from "react";
 import ImageChecker from "../ImageChecker";

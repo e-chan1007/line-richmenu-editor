@@ -1,9 +1,9 @@
-import Alert from "@material-ui/core/Alert";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import TextField from "@material-ui/core/TextField";
+import Alert from "@mui/material/Alert";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import TextField from "@mui/material/TextField";
 import { apiList } from "constants/RichMenuAPI";
 import { APIControllerContext } from "contexts/APIControllerContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";

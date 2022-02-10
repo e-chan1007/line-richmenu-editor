@@ -1,5 +1,5 @@
-import Stack from "@material-ui/core/Stack";
-import { useTheme } from "@material-ui/core/styles";
+import Stack from "@mui/material/Stack";
+import { useTheme } from "@mui/material/styles";
 import React from "react";
 import styles from "styles/Phone.module.scss";
 

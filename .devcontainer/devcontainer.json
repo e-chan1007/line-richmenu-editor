@@ -11,6 +11,7 @@
 	},
 	"settings": {},
 	"extensions": [
+		"arcanis.vscode-zipfs",
 		"dbaeumer.vscode-eslint"
 	],
 	"postCreateCommand": "yarn install",

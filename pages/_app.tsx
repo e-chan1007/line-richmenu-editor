@@ -1,8 +1,8 @@
-import { orange } from "@material-ui/core/colors";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { createTheme, ThemeProvider } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import "@material-ui/lab/themeAugmentation";
+import { orange } from "@mui/material/colors";
+import CssBaseline from "@mui/material/CssBaseline";
+import { createTheme, ThemeProvider, Theme, StyledEngineProvider } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import "@mui/lab/themeAugmentation";
 import { APIControllerContextProvider } from "contexts/APIControllerContext";
 import { BotAccountContextProvider } from "contexts/BotAccountContext";
 import { EditingRichMenuContextProvider } from "contexts/EditingRichMenuContext";
@@ -56,25 +56,8 @@ export default function App({ Component, pageProps }: AppProps) {
         },
         mode: uiMode === "system" ? systemMode : uiMode
       },
-      typography: { fontFamily: "RobotoFlex, Source Han Sans, sans-serif" },
+      typography: { fontFamily: "Roboto, Noto Sans Japanese, sans-serif" },
       components: {
-        MuiCssBaseline: {
-          styleOverrides: `
-            @font-face {
-              font-family: "Source Han Sans";
-              font-style: normal;
-              font-display: swap;
-              src: local("Source Han Sans JP VF"), local("Source Han Sans JP"), local("Source Han Sans"), url(/fonts/SourceHanSansJP-VF.ttf.woff2) format("woff2-variations");
-            }
-
-            @font-face {
-              font-family: "RobotoFlex";
-              font-style: normal;
-              font-display: swap;
-              src: local("RobotoFlex"), local("Roboto"), url(/fonts/RobotoFlex.ttf) format("woff2-variations");
-            }
-          `
-        },
         MuiButton: { defaultProps: { variant: (uiMode === "system" ? systemMode : uiMode) === "light" ? "contained" : "outlined" } },
         MuiFormControl: { defaultProps: { variant: "standard" } },
         MuiSelect: { defaultProps: { variant: "standard" } },
@@ -86,20 +69,22 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <React.Fragment>
       <ThemeColorContext.Provider value={newThemeContext}>
-        <ThemeProvider theme={theme}>
-          <PageLoadingStateContextProvider>
-            <CssBaseline />
-            <BotAccountContextProvider>
-              <EditingRichMenuContextProvider>
-                <JSONEditorContextProvider>
-                  <APIControllerContextProvider>
-                    <Component {...pageProps} />
-                  </APIControllerContextProvider>
-                </JSONEditorContextProvider>
-              </EditingRichMenuContextProvider>
-            </BotAccountContextProvider>
-          </PageLoadingStateContextProvider>
-        </ThemeProvider>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <PageLoadingStateContextProvider>
+              <CssBaseline />
+              <BotAccountContextProvider>
+                <EditingRichMenuContextProvider>
+                  <JSONEditorContextProvider>
+                    <APIControllerContextProvider>
+                      <Component {...pageProps} />
+                    </APIControllerContextProvider>
+                  </JSONEditorContextProvider>
+                </EditingRichMenuContextProvider>
+              </BotAccountContextProvider>
+            </PageLoadingStateContextProvider>
+          </ThemeProvider>
+        </StyledEngineProvider>
       </ThemeColorContext.Provider>
     </React.Fragment>
   );
