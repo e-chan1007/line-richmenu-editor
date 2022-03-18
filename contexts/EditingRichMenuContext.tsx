@@ -2,7 +2,7 @@ import botAccountDatabase from "databases/BotAccount";
 import richMenuDatabase from "databases/RichMenu";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import rfdc from "rfdc/default";
-import { EditingRichMenuContextType, StoragedRichMenu } from "types/RichMenu";
+import { EditingRichMenuContextType, StoredRichMenu } from "types/RichMenu";
 import { v4 as uuidv4 } from "uuid";
 import { BotAccountContext } from "./BotAccountContext";
 import { PageLoadingStateContext } from "./PageLoadingStateContext";
@@ -133,7 +133,7 @@ export function EditingRichMenuContextProvider({ children }: { children: React.R
   useEffect(() => {
     (async () => {
       if (!newContext.richMenuId) return;
-      const savedRichMenu = rfdc(newContext) as EditingRichMenuContextType & StoragedRichMenu;
+      const savedRichMenu = rfdc(newContext) as EditingRichMenuContextType & StoredRichMenu;
       delete savedRichMenu.setters;
       delete savedRichMenu.reset;
       delete savedRichMenu.loadFromDB;

@@ -1,4 +1,4 @@
-import { Area as Bounds, DatetimePickerAction, MessageAction, PostbackAction, RichMenu as RichMenuBase, Size, URIAction } from "@line/bot-sdk";
+import { Area as Bounds, Action as ActionBase, RichMenu as RichMenuBase, Size } from "@line/bot-sdk";
 
 export type ActionType = "postback" | "message" | "uri" | "datetimepicker" | "richmenuswitch"
 export type ActionPropKey = "label" | "data" | "displayText" | "text" | "uri" | "mode" | "initial" | "max" | "min" | "richMenuAliasId";
@@ -10,13 +10,7 @@ export type MenuImage = {
   image?: HTMLImageElement,
 }
 
-export type RichMenuSwitchAction = {
-  type: "richmenuswitch",
-  data: string,
-  richMenuAliasId: string
-}
-
-export type Action = (PostbackAction | MessageAction | URIAction | DatetimePickerAction | RichMenuSwitchAction | { type: "" }) & {
+export type Action = (ActionBase | { type: "" }) & {
   label?: string;
 };
 
@@ -48,6 +42,6 @@ export type EditingRichMenuContextType = {
   loadFromDB: (richMenuId: string) => void
 }
 
-export type StoragedRichMenu = Omit<EditingRichMenuContextType, "menuImage" | "setters" | "reset" | "loadFromDB" | "isRichMenuIdReplaced"> & {
+export type StoredRichMenu = Omit<EditingRichMenuContextType, "menuImage" | "setters" | "reset" | "loadFromDB" | "isRichMenuIdReplaced"> & {
   menuImage: Omit<MenuImage, "image"> & { imageSrc?: string }
 };

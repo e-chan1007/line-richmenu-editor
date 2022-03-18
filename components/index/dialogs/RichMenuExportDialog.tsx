@@ -12,7 +12,7 @@ import Typography from "@mui/material/Typography";
 import richMenuDatabase from "databases/RichMenu";
 import JSZip from "jszip";
 import React, { useEffect, useState } from "react";
-import { StoragedRichMenu } from "types/RichMenu";
+import { StoredRichMenu } from "types/RichMenu";
 
 export default function RichMenuExportDialog(
   { richMenuId, isDialogOpened, setIsDialogOpened, handleMenuClose: handleMenuClose }:
@@ -22,7 +22,7 @@ export default function RichMenuExportDialog(
     setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
     handleMenuClose: () => void
   }) {
-  const [richMenuToExport, setRichMenuToExport] = useState<StoragedRichMenu>(null);
+  const [richMenuToExport, setRichMenuToExport] = useState<StoredRichMenu>(null);
   useEffect(() => {
     (async () => {
       if (richMenuId) setRichMenuToExport(await richMenuDatabase.menus.where("richMenuId").equalsIgnoreCase(richMenuId).first());

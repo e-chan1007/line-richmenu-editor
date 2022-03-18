@@ -2,7 +2,6 @@
 // next.config.js
 
 import MonacoWebpackPlugin from "monaco-editor-webpack-plugin";
-import webpack from "webpack";
 import _withTM from "next-transpile-modules";
 import withPWA from "next-pwa";
 

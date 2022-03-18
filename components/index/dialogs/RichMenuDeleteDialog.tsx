@@ -8,7 +8,7 @@ import { BotAccountContext } from "contexts/BotAccountContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import richMenuDatabase from "databases/RichMenu";
 import React, { useContext, useEffect, useState } from "react";
-import { StoragedRichMenu } from "types/RichMenu";
+import { StoredRichMenu } from "types/RichMenu";
 
 export default function RichMenuDeleteDialog(
   { richMenuId, isDialogOpened, setIsDialogOpened, handleMenuClose: handleMenuClose }:
@@ -20,7 +20,7 @@ export default function RichMenuDeleteDialog(
   }) {
   const { accounts, setAccounts } = useContext(BotAccountContext);
   const { richMenuId: editingRichMenuId, setters: { changeRichMenuId } } = useContext(EditingRichMenuContext);
-  const [richMenuToDelete, setRichMenuToDelete] = useState<StoragedRichMenu>(null);
+  const [richMenuToDelete, setRichMenuToDelete] = useState<StoredRichMenu>(null);
   useEffect(() => {
     (async () => {
       if (richMenuId) setRichMenuToDelete(await richMenuDatabase.menus.where("richMenuId").equalsIgnoreCase(richMenuId).first());

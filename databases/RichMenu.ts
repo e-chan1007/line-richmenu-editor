@@ -1,8 +1,8 @@
 import Dexie from "dexie";
-import { StoragedRichMenu } from "types/RichMenu";
+import { StoredRichMenu } from "types/RichMenu";
 
 class RichMenuDatabase extends Dexie {
-  menus: Dexie.Table<StoragedRichMenu, string>;
+  menus: Dexie.Table<StoredRichMenu, string>;
   constructor() {
     super("RichMenuDatabase");
     this.version(1).stores({ menus: "++richMenuId" });

@@ -55,7 +55,7 @@
     "selected": {
       "$id": "#/properties/selected",
       "type": "boolean",
-      "title": "select",
+      "title": "selected",
       "description": "デフォルトでリッチメニューを表示する場合はtrueです。それ以外はfalseです。",
       "examples": [
         false
