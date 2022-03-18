@@ -52,9 +52,11 @@ export default function MainLayout({
           </IconButton>
           <Container maxWidth="xl">
             <Box display="flex" flexDirection="row">
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1, mt: 0.25 }}>
-                <span style={{ verticalAlign: "middle" }}>リッチメニューエディタ</span>
-              </Typography>
+              <Box display="flex" flexDirection="row" flexGrow={1} alignItems="center">
+                <Typography variant="h6" >
+                  リッチメニューエディタ
+                </Typography>
+              </Box>
               <Stack direction="row" spacing={2}>
                 <Tooltip title="設定">
                   <IconButton

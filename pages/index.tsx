@@ -80,8 +80,8 @@ export default function Index() {
 
                     >
                       <Tab label="メニュー設定" icon={<ViewModuleIcon />} value="0" />
-                      <Tab label="コード編集" icon={<CodeIcon />} value="1" />
-                      <Tab label="API操作(メニュー別)" icon={<CloudQueueIcon />} value="2" />
+                      <Tab label="メニュー設定(JSON)" icon={<CodeIcon />} value="1" />
+                      <Tab label="API呼び出し" icon={<CloudQueueIcon />} value="2" />
                     </TabList>
                   </Box>
                   <TabPanel value="0">

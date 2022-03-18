@@ -4,6 +4,13 @@ import { v4 as uuidv4 } from "uuid";
 
 const axios = axiosBase.create({ baseURL: "https://cors.api.e-chan.cf/", headers: { "Content-Type": "application/json" }, responseType: "json" });
 
+const errorMessages = {
+  "NEED_UPLOADING": "リッチメニューのアップロードを先にしてください",
+  "MISSING_USER_ID": "ユーザーIDを指定してください",
+  "MISSING_IMAGE": "メニュー画像を指定してください",
+  "MISSING_ALIAS": "リッチメニューエイリアスを指定してください"
+} as const;
+
 const toBlob = (base64: string, type: string) => {
   const bin: string = atob(base64.split(",")[1]);
   const buffer = new Uint8Array(bin.length);
@@ -39,11 +46,11 @@ class APIList extends Array<APISpecification> {
 export const apiList = new APIList([
   {
     key: "createRichMenu",
-    label: "作成",
-    description: "リッチメニューを作成し、画像をアップロード",
+    label: "アップロード",
+    description: "リッチメニューをサーバーにアップロード",
     endpoints: ["POST https://api.line.me/v2/bot/richmenu", "POST https://api-data.line.me/v2/bot/richmenu/{createdRichMenuId}/content"],
     validateParams: ({ menuImage }: EditingRichMenuContextType) => {
-      if (!(menuImage && menuImage.image)) return { isSucceeded: false, messages: ["メニュー画像を指定してください"] };
+      if (!(menuImage && menuImage.image)) return { isSucceeded: false, messages: [errorMessages.MISSING_IMAGE] };
       return { isSucceeded: true, messages: [] };
     },
     callAPI: async (
@@ -71,7 +78,7 @@ export const apiList = new APIList([
     label: "デフォルトに指定",
     description: "リッチメニューを個別に指定していないすべてのユーザーに表示",
     endpoints: ({ richMenuId }: { richMenuId: string }) => richMenuId.startsWith("richmenu-") ? ["POST https://api.line.me/v2/bot/user/all/richmenu/{richMenuId}"] : [],
-    validateParams: ({ richMenuId }: { richMenuId: string }) => (richMenuId.startsWith("richmenu-") ? { isSucceeded: true, messages: [] } : { isSucceeded: false, messages: ["アップロードされていないリッチメニューに対して実行することはできません"] }),
+    validateParams: ({ richMenuId }: { richMenuId: string }) => (richMenuId.startsWith("richmenu-") ? { isSucceeded: true, messages: [] } : { isSucceeded: false, messages: [errorMessages.NEED_UPLOADING] }),
     callAPI: async (channelAccessToken, { richMenuId }: { richMenuId: string }) => {
       const responses: APIResponse[] = [];
       const setRichMenuAsDefaultResponse = await axios.post(`api.line.me/v2/bot/user/all/richmenu/${richMenuId}`, null, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
@@ -89,11 +96,11 @@ export const apiList = new APIList([
       let isSucceeded = true;
       if (!richMenuId.startsWith("richmenu-")) {
         isSucceeded = false;
-        messages.push("アップロードされていないリッチメニューに対して実行することはできません");
+        messages.push(errorMessages.NEED_UPLOADING);
       }
       if (!userIds || userIds.length === 0) {
         isSucceeded = false;
-        messages.push("ユーザーIDを指定してください");
+        messages.push(errorMessages.MISSING_USER_ID);
       }
       return { isSucceeded, messages };
     },
@@ -114,11 +121,11 @@ export const apiList = new APIList([
       let isSucceeded = true;
       if (!richMenuId.startsWith("richmenu-")) {
         isSucceeded = false;
-        messages.push("アップロードされていないリッチメニューに対して実行することはできません");
+        messages.push(errorMessages.NEED_UPLOADING);
       }
       if (!alias || alias.length === 0) {
         isSucceeded = false;
-        messages.push("リッチメニューエイリアスを指定してください");
+        messages.push(errorMessages.MISSING_ALIAS);
       }
       return { isSucceeded, messages };
     },
@@ -139,7 +146,7 @@ export const apiList = new APIList([
       let isSucceeded = true;
       if (!alias || alias.length === 0) {
         isSucceeded = false;
-        messages.push("リッチメニューエイリアスを指定してください");
+        messages.push(errorMessages.MISSING_ALIAS);
       }
       return { isSucceeded, messages };
     },
