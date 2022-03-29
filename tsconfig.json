@@ -7,7 +7,7 @@
       "esnext"
     ],
     "allowJs": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "skipLibCheck": true,
     "strict": false,
     "importHelpers": true,

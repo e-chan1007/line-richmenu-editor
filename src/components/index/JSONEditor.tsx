@@ -15,7 +15,7 @@ import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import { JSONEditorContext } from "contexts/JSONEditorContext";
 import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 import { ThemeColorContext } from "pages/_app";
-import richMenuSchema from "public/schemas/richmenu.json";
+import richMenuSchema from "../../../public/schemas/richmenu.json";
 import React, { useContext, useEffect, useRef, useState } from "react";
 
 export default function JSONEditor() {

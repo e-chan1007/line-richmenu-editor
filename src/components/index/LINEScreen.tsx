@@ -126,8 +126,8 @@ export default function LINEScreen(
                 style={{ transition: "all ease 0.16s" }}
                 x={areas[activeAreaIndex] ? areas[activeAreaIndex].bounds.x / imageScale : 0}
                 y={areas[activeAreaIndex] ? areas[activeAreaIndex].bounds.y / imageScale : 0}
-                width={areas[activeAreaIndex] ? areas[activeAreaIndex].bounds.width / imageScale: "100%"}
-                height={areas[activeAreaIndex] ? areas[activeAreaIndex].bounds.height / imageScale : "100%"}/>
+                width={areas[activeAreaIndex] ? areas[activeAreaIndex].bounds.width / imageScale: imageRef.current?.width}
+                height={areas[activeAreaIndex] ? areas[activeAreaIndex].bounds.height / imageScale : imageRef.current?.height} />
             </mask>
           </defs>
           <rect x="0" y="0" width="100%" height="100%" fill="#00000055"

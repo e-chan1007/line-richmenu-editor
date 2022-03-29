@@ -21,7 +21,7 @@ import { BotAccount, BotAccountContext } from "contexts/BotAccountContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import { PageLoadingStateContext } from "contexts/PageLoadingStateContext";
 import botAccountDatabase from "databases/BotAccount";
-import richMenuSchema from "public/schemas/richmenu.json";
+import richMenuSchema from "../../../../public/schemas/richmenu.json";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 

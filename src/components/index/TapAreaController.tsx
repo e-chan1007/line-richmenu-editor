@@ -16,6 +16,7 @@ export default function TapAreaController(
   const [viewBounds, setViewBounds] = useState([0, 0, viewWidth, 128]);
   const [viewHeight, setViewHeight] = useState(0);
   const canvas = useRef<HTMLCanvasElement>();
+  const diffColorCalculator = useRef<Worker>();
   const adjustAndSetBounds = (_rect: number[]) => {
     const newBounds = _rect.map(v => Math.round(v * ((menuImage.image.width || viewWidth) / viewWidth)));
     if (newBounds[2] > menuImage.image.width - newBounds[0]) newBounds[2] = menuImage.image.width - newBounds[0];
@@ -70,17 +71,15 @@ export default function TapAreaController(
     adjustAndSetBounds(newBounds);
   };
   const calcDiffColor = useCallback((context: CanvasRenderingContext2D) => {
-    if (context) {
-      setDiffColor([
+    if (diffColorCalculator.current) {
+      const imageData = [
         context.getImageData(viewBounds[0], viewBounds[1], 16, 16),
         context.getImageData(viewBounds[0] + viewBounds[2], viewBounds[1], -16, 16),
         context.getImageData(viewBounds[0], viewBounds[1] + viewBounds[3], 16, -16),
         context.getImageData(viewBounds[0] + viewBounds[2], viewBounds[1] + viewBounds[3], -16, -16)
-      ].map(({ data }) => (
-        data.map((_, i) => i)
-          .filter((_, i) => !(i % 4))
-          .map(i => [data[i], data[i + 1], data[i + 2]].reduce((acc, cur) => acc + cur) / 3 / 2.55)
-          .reduce((accumrator, brightness) => accumrator + brightness) / (data.length / 4) < 55 ? "white" : "black")));
+      ];
+      diffColorCalculator.current.onmessage = ({ data }) => setDiffColor(data);
+      diffColorCalculator.current.postMessage({ imageData, viewBounds });
     }
   }, [viewBounds]);
 
@@ -110,6 +109,7 @@ export default function TapAreaController(
     }
   }, [bounds]);
   useEffect(() => {
+    diffColorCalculator.current = new Worker(new URL("../../workers/DiffColorCalculator.ts", import.meta.url));
     if (bounds[0] === -1) setBounds([0, 0, menuImage.image.width, menuImage.image.height, true]);
   }, []);
   return (
