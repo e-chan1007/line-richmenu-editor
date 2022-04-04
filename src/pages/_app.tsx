@@ -58,10 +58,10 @@ export default function App({ Component, pageProps }: AppProps) {
       },
       typography: { fontFamily: "Roboto, Noto Sans Japanese, sans-serif" },
       components: {
-        MuiButton: { defaultProps: { variant: (uiMode === "system" ? systemMode : uiMode) === "light" ? "contained" : "outlined" } },
-        MuiFormControl: { defaultProps: { variant: "standard" } },
-        MuiSelect: { defaultProps: { variant: "standard" } },
-        MuiTextField: { defaultProps: { variant: "standard" } }
+        MuiButton: { defaultProps: { variant: (uiMode === "system" ? systemMode : uiMode) === "light" ? "contained" : "outlined" }},
+        MuiFormControl: { defaultProps: { variant: "standard" }},
+        MuiSelect: { defaultProps: { variant: "standard" }},
+        MuiTextField: { defaultProps: { variant: "standard" }}
       }
     }),
     [uiMode, systemMode]

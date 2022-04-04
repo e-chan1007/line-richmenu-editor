@@ -8,7 +8,7 @@ import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import React, { useContext } from "react";
 
 export default function BasicSettingsCard() {
-  const { menu: { name, chatBarText, selected }, setters: { setName, setChatBarText, setSelected } } = useContext(EditingRichMenuContext);
+  const { menu: { name, chatBarText, selected }, setters: { setName, setChatBarText, setSelected }} = useContext(EditingRichMenuContext);
   return (
     <Card>
       <CardContent>

@@ -26,7 +26,7 @@ export default function TapAreaSettingsPanel(
     setActiveAreaIndex: React.Dispatch<React.SetStateAction<number>>
   }) {
   const theme = useTheme();
-  const { menuImage, menu: { areas }, setters: { setAreas } } = useContext(EditingRichMenuContext);
+  const { menuImage, menu: { areas }, setters: { setAreas }} = useContext(EditingRichMenuContext);
   const [editingAreaIndex, setEditingAreaIndex] = useState(0);
   const [isActionDialogOpened, setIsActionDialogOpened] = useState(false);
   const [isBoundsDialogOpened, setIsBoundsDialogOpened] = useState(false);
@@ -147,7 +147,8 @@ export default function TapAreaSettingsPanel(
                   setIsDialogOpened: setIsDeleteDialogOpened,
                   setActiveAreaIndex
                 }} />
-            </>);
+            </>
+          );
         })()}
       </CardContent>
     </Card>

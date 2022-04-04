@@ -12,7 +12,7 @@ const JPEG_HEADER = "/9j";
 const PNG_HEADER = "iVBORw0KGgo";
 
 export default function ImageSelectCard() {
-  const { setters: { setMenuImage, setSize } } = useContext(EditingRichMenuContext);
+  const { setters: { setMenuImage, setSize }} = useContext(EditingRichMenuContext);
   const theme = useTheme();
   const onImageSelected = (event: ChangeEvent<HTMLInputElement>): void => {
     const file = (event.target.files as FileList)[0];

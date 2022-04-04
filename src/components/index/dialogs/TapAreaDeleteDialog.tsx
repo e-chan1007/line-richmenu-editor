@@ -15,7 +15,7 @@ export default function TapAreaDeleteDialog(
     setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
     setActiveAreaIndex: React.Dispatch<React.SetStateAction<number>>
   }) {
-  const { menuImage, menu: { areas }, setters: { setAreas } } = useContext(EditingRichMenuContext);
+  const { menuImage, menu: { areas }, setters: { setAreas }} = useContext(EditingRichMenuContext);
   const [bounds, setBounds] = useState<(number|boolean)[]>([]);
   useEffect(() => {
     if (areas[editingAreaIndex]) {

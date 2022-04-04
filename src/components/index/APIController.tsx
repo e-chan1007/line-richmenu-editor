@@ -72,18 +72,21 @@ export default function APIController(
           (() => {
             const endpoints = typeof apiSpec.endpoints === "function" ? apiSpec.endpoints({ ...params, ...editableValues }) : apiSpec.endpoints;
             if (endpoints.length > 0) {
-              return <>
-                <Typography sx={{ mb: 1 }}>実行するAPI:</Typography>
-                <ul style={{ marginTop: 0 }}>
-                  {endpoints.map((endpoint, i) => (
-                    <li key={i}>
-                      {endpoint.replace(/(\{(.+?)\})/g, (_, p1, p2) => {
-                        if ({ ...params, ...editableValues }[p2]) return { ...params, ...editableValues }[p2];
-                        return p1;
-                      })}
-                    </li>
-                  ))}
-                </ul></>;
+              return (
+                <>
+                  <Typography sx={{ mb: 1 }}>実行するAPI:</Typography>
+                  <ul style={{ marginTop: 0 }}>
+                    {endpoints.map((endpoint, i) => (
+                      <li key={i}>
+                        {endpoint.replace(/(\{(.+?)\})/g, (_, p1, p2) => {
+                          if ({ ...params, ...editableValues }[p2]) return { ...params, ...editableValues }[p2];
+                          return p1;
+                        })}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              );
             }
           })()}
         <div>

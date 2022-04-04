@@ -1,6 +1,6 @@
 const worker = self as unknown as Worker;
 
-worker.addEventListener("message", ({ data: { imageData } }: MessageEvent<{imageData: ImageData[]}>) => {
+worker.addEventListener("message", ({ data: { imageData }}: MessageEvent<{imageData: ImageData[]}>) => {
   const diffColor = imageData.map(({ data }) => (
     data.map((_, i) => i)
       .filter((_, i) => !(i % 4))

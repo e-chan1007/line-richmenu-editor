@@ -22,7 +22,7 @@ export default function LINEScreen(
   }
 ) {
   const theme = useTheme();
-  const { menuImage, richMenuId, menu: { areas, chatBarText } } = useContext(EditingRichMenuContext);
+  const { menuImage, richMenuId, menu: { areas, chatBarText }} = useContext(EditingRichMenuContext);
   const { accounts, editingBotId } = useContext(BotAccountContext);
   const [messages, setMessages] = useState<{from: "user" | "bot", text: string}[]>([]);
   const [imageScale, setImageScale] = useState(1);
@@ -91,6 +91,7 @@ export default function LINEScreen(
         {messages.map(({ from, text }, i) => (
           <div key={i} className={from === "bot" ? styles.line__chatarea__row : [styles.line__chatarea__row, styles["is-user"]].join(" ")}>
             {(from === "bot" && accounts.find(({ basicId }) => basicId === editingBotId).pictureUrl) && (
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 className={styles.line__chatarea__row__icon}
                 src={accounts.find(({ basicId }) => basicId === editingBotId).pictureUrl}

@@ -53,7 +53,7 @@ export default function BotSettingsDialog(
           ref={saveButtonRef}
           onClick={async () => {
             setChannelAccessTokenValidating(true);
-            const result = await axios.get("api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${channelAccessToken.trim()}` } }).catch(({ response }) => response);
+            const result = await axios.get("api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${channelAccessToken.trim()}` }}).catch(({ response }) => response);
             setChannelAccessTokenValidating(false);
             setChannelAccessTokenValidated(true);
             if (result.status === 200) {

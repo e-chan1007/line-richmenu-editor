@@ -20,7 +20,7 @@ export default function BotDeleteDialog(
   }) {
   const { accounts, setAccounts } = useContext(BotAccountContext);
   const [botToDelete, setBotToDelete] = useState<BotAccount>(null);
-  const { richMenuId: editingRichMenuId, setters: { changeRichMenuId } } = useContext(EditingRichMenuContext);
+  const { richMenuId: editingRichMenuId, setters: { changeRichMenuId }} = useContext(EditingRichMenuContext);
   useEffect(() => {
     (async () => {
       if (botId) setBotToDelete(await botAccountDatabase.accounts.where("basicId").equalsIgnoreCase(botId).first());

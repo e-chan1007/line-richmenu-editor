@@ -39,7 +39,7 @@ export default function RichMenuImportDialog(
   const [botToInsertRichMenu, setBotToInsertRichMenu] = useState<BotAccount>(null);
   const [tabIndex, setTabIndex] = useState("0");
   const currentAccount = useMemo(() => accounts.find(({ basicId }) => basicId === botId), [accounts, botId]);
-  const { data: remoteRichMenuList } = useSWR<{ richmenus: { [key: string]: string }[] }>(() => (currentAccount.channelAccessToken) ? `https://cors.api.e-chan.cf/api.line.me/v2/bot/richmenu/list` : null, url => axios.get(url, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` } }).then(({ data }) => data), { dedupingInterval: 5000 });
+  const { data: remoteRichMenuList } = useSWR<{ richmenus: { [key: string]: string }[] }>(() => (currentAccount.channelAccessToken) ? `https://cors.api.e-chan.cf/api.line.me/v2/bot/richmenu/list` : null, url => axios.get(url, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` }}).then(({ data }) => data), { dedupingInterval: 5000 });
   const [selectedRichMenuIndex, setSelectedRichMenuIndex] = useState(0);
   const [isFileSelected, setIsFileSelected] = useState(false);
   const [isJSONValid, setIsJSONValid] = useState(true);

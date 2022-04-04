@@ -82,7 +82,7 @@ export default function LeftSideDrawer(
       const accounts = await botAccountDatabase.accounts.toArray();
       const newAccounts = [];
       await Promise.allSettled(accounts.map(async account => {
-        const result = await axios.get("https://cors.api.e-chan.cf/api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${account.channelAccessToken}` } }).catch(({ response }) => response);
+        const result = await axios.get("https://cors.api.e-chan.cf/api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${account.channelAccessToken}` }}).catch(({ response }) => response);
         if (result.status === 200) {
           const newAccount = {
             ...account,

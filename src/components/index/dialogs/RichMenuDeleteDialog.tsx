@@ -19,7 +19,7 @@ export default function RichMenuDeleteDialog(
     handleMenuClose: () => void
   }) {
   const { accounts, setAccounts } = useContext(BotAccountContext);
-  const { richMenuId: editingRichMenuId, setters: { changeRichMenuId } } = useContext(EditingRichMenuContext);
+  const { richMenuId: editingRichMenuId, setters: { changeRichMenuId }} = useContext(EditingRichMenuContext);
   const [richMenuToDelete, setRichMenuToDelete] = useState<StoredRichMenu>(null);
   useEffect(() => {
     (async () => {

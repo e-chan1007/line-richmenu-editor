@@ -213,5 +213,6 @@ export default function JSONEditor() {
           <ListItemText>貼り付け</ListItemText>
         </MenuItem>
       </Menu>
-    </div>);
+    </div>
+  );
 }
