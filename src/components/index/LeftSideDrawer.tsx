@@ -82,7 +82,7 @@ export default function LeftSideDrawer(
       const accounts = await botAccountDatabase.accounts.toArray();
       const newAccounts = [];
       await Promise.allSettled(accounts.map(async account => {
-        const result = await axios.get("https://cors.api.e-chan.cf/api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${account.channelAccessToken}` }}).catch(({ response }) => response);
+        const result = await axios.get("https://cors.e-chan1007.workers.dev/api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${account.channelAccessToken}` }}).catch(({ response }) => response);
         if (result.status === 200) {
           const newAccount = {
             ...account,
@@ -114,7 +114,7 @@ export default function LeftSideDrawer(
 
   /* const { data: remoteRichMenuList } = useSWR<{richmenus: {[key: string]: string}[]}>(() => {
     const channelAccessToken = accounts.find(({ isOpened }) => isOpened)?.channelAccessToken;
-    if (channelAccessToken) return `https://cors.api.e-chan.cf/api.line.me/v2/bot/richmenu/list`;
+    if (channelAccessToken) return `https://cors.e-chan1007.workers.dev/api.line.me/v2/bot/richmenu/list`;
     return null;
   }, url => axios.get(url, { headers: { Authorization: `Bearer ${accounts.find(({ isOpened }) => isOpened)?.channelAccessToken}` } }).then(({ data }) => data), { dedupingInterval: 1000 }); */
 

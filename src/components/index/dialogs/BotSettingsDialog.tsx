@@ -13,7 +13,7 @@ import axiosBase from "axios";
 import { BotAccountContext } from "contexts/BotAccountContext";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 
-const axios = axiosBase.create({ baseURL: "https://cors.api.e-chan.cf/", headers: { "Content-Type": "application/json" }, responseType: "json" });
+const axios = axiosBase.create({ baseURL: "https://cors.e-chan1007.workers.dev/", headers: { "Content-Type": "application/json" }, responseType: "json" });
 
 export default function BotSettingsDialog(
   { isDialogOpened, setIsDialogOpened }:

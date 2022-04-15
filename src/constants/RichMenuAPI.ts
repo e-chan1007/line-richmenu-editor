@@ -2,7 +2,7 @@ import axiosBase, { AxiosError } from "axios";
 import { EditingRichMenuContextType } from "types/RichMenu";
 import { v4 as uuidv4 } from "uuid";
 
-const axios = axiosBase.create({ baseURL: "https://cors.api.e-chan.cf/", headers: { "Content-Type": "application/json" }, responseType: "json" });
+const axios = axiosBase.create({ baseURL: "https://cors.e-chan1007.workers.dev/", headers: { "Content-Type": "application/json" }, responseType: "json" });
 
 const errorMessages = {
   "NEED_UPLOADING": "リッチメニューのアップロードを先にしてください",
