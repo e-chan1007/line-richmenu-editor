@@ -259,7 +259,7 @@
                           "Buy"
                         ]
                       },
-                      "inputOption":{
+                      "inputOption": {
                         "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/0/properties/inputOption",
                         "type": "string",
                         "title": "inputOption",
@@ -274,7 +274,7 @@
                           "openVoice"
                         ]
                       },
-                      "fillInText":{
+                      "fillInText": {
                         "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/0/properties/fillInText",
                         "type": "string",
                         "title": "fillInText",
@@ -282,6 +282,20 @@
                         "examples": [
                           "Yes"
                         ]
+                      }
+                    },
+                    "dependencies": {
+                      "fillInText": {
+                        "required": [
+                          "inputOption"
+                        ],
+                        "properties": {
+                          "inputOption": {
+                            "enum": [
+                              "openKeyboard"
+                            ]
+                          }
+                        }
                       }
                     }
                   },
