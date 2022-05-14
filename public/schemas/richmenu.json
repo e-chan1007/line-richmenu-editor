@@ -258,6 +258,24 @@
                         "examples": [
                           "Buy"
                         ]
+                      },
+                      "inputOption":{
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/0/properties/inputOption",
+                        "type": "string",
+                        "title": "inputOption",
+                        "description": "ユーザーのアクションに応じた、リッチメニューなどの表示方法。\ncloseRichMenu：リッチメニューを閉じます。\nopenRichMenu：リッチメニューを開きます。\nopenKeyboard：キーボードを開きます。\nopenKeyboard：キーボードを開きます",
+                        "examples": [
+                          "openVoice"
+                        ]
+                      },
+                      "fillInText":{
+                        "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/0/properties/fillInText",
+                        "type": "string",
+                        "title": "fillInText",
+                        "description": "キーボードを開いたときに、入力欄にあらかじめ入力しておく文字列。inputOptionがopenKeyboardの場合にのみ有効です。文字列は、改行文字により改行できます。最大文字数：300",
+                        "examples": [
+                          "Yes"
+                        ]
                       }
                     }
                   },
