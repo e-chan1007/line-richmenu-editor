@@ -263,7 +263,13 @@
                         "$id": "#/properties/areas/items/oneOf/0/properties/action/oneOf/0/properties/inputOption",
                         "type": "string",
                         "title": "inputOption",
-                        "description": "ユーザーのアクションに応じた、リッチメニューなどの表示方法。\ncloseRichMenu：リッチメニューを閉じます。\nopenRichMenu：リッチメニューを開きます。\nopenKeyboard：キーボードを開きます。\nopenKeyboard：キーボードを開きます",
+                        "description": "ユーザーのアクションに応じた、リッチメニューなどの表示方法。\ncloseRichMenu：リッチメニューを閉じます。\nopenRichMenu：リッチメニューを開きます。\nopenKeyboard：キーボードを開きます。\nopenVoice：ボイスメッセージ入力モードを開きます。",
+                        "enum": [
+                          "closeRichMenu",
+                          "openRichMenu",
+                          "openKeyboard",
+                          "openVoice"
+                        ],
                         "examples": [
                           "openVoice"
                         ]
