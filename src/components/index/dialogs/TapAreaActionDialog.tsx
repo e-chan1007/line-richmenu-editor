@@ -75,7 +75,7 @@ export default function TapAreaActionDialog(
           </FormControl>
           <TextField label="ラベル" value={action.label} onChange={e => setActionProp("label", e.target.value)} inputProps={{ maxLength: 40 }}/>
           {(action.type === "postback" || action.type === "datetimepicker" || action.type === "richmenuswitch") && (
-            <TextField label="Webhookに送信するテキスト" value={action.data} onChange={e => setActionProp("data", e.target.value)} inputProps={{ maxLength: 300 }} required/>
+            <TextField multiline label="Webhookに送信するテキスト" value={action.data} onChange={e => setActionProp("data", e.target.value)} inputProps={{ maxLength: 300 }} required/>
           )}
           {action.type === "postback" && (
             <>
@@ -93,12 +93,12 @@ export default function TapAreaActionDialog(
                 </Select>
               </FormControl>
               { action.inputOption === "openKeyboard" && (
-                <TextField label="あらかじめ入力するテキスト" value={action.fillInText} onChange={e => setActionProp("fillInText", e.target.value)} inputProps={{ maxLength: 300 }} />
+                <TextField multiline label="あらかじめ入力するテキスト" value={action.fillInText} onChange={e => setActionProp("fillInText", e.target.value)} inputProps={{ maxLength: 300 }} />
               )}
             </>
           )}
           {action.type === "message" && (
-            <TextField label="送信されるメッセージ" value={action.text} onChange={e => setActionProp("text", e.target.value)} inputProps={{ maxLength: 300 }} required />
+            <TextField multiline label="送信されるメッセージ" value={action.text} onChange={e => setActionProp("text", e.target.value)} inputProps={{ maxLength: 300 }} required />
           )}
           {action.type === "uri" && (
             <TextField
