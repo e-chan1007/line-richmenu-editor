@@ -1,7 +1,7 @@
-import { Area as Bounds, Action as ActionBase, RichMenu as RichMenuBase, Size } from "@line/bot-sdk";
+import { Area as Bounds, Action as ActionBase, PostbackAction as PostbackActionBase, RichMenu as RichMenuBase, Size } from "@line/bot-sdk";
 
 export type ActionType = "postback" | "message" | "uri" | "datetimepicker" | "richmenuswitch"
-export type ActionPropKey = "label" | "data" | "displayText" | "text" | "uri" | "mode" | "initial" | "max" | "min" | "richMenuAliasId";
+export type ActionPropKey = "label" | "data" | "displayText" | "text" | "inputOption" | "fillInText" | "uri" | "mode" | "initial" | "max" | "min" | "richMenuAliasId";
 
 export type MenuImage = {
   fileName?: string,
@@ -10,7 +10,15 @@ export type MenuImage = {
   image?: HTMLImageElement,
 }
 
-export type Action = (ActionBase | { type: "" }) & {
+export declare type PostbackAction = {
+  type: "postback";
+  data: string;
+  text?: string;
+  displayText?: string;
+  inputOption?: "closeRichMenu" | "openRichMenu" | "openKeyboard" | "openVoice";
+  fillInText?: string;
+};
+export type Action = (Exclude<ActionBase, PostbackActionBase> | ActionBase<PostbackAction> | { type: "" }) & {
   label?: string;
 };
 
