@@ -1,4 +1,4 @@
-import { ActionPropKey, ActionType } from "types/RichMenu";
+import { ActionPropKey, ActionType, PostbackAction } from "types/RichMenu";
 
 export const actionProp: {
   [key in ActionPropKey]: { label: string, description: string }
@@ -20,9 +20,17 @@ export const actionProp: {
     label: "実行時に送信されるテキスト",
     description: "アクション実行時に送信されるテキスト"
   },
+  inputOption: {
+    label: "リッチメニューなどの表示方法",
+    description: "アクションに応じた、リッチメニューなどの表示方法"
+  },
+  fillInText: {
+    label: "あらかじめ入力しておく文字列",
+    description: "キーボードを開いたときに、入力欄にあらかじめ入力しておく文字列"
+  },
   uri: {
     label: "実行時に開かれるURI",
-    description: "アクション実行時に開かれるURI(http/https/line/tel)"
+    description: "アクション実行時に開かれるURI(http/https/tel)"
   },
   mode: {
     label: "アクションモード",
@@ -45,6 +53,7 @@ export const actionProp: {
     description: "切り替え後に表示するリッチメニューのエイリアス"
   }
 };
+
 export const actionTypes: {
   [key in ActionType]: { label: string, description: string, requires: ActionPropKey[], acceptable: ActionPropKey[] }
 } = {
@@ -52,7 +61,7 @@ export const actionTypes: {
     label: "ポストバック",
     description: "ポストバックイベントをWebhookに送信",
     requires: ["data"],
-    acceptable: ["label", "displayText"]
+    acceptable: ["label", "displayText", "inputOption", "fillInText"]
   },
   message: {
     label: "メッセージ",
@@ -78,4 +87,11 @@ export const actionTypes: {
     requires: ["richMenuAliasId", "data"],
     acceptable: ["label"]
   }
+};
+
+export const postbackInputOptions: Record<PostbackAction["inputOption"], string> = {
+  closeRichMenu: "リッチメニューを閉じる",
+  openRichMenu: "リッチメニューを開く",
+  openKeyboard: "キーボードを開く",
+  openVoice: "ボイスメッセージ入力モードを開く"
 };

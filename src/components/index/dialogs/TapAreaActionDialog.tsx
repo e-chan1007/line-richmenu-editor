@@ -14,7 +14,7 @@ import AdapterDayjs from "@mui/lab/AdapterDayjs";
 import DatePicker from "@mui/lab/DatePicker";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import TimePicker from "@mui/lab/TimePicker";
-import { actionTypes } from "constants/RichMenuAction";
+import { actionTypes, postbackInputOptions } from "constants/RichMenuAction";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import dayjs from "dayjs";
 import jaLocale from "dayjs/locale/ja";
@@ -44,7 +44,7 @@ export default function TapAreaActionDialog(
         areas[editingAreaIndex].bounds.height,
         true
       ]);
-      const newAction = { label: "", data: "", displayText: "", text: "", mode: "datetime", initial: null, max: null, min: null, richMenuAliasId: "", ...areas[editingAreaIndex].action };
+      const newAction = { label: "", data: "", displayText: "", text: "", inputOption: "", fillInText: "", mode: "datetime", initial: null, max: null, min: null, richMenuAliasId: "", ...areas[editingAreaIndex].action };
       ["initial", "max", "min"].forEach(key => {
         if (typeof newAction[key] === "string") newAction[key] = dayjs(newAction[key], newAction[key].replace(/\d{4}-\d{2}-\d{2}/, "YYYY-MM-DD").replace(/\d{2}:\d{2}/, "HH:mm"));
       });
@@ -78,7 +78,24 @@ export default function TapAreaActionDialog(
             <TextField label="Webhookに送信するテキスト" value={action.data} onChange={e => setActionProp("data", e.target.value)} inputProps={{ maxLength: 300 }} required/>
           )}
           {action.type === "postback" && (
-            <TextField label="メッセージとして表示するテキスト" value={action.displayText} onChange={e => setActionProp("displayText", e.target.value)} inputProps={{ maxLength: 300 }} />
+            <>
+              <TextField label="メッセージとして表示するテキスト" value={action.displayText} onChange={e => setActionProp("displayText", e.target.value)} inputProps={{ maxLength: 300 }} />
+              <FormControl sx={{ width: "100%" }}>
+                <InputLabel>メニューの表示方法</InputLabel>
+                <Select
+                  value={action.inputOption}
+                  onChange={event => setActionProp("inputOption", event.target.value)}
+                >
+                  <MenuItem value={""}>選択しない</MenuItem>
+                  {Object.entries(postbackInputOptions).map(([inputOption, label]) =>
+                    (<MenuItem value={inputOption} key={inputOption}>{label}</MenuItem>)
+                  )}
+                </Select>
+              </FormControl>
+              { action.inputOption === "openKeyboard" && (
+                <TextField label="あらかじめ入力するテキスト" value={action.fillInText} onChange={e => setActionProp("fillInText", e.target.value)} inputProps={{ maxLength: 300 }} />
+              )}
+            </>
           )}
           {action.type === "message" && (
             <TextField label="送信されるメッセージ" value={action.text} onChange={e => setActionProp("text", e.target.value)} inputProps={{ maxLength: 300 }} required />
@@ -88,10 +105,10 @@ export default function TapAreaActionDialog(
               label="URI"
               value={action.uri}
               onChange={e => setActionProp("uri", e.target.value)}
-              inputProps={{ maxLength: 1000, pattern: "^(https?|line|tel):" }}
+              inputProps={{ maxLength: 1000, pattern: "^(https?|tel):" }}
               required
-              error={!/^(https?|line|tel):/.test(action.uri)}
-              helperText="http(s)://, line://, tel: で始まるURI" />
+              error={!/^(https?|tel):/.test(action.uri)}
+              helperText="http(s)://, tel: で始まるURI" />
           )}
           {action.type === "datetimepicker" && (
             <LocalizationProvider dateAdapter={AdapterDayjs} locale={jaLocale}>
@@ -120,7 +137,6 @@ export default function TapAreaActionDialog(
                       (isMaxValueFilled && isMinValueFilled && action.max < action.min)
                     );
                     return {
-                      // eslint-disable-next-line react/display-name
                       renderInput: (params: TextFieldProps) => (
                         <TextField
                           {...params}
@@ -189,6 +205,8 @@ export default function TapAreaActionDialog(
               delete newAreas[editingAreaIndex].action[key];
             } else if (action.type === "datetimepicker" && ["initial", "min", "max"].includes(key)) {
               newAreas[editingAreaIndex].action[key] = newAreas[editingAreaIndex].action[key].format({ datetime: "YYYY-MM-DDTHH:mm", date: "YYYY-MM-DD", time: "HH:mm" }[action.mode]);
+            } else if (action.type === "postback" && action.inputOption !== "openKeyboard" && key === "fillInText") {
+              delete newAreas[editingAreaIndex].action[key];
             }
           });
           setAreas(newAreas);
