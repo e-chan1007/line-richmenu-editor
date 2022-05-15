@@ -133,7 +133,7 @@ export default function TapAreaController(
         }}>
           <defs>
             <mask id="outsideBoundsMask">
-              <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+              <rect x="0" y="0" width={viewWidth} height={viewHeight} fill="white"/>
               <rect x={viewBounds[0]} y={viewBounds[1]} width={viewBounds[2]} height={viewBounds[3]}/>
             </mask>
           </defs>
