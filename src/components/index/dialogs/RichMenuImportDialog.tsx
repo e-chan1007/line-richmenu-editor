@@ -39,7 +39,7 @@ export default function RichMenuImportDialog(
   const [botToInsertRichMenu, setBotToInsertRichMenu] = useState<BotAccount>(null);
   const [tabIndex, setTabIndex] = useState("0");
   const currentAccount = useMemo(() => accounts.find(({ basicId }) => basicId === botId), [accounts, botId]);
-  const { data: remoteRichMenuList } = useSWR<{ richmenus: { [key: string]: string }[] }>(() => (currentAccount.channelAccessToken) ? `https://cors.e-chan1007.workers.dev/api.line.me/v2/bot/richmenu/list` : null, url => axios.get(url, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` }}).then(({ data }) => data), { dedupingInterval: 5000 });
+  const { data: remoteRichMenuList } = useSWR<{ richmenus: { [key: string]: string }[] }>(() => (currentAccount.channelAccessToken) ? `/api/line?target=api.line.me/v2/bot/richmenu/list` : null, url => axios.get(url, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` }}).then(({ data }) => data), { dedupingInterval: 5000 });
   const [selectedRichMenuIndex, setSelectedRichMenuIndex] = useState(0);
   const [isFileSelected, setIsFileSelected] = useState(false);
   const [isJSONValid, setIsJSONValid] = useState(true);
@@ -168,7 +168,7 @@ export default function RichMenuImportDialog(
           if (tabIndex === "1" && remoteRichMenuList?.richmenus?.[selectedRichMenuIndex]?.richMenuId) {
             (async () => {
               setIsPageLoading(true);
-              const imageData = await axios.get<Blob>(`https://cors.e-chan1007.workers.dev/api-data.line.me/v2/bot/richmenu/${remoteRichMenuList.richmenus[selectedRichMenuIndex].richMenuId}/content`, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` }, responseType: "blob" });
+              const imageData = await axios.get<Blob>(`/api/line?target=api-data.line.me/v2/bot/richmenu/${remoteRichMenuList.richmenus[selectedRichMenuIndex].richMenuId}/content`, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` }, responseType: "blob" });
               const reader = new FileReader();
               reader.readAsDataURL(imageData.data);
               await new Promise(resolve => { reader.onload = resolve; });
