@@ -6,7 +6,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(403).end();
   }
 
-  const filteredHeaders = Object.fromEntries(Object.entries(req.headers).filter(([key, value]) => key !== "host")) as AxiosRequestHeaders;
+  const filteredHeaders = Object.fromEntries(
+    Object
+      .entries(req.headers)
+      .filter(([key, value]) => ["content-type", "authorization"].includes(key))
+  ) as AxiosRequestHeaders;
 
   const buffers = [];
   for await (const chunk of req) {
