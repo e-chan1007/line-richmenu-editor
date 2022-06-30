@@ -17,6 +17,7 @@ import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 import { ThemeColorContext } from "pages/_app";
 import richMenuSchema from "../../../public/schemas/richmenu.json";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import loader from "@monaco-editor/loader";
 
 export default function JSONEditor() {
   const { editorMode, systemMode } = useContext(ThemeColorContext);
@@ -25,29 +26,22 @@ export default function JSONEditor() {
   const monacoRef = useRef<monacoEditor.editor.IStandaloneCodeEditor>(null);
   const [isJSONValid, setIsJSONValid] = useState(true);
   const [isMonacoLoading, setIsMonacoLoading] = useState(true);
-  const [isCopyAvailable, setisCopyAvailable] = useState(false);
 
   const editorElementRef = useRef<HTMLDivElement>();
-
-  const [contextMenu, setContextMenu] = useState<{
-    mouseX: number;
-    mouseY: number;
-  } | null>(null);
 
   useEffect(() => {
     if (!editorElementRef.current) return;
     let windowResizeListener;
     let monacoCreateListener;
     let monacoChangeModelListener;
-    let monacoSelectListener;
-    import("monaco-editor/esm/vs/editor/editor.api").then(monaco => {
+    loader.config({ "vs/nls": { availableLanguages: { "*": "ja" }}});
+    loader.init().then(monaco => {
       try {
         if (isMonacoLoading) {
           monacoCreateListener = monaco.editor.onDidCreateEditor((editor: monacoEditor.editor.IStandaloneCodeEditor) => {
             monacoRef.current = editor;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            window.MonacoEnvironment.getWorkerUrl = () => "_next/static/json.worker.js";
             windowResizeListener = () => editor.layout();
             window.addEventListener("resize", windowResizeListener);
             setIsMonacoLoading(false);
@@ -61,7 +55,7 @@ export default function JSONEditor() {
             value: jsonEditorValue,
             language: "json",
             theme: { light: "vs", dark: "vs-dark" }[editorMode === "system" ? systemMode : editorMode],
-            contextmenu: false
+            contextmenu: true
           });
 
           monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
@@ -73,12 +67,6 @@ export default function JSONEditor() {
               schema: richMenuSchema
             }]
           });
-
-          monacoSelectListener = () => {
-            setisCopyAvailable(Boolean(monacoRef.current.getModel().getValueInRange(monacoRef.current.getSelection())));
-          };
-          editorElementRef.current.addEventListener("keydown", monacoSelectListener);
-          editorElementRef.current.addEventListener("mouseup", monacoSelectListener);
         }
       } catch (_) {
         console.error(_);
@@ -86,8 +74,6 @@ export default function JSONEditor() {
     });
     return function cleanup() {
       window.removeEventListener("resize", windowResizeListener);
-      editorElementRef.current?.removeEventListener("keydown", monacoSelectListener);
-      editorElementRef.current?.removeEventListener("mouseup", monacoSelectListener);
       monacoCreateListener?.dispose?.();
       monacoChangeModelListener?.dispose();
       monacoRef.current?.getModel?.()?.dispose?.();
@@ -119,26 +105,6 @@ export default function JSONEditor() {
     if (monacoRef.current) monacoRef.current.updateOptions({ theme: { light: "vs", dark: "vs-dark" }[editorMode === "system" ? systemMode : editorMode] });
   }, [editorMode, systemMode]);
 
-  const handleContextMenu = (event: React.MouseEvent) => {
-    const findTarget = (target: HTMLElement) => {
-      if (target.dataset.target) return target.dataset.target;
-      if (target.parentElement) {
-        if (target.parentElement.classList.contains("MuiCollapse-vertical")) return findTarget(target.parentElement);
-        return findTarget(target.parentElement);
-      }
-      return null;
-    };
-    const target = findTarget(event.target as HTMLElement);
-    if (!(target || (event.target as HTMLElement).classList.contains("MuiBackdrop-root"))) return;
-    event.preventDefault();
-    setContextMenu(
-      contextMenu === null ? {
-        mouseX: event.clientX - 2,
-        mouseY: event.clientY - 4
-      } : null
-    );
-  };
-
   const pasteText = async () => {
     const selection = monacoRef.current.getSelection();
     const text = await navigator.clipboard.readText();
@@ -155,7 +121,7 @@ export default function JSONEditor() {
   };
 
   return (
-    <div style={{ height: "100%" }} onContextMenu={handleContextMenu}>
+    <div style={{ height: "100%" }}>
       <Stack direction="column" sx={{ height: "100%" }} >
         {isMonacoLoading && <LinearProgress/>}
         <Box sx={{ flex: 1 }} data-target="test">
@@ -183,36 +149,6 @@ export default function JSONEditor() {
           <Alert severity="error">不正な形式のJSONファイルです。内容を確認してください。</Alert>
         ))}
       </Stack>
-      <Menu
-        open={contextMenu !== null}
-        onClose={() => setContextMenu(null)}
-        anchorReference="anchorPosition"
-        anchorPosition={
-          contextMenu !== null? { top: contextMenu.mouseY, left: contextMenu.mouseX }: null
-        }
-      >
-        {isCopyAvailable && (<>
-          <MenuItem onClick={() => { copyText(true); setContextMenu(null); }}>
-            <ListItemIcon>
-              <ContentCutIcon />
-            </ListItemIcon>
-            <ListItemText>切り取り</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={() => { copyText(); setContextMenu(null); }}>
-            <ListItemIcon>
-              <ContentCopyIcon />
-            </ListItemIcon>
-            <ListItemText>コピー</ListItemText>
-          </MenuItem>
-        </>
-        )}
-        <MenuItem onClick={() => { pasteText(); setContextMenu(null); }}>
-          <ListItemIcon>
-            <ContentPasteIcon />
-          </ListItemIcon>
-          <ListItemText>貼り付け</ListItemText>
-        </MenuItem>
-      </Menu>
     </div>
   );
 }
