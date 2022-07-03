@@ -6,6 +6,6 @@ import withPWA from "next-pwa";
 export default withPWA({
   cssModules: true,
   eslint: { ignoreDuringBuilds: true },
-  pwa: { dest: "public", buildExcludes: [/.*codicons.*/, /middleware-manifest.json$/] },
-  outputFileTracing: false
+  pwa: { dest: "public" },
+  serverRuntimeConfig: { GTM_ID: process.env.GTM_ID || "GTM_ID" }
 });

@@ -56,7 +56,7 @@ export default function App({ Component, pageProps }: AppProps) {
         },
         mode: uiMode === "system" ? systemMode : uiMode
       },
-      typography: { fontFamily: "Roboto, Noto Sans Japanese, sans-serif" },
+      typography: { fontFamily: "Roboto, Noto Sans JP, sans-serif" },
       components: {
         MuiButton: { defaultProps: { variant: (uiMode === "system" ? systemMode : uiMode) === "light" ? "contained" : "outlined" }},
         MuiFormControl: { defaultProps: { variant: "standard" }},

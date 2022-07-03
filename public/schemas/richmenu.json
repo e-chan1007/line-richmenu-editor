@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://richmenu.app.e-chan.cf/schemas/richmenu.json",
+  "$id": "https://richmenu.app.e-chan.me/schemas/richmenu.json",
   "type": "object",
   "title": "LINE Messaging API リッチメニュー",
   "description": "リッチメニューの構造 ( https://developers.line.biz/ja/reference/messaging-api/#rich-menu-structure )",

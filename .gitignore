@@ -41,3 +41,5 @@ yarn-error.log*
 public/fallback-*
 public/sw.js*
 public/workbox-*
+
+.env

@@ -40,8 +40,6 @@ export default function JSONEditor() {
         if (isMonacoLoading) {
           monacoCreateListener = monaco.editor.onDidCreateEditor((editor: monacoEditor.editor.IStandaloneCodeEditor) => {
             monacoRef.current = editor;
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             windowResizeListener = () => editor.layout();
             window.addEventListener("resize", windowResizeListener);
             setIsMonacoLoading(false);
@@ -62,7 +60,7 @@ export default function JSONEditor() {
             schemaValidation: "error",
             validate: true,
             schemas: [{
-              uri: "https://richmenu.app.e-chan.cf/schemas/richmenu.json",
+              uri: "https://richmenu.app.e-chan.me/schemas/richmenu.json",
               fileMatch: ["*"],
               schema: richMenuSchema
             }]

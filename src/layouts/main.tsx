@@ -45,7 +45,7 @@ export default function MainLayout({
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2, display: { xl: "none" } }}
+            sx={{ mr: 2, display: { xl: "none" }}}
             onClick={onMenuButtonClick}
           >
             <MenuIcon />
