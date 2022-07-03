@@ -4,6 +4,9 @@
     "**/.yarn": true,
     "**/.pnp.*": true
   },
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
   "eslint.nodePath": ".yarn/sdks",
   "typescript.enablePromptUseWorkspaceTsdk": true
 }

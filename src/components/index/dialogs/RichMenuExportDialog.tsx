@@ -9,8 +9,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Typography from "@mui/material/Typography";
+import * as zip from "@zip.js/zip.js";
 import richMenuDatabase from "databases/RichMenu";
-import JSZip from "jszip";
 import React, { useEffect, useState } from "react";
 import { StoredRichMenu } from "types/RichMenu";
 
@@ -40,19 +40,6 @@ export default function RichMenuExportDialog(
       image: Boolean(richMenuToExport?.menuImage)
     });
   }, [richMenuToExport]);
-
-  const toBlob = (base64: string): Blob => {
-    const bin = atob(base64.replace(/^.*,/, ""));
-    const buffer = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) {
-      buffer[i] = bin.charCodeAt(i);
-    }
-    try {
-      return new Blob([buffer.buffer]);
-    } catch (e) {
-      return null;
-    }
-  };
 
   return (
     <Dialog onClose={() => setIsDialogOpened(false)} open={isDialogOpened} maxWidth="xs" fullWidth>
@@ -87,7 +74,7 @@ export default function RichMenuExportDialog(
       <DialogActions>
         <Button onClick={() => { setIsDialogOpened(false); handleMenuClose(); }} variant="text">キャンセル</Button>
         <Button onClick={async () => {
-          const files: {[key: string]: string | Blob} = {};
+          const files: Record<string, string> = {};
           const richMenuBody: Partial<RichMenuResponse> = { ...richMenuToExport.menu };
           const downloadLink = document.createElement("a");
 
@@ -100,14 +87,14 @@ export default function RichMenuExportDialog(
             files["richmenu-structure.min.json"] = JSON.stringify(richMenuBody);
           }
           if (exportFileList.image) {
-            files[`richmenu-image.${richMenuToExport.menuImage.fileType === "JPEG" ? "jpg" : "png"}`] = toBlob(richMenuToExport.menuImage.imageSrc);
+            files[`richmenu-image.${richMenuToExport.menuImage.fileType === "JPEG" ? "jpg" : "png"}`] = richMenuToExport.menuImage.imageSrc;
           }
           if (Object.keys(files).length > 1) {
-            const zip = new JSZip();
-            Object.entries(files).forEach(([fileName, content]) => {
-              zip.file(fileName.replace(/\.base64$/, ""), content);
-            });
-            const zipFile = await zip.generateAsync({ type: "blob" });
+            const zipWriter = new zip.ZipWriter(new zip.BlobWriter());
+            for await (const [fileName, content] of Object.entries(files)) {
+              await zipWriter.add(fileName, fileName.endsWith(".json") ? new zip.TextReader(content) : new zip.Data64URIReader(content));
+            }
+            const zipFile = await zipWriter.close();
             downloadLink.download = `${richMenuToExport.menu.name || "richmenu"}.zip`;
             downloadLink.href = URL.createObjectURL(zipFile);
           } else {

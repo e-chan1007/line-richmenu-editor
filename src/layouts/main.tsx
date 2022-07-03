@@ -1,6 +1,14 @@
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import BrightnessAutoIcon from "@mui/icons-material/BrightnessAuto";
+import MenuIcon from "@mui/icons-material/Menu";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import SettingsIcon from "@mui/icons-material/Settings";
 import AppBar from "@mui/material/AppBar";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import FormGroup from "@mui/material/FormGroup";
@@ -14,13 +22,11 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
-import BrightnessAutoIcon from "@mui/icons-material/BrightnessAuto";
-import MenuIcon from "@mui/icons-material/Menu";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import SettingsIcon from "@mui/icons-material/Settings";
+import * as zip from "@zip.js/zip.js";
+import AllDataExportDialog from "components/index/dialogs/AllDataExportDialog";
 import { PageLoadingStateContext } from "contexts/PageLoadingStateContext";
+import botAccountDatabase from "databases/BotAccount";
+import richMenuDatabase from "databases/RichMenu";
 import { ThemeColorContext } from "pages/_app";
 import React, { useContext, useRef, useState } from "react";
 
@@ -34,8 +40,9 @@ export default function MainLayout({
   const theme = useTheme();
   const settingsButtonRef = useRef();
   const [isSettingsPopoverOpened, setIsSettingsPopoverOpened] = useState(false);
+  const [isAllDataExportDialogOpen, setIsAllDataExportDialogOpen] = useState(false);
   const { uiMode, setUIMode, editorMode, setEditorMode } = useContext(ThemeColorContext);
-  const { isPageLoading } = useContext(PageLoadingStateContext);
+  const { isPageLoading, setIsPageLoading } = useContext(PageLoadingStateContext);
   return <>
     <Box height="100vh">
       <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
@@ -108,6 +115,27 @@ export default function MainLayout({
                           <ToggleButton value="dark"><Brightness4Icon sx={{ mr: 1 }}/>ダークモード</ToggleButton>
                         </ToggleButtonGroup>
                       </FormGroup>
+                      <FormGroup>
+                        <FormLabel>全データのエクスポート/インポート</FormLabel>
+                        <ButtonGroup fullWidth>
+                          <Button onClick={() => setIsAllDataExportDialogOpen(true)}>エクスポート</Button>
+                          <Button onClick={async () => {
+                            try {
+                              const file: File | null = await window.showOpenFilePicker({ types: [{ accept: { "application/zip": [".zip"] }}] }).then(([file]) => file.getFile()).catch(() => null);
+                              if (!file) return;
+                              setIsPageLoading(true);
+                              const blobReader = new zip.ZipReader(new zip.BlobReader(file));
+                              const entries = await blobReader.getEntries();
+                              const botAccountBlob = await entries.find(entry => entry.filename === "bot-account.json").getData(new zip.BlobWriter());
+                              const richMenuBlob = await entries.find(entry => entry.filename === "richmenu.json").getData(new zip.BlobWriter());
+                              const { importInto } = await import("dexie-export-import");
+                              await importInto(botAccountDatabase, botAccountBlob, { overwriteValues: true });
+                              await importInto(richMenuDatabase, richMenuBlob, { overwriteValues: true });
+                              location.reload();
+                            } catch (e) {}
+                          }}>インポート</Button>
+                        </ButtonGroup>
+                      </FormGroup>
                     </Stack>
                   </Box>
                 </Popover>
@@ -136,5 +164,9 @@ export default function MainLayout({
         <CircularProgress color="inherit" />
       </div>
     </Backdrop>
+    <AllDataExportDialog
+      isDialogOpened={isAllDataExportDialogOpen}
+      setIsDialogOpened={setIsAllDataExportDialogOpen}
+      handleMenuClose={() => setIsSettingsPopoverOpened(false)} />
   </>;
 }

@@ -1,4 +1,13 @@
 import { RichMenuResponse } from "@line/bot-sdk";
+import AddIcon from "@mui/icons-material/Add";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DriveFileMoveIcon from "@mui/icons-material/DriveFileMove";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import FolderIcon from "@mui/icons-material/Folder";
+import Alert from "@mui/material/Alert";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -15,14 +24,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useTheme } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
-import AddIcon from "@mui/icons-material/Add";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DriveFileMoveIcon from "@mui/icons-material/DriveFileMove";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import FolderIcon from "@mui/icons-material/Folder";
 import axios from "axios";
 import { BotAccount, BotAccountContext } from "contexts/BotAccountContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
@@ -126,6 +127,18 @@ export default function LeftSideDrawer(
   return <>
     <List sx={{ paddingBottom: "0px" }} onContextMenu={handleContextMenu}>
       <Box display="flex" flexDirection="column">
+        {
+          location.hostname === "richmenu.app.e-chan.cf" && (
+            <>
+              <Alert severity="warning" sx={{ mt: -1 }}>
+                { /* eslint-disable-next-line react/jsx-no-target-blank */ }
+                8月1日からドメインを<a href="https://richmenu.app.e-chan.me/" target="_blank" style={{ color: "inherit" }}>https://richmenu.app.e-chan<strong>.me</strong>/</a>に切り替えます。
+                データの移行については<a href="https://e-chan1007.notion.site/d0b673fec1874422aa466b57dc0a4d74" target="_blank" rel="noopener noreferrer" style={{ color: "inherit" }}>こちら</a>をご覧ください。
+              </Alert>
+              <Divider />
+            </>
+          )
+        }
         <ListSubheader component="div" sx={{ background: "transparent" }}>
           リッチメニュー一覧
         </ListSubheader>
