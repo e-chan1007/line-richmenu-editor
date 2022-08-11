@@ -86,10 +86,8 @@ export default function TapAreaBoundsDialog(
     else if (boundsRangeError.some(v => v !== null)) setBoundsRangeError([null, null, null, null]);
   }, [bounds, isBoundsPosAbsolute]);
   useEffect(() => {
-    console.log({ isDialogOpen, editingAreaIndex, a: areas.length });
     if (editingAreaIndex < areas.length) {
       const { x, y, width, height } = areas[editingAreaIndex].bounds;
-      console.log({ x, y, width, height });
       setBounds([x, y, width, height, true]);
     } else if (menuImage?.image) {
       setBounds([0, 0, menuImage.image.width, menuImage.image.height, true]);

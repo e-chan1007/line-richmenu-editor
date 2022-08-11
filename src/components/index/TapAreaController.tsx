@@ -104,7 +104,6 @@ export default function TapAreaController(
         .slice(0, 4)
         .map(v => Number.isNaN(v)? 0 : v) as number[];
       if (bounds[0] === -1) setBounds([...newBounds, true]);
-      console.log("will set", [...newBounds].map(v => Math.round(v / ((menuImage.image.width || viewWidth) / viewWidth))));
       setViewBounds([...newBounds].map(v => Math.round(v / ((menuImage.image.width || viewWidth) / viewWidth))));
     }
   }, [bounds]);
