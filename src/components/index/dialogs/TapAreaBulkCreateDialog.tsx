@@ -1,3 +1,5 @@
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -123,6 +125,14 @@ export default function TapAreaBulkCreateDialog(
             </table>
           )}
         </div>
+        <Alert severity="error" sx={{ visibility: (isHorizontalSplitSettingsWrong || isVerticalSplitSettingsWrong || areBoundsTooMuch) ? "visible": "hidden", height: 120 }}>
+          <AlertTitle>エラー</AlertTitle>
+          <ul>
+            {isHorizontalSplitSettingsWrong && <li><b>横の分割設定</b>の内容が誤っています</li>}
+            {isVerticalSplitSettingsWrong && <li><b>縦の分割設定</b>の内容が誤っています</li>}
+            {areBoundsTooMuch && <li>指定できる領域の最大数を超えています</li>}
+          </ul>
+        </Alert>
       </DialogContent>
       <DialogActions>
         <Button onClick={() => {
@@ -157,6 +167,7 @@ export default function TapAreaBulkCreateDialog(
             setVerticalSplitSettingsBase("1");
           }, 100);
         }}
+        disabled={isHorizontalSplitSettingsWrong || isVerticalSplitSettingsWrong || areBoundsTooMuch}
         variant="text">保存</Button>
       </DialogActions>
     </Dialog>
