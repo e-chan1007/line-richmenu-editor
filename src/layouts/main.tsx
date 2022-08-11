@@ -39,7 +39,7 @@ export default function MainLayout({
 ) {
   const theme = useTheme();
   const settingsButtonRef = useRef();
-  const [isSettingsPopoverOpened, setIsSettingsPopoverOpened] = useState(false);
+  const [isSettingsPopoverOpen, setIsSettingsPopoverOpen] = useState(false);
   const [isAllDataExportDialogOpen, setIsAllDataExportDialogOpen] = useState(false);
   const { uiMode, setUIMode, editorMode, setEditorMode } = useContext(ThemeColorContext);
   const { isPageLoading, setIsPageLoading } = useContext(PageLoadingStateContext);
@@ -67,7 +67,7 @@ export default function MainLayout({
               <Stack direction="row" spacing={2}>
                 <Tooltip title="設定">
                   <IconButton
-                    onClick={() => setIsSettingsPopoverOpened(!isSettingsPopoverOpened)}
+                    onClick={() => setIsSettingsPopoverOpen(!isSettingsPopoverOpen)}
                     ref={settingsButtonRef}
                     sx={{ color: "white" }}
                     size="large">
@@ -84,8 +84,8 @@ export default function MainLayout({
                     vertical: "top",
                     horizontal: "right"
                   }}
-                  open={isSettingsPopoverOpened}
-                  onClose={() => setIsSettingsPopoverOpened(false)}
+                  open={isSettingsPopoverOpen}
+                  onClose={() => setIsSettingsPopoverOpen(false)}
                 >
                   <Box sx={{ m: 2 }}>
                     <Stack spacing={2}>
@@ -165,8 +165,8 @@ export default function MainLayout({
       </div>
     </Backdrop>
     <AllDataExportDialog
-      isDialogOpened={isAllDataExportDialogOpen}
-      setIsDialogOpened={setIsAllDataExportDialogOpen}
-      handleMenuClose={() => setIsSettingsPopoverOpened(false)} />
+      isDialogOpen={isAllDataExportDialogOpen}
+      setIsDialogOpen={setIsAllDataExportDialogOpen}
+      handleMenuClose={() => setIsSettingsPopoverOpen(false)} />
   </>;
 }

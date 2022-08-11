@@ -11,11 +11,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { StoredRichMenu } from "types/RichMenu";
 
 export default function RichMenuDeleteDialog(
-  { richMenuId, isDialogOpened, setIsDialogOpened, handleMenuClose: handleMenuClose }:
+  { richMenuId, isDialogOpen, setIsDialogOpen, handleMenuClose: handleMenuClose }:
   {
     richMenuId: string,
-    isDialogOpened: boolean,
-    setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
+    isDialogOpen: boolean,
+    setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>,
     handleMenuClose: () => void
   }) {
   const { accounts, setAccounts } = useContext(BotAccountContext);
@@ -28,7 +28,7 @@ export default function RichMenuDeleteDialog(
   }, [richMenuId]);
 
   return (
-    <Dialog onClose={() => setIsDialogOpened(false)} open={isDialogOpened} maxWidth="xs">
+    <Dialog onClose={() => setIsDialogOpen(false)} open={isDialogOpen} maxWidth="xs">
       <DialogTitle>リッチメニューを削除</DialogTitle>
       <DialogContent>
         <p>{!(richMenuToDelete?.menu?.name) && "名称未設定の" }リッチメニュー{(richMenuToDelete?.menu?.name) && `「${richMenuToDelete.menu.name}」` }をエディタ上から削除しますか?</p>
@@ -44,7 +44,7 @@ export default function RichMenuDeleteDialog(
         </Alert>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => { setIsDialogOpened(false); handleMenuClose(); }} variant="text">キャンセル</Button>
+        <Button onClick={() => { setIsDialogOpen(false); handleMenuClose(); }} variant="text">キャンセル</Button>
         <Button onClick={() => {
           const richMenuIdToDelete = richMenuId;
           richMenuDatabase.menus.delete(editingRichMenuId);
@@ -53,7 +53,7 @@ export default function RichMenuDeleteDialog(
           ));
           if (richMenuIdToDelete === editingRichMenuId) changeRichMenuId("DELETED");
           handleMenuClose();
-          setIsDialogOpened(false);
+          setIsDialogOpen(false);
         }} color="error" variant="text">削除</Button>
       </DialogActions>
     </Dialog>

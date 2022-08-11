@@ -1,15 +1,15 @@
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import DeleteIcon from "@mui/icons-material/Delete";
+import KeyboardAltOutlinedIcon from "@mui/icons-material/KeyboardAltOutlined";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import DeleteIcon from "@mui/icons-material/Delete";
-import KeyboardAltOutlinedIcon from "@mui/icons-material/KeyboardAltOutlined";
 import { actionTypes } from "constants/RichMenuAction";
-import { BotAccount, BotAccountContext } from "contexts/BotAccountContext";
+import { BotAccountContext } from "contexts/BotAccountContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import React, { MouseEvent, useContext, useEffect, useRef, useState } from "react";
 import styles from "styles/LINEScreen.module.scss";
@@ -40,8 +40,13 @@ export default function LINEScreen(
       setActiveAreaIndex(areas.indexOf(clickedArea));
       const newMessages = [...messages];
       if (clickedArea.action.text || clickedArea.action.displayText) newMessages.push({ from: "user", text: clickedArea.action.text || clickedArea.action.displayText });
-      if (clickedArea.action.label) newMessages.push({ from: "bot", text: `${clickedArea.action.label}(${actionTypes[clickedArea.action.type].label}アクション)` });
-      else newMessages.push({ from: "bot", text: `${actionTypes[clickedArea.action.type] ? actionTypes[clickedArea.action.type].label+ "アクション" : "アクション未設定"}` });
+      if (clickedArea.action.label) {
+        if (actionTypes[clickedArea.action.type]?.label) {
+          newMessages.push({ from: "bot", text: `${clickedArea.action.label}(${actionTypes[clickedArea.action.type].label}アクション)` });
+        } else {
+          newMessages.push({ from: "bot", text: `${clickedArea.action.label}(アクション未設定)` });
+        }
+      } else { newMessages.push({ from: "bot", text: `${actionTypes[clickedArea.action.type] ? actionTypes[clickedArea.action.type].label+ "アクション" : "アクション未設定"}` }); }
       setMessages(newMessages);
     }
   };

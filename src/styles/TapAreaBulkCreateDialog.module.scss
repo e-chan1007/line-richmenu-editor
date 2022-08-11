@@ -1,0 +1,33 @@
+.bounds-grid-wrapper {
+  position: relative;
+}
+
+.bounds-grid {
+  position: absolute;
+  border-collapse: collapse;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+
+  td {
+    line-height: 0;
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+    min-width: 0;
+    font-size: 2rem;
+  }
+
+  .row-2n>td:nth-of-type(2n),
+  .row-2n-1>td:nth-of-type(2n + 1) {
+    color: white;
+    background-color: #000A;
+  }
+
+  .row-2n>td:nth-of-type(2n + 1),
+  .row-2n-1>td:nth-of-type(2n) {
+    color: black;
+    background-color: #FFFA;
+  }
+}

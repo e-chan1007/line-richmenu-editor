@@ -10,14 +10,14 @@ import richMenuDatabase from "databases/RichMenu";
 import React from "react";
 
 export default function AllDataExportDialog(
-  { isDialogOpened, setIsDialogOpened, handleMenuClose }:
+  { isDialogOpen, setIsDialogOpen, handleMenuClose }:
   {
-    isDialogOpened: boolean,
-    setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
+    isDialogOpen: boolean,
+    setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>,
     handleMenuClose: () => void
   }) {
   return (
-    <Dialog onClose={() => setIsDialogOpened(false)} open={isDialogOpened} maxWidth="xs" fullWidth>
+    <Dialog onClose={() => setIsDialogOpen(false)} open={isDialogOpen} maxWidth="xs" fullWidth>
       <DialogTitle>すべてのデータをエクスポート</DialogTitle>
       <DialogContent>
         <Alert severity="warning">
@@ -25,7 +25,7 @@ export default function AllDataExportDialog(
         </Alert>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => { setIsDialogOpened(false); handleMenuClose(); }} variant="text">キャンセル</Button>
+        <Button onClick={() => { setIsDialogOpen(false); handleMenuClose(); }} variant="text">キャンセル</Button>
         <Button onClick={async () => {
           const { exportDB } = await import("dexie-export-import");
           const botAccountBlob = await exportDB(botAccountDatabase);
@@ -39,7 +39,7 @@ export default function AllDataExportDialog(
           downloadLink.href = URL.createObjectURL(zipFile);
           downloadLink.click();
           handleMenuClose();
-          setIsDialogOpened(false);
+          setIsDialogOpen(false);
         }}
         variant="text"
         >エクスポート</Button>

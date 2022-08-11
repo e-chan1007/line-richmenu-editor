@@ -1,3 +1,4 @@
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Button from "@mui/material/Button";
@@ -11,10 +12,8 @@ import Input, { InputProps } from "@mui/material/Input";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
 import Stack from "@mui/material/Stack";
-import { useTheme } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import React, { useContext, useEffect, useState } from "react";
 import TapAreaController from "../TapAreaController";
@@ -26,15 +25,15 @@ type AreaRangeError = {
 
 
 export default function TapAreaBoundsDialog(
-  { editingAreaIndex, isDialogOpened, setIsDialogOpened, setActiveAreaIndex }:
+  { editingAreaIndex, isDialogOpen, setIsDialogOpen, setActiveAreaIndex }:
   {
     editingAreaIndex: number,
-    isDialogOpened: boolean,
-    setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
+    isDialogOpen: boolean,
+    setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>,
     setActiveAreaIndex: React.Dispatch<React.SetStateAction<number>>
   }) {
   const { menuImage, menu: { areas }, setters: { setAreas }} = useContext(EditingRichMenuContext);
-  const [bounds, setBounds] = useState<(number | boolean)[]>([-1, -1, -1, -1, false]);
+  const [bounds, setBounds] = useState<(number | boolean)[]>([0, 0, 0, 0, false]);
   const [boundsRangeError, setBoundsRangeError] = useState<(AreaRangeError)[]>([null, null, null, null]);
   const [isBoundsPosAbsolute, setBoundsAreaPosAbsolute] = useState(false);
   const detectAreaRangeError = () => {
@@ -87,23 +86,22 @@ export default function TapAreaBoundsDialog(
     else if (boundsRangeError.some(v => v !== null)) setBoundsRangeError([null, null, null, null]);
   }, [bounds, isBoundsPosAbsolute]);
   useEffect(() => {
-    if (isDialogOpened) {
-      if (editingAreaIndex < areas.length) {
-        const { x, y, width, height } = areas[editingAreaIndex].bounds;
-
-        setBounds([x, y, width, height, true]);
-      } else {
-        setBounds([-1, -1, -1, -1, false]);
-      }
+    console.log({ isDialogOpen, editingAreaIndex, a: areas.length });
+    if (editingAreaIndex < areas.length) {
+      const { x, y, width, height } = areas[editingAreaIndex].bounds;
+      console.log({ x, y, width, height });
+      setBounds([x, y, width, height, true]);
+    } else if (menuImage?.image) {
+      setBounds([0, 0, menuImage.image.width, menuImage.image.height, true]);
     }
-  }, [areas, editingAreaIndex, isDialogOpened]);
+  }, [areas, editingAreaIndex, isDialogOpen]);
   return (
-    <Dialog onClose={() => setIsDialogOpened(false)} onBackdropClick={() => {
-      setIsDialogOpened(false);
+    <Dialog onClose={() => setIsDialogOpen(false)} onBackdropClick={() => {
+      setIsDialogOpen(false);
       setTimeout(() => {
-        setBounds([-1, -1, -1, -1, false]);
+        setBounds([0, 0, 0, 0, false]);
       }, 100);
-    }} open={isDialogOpened} scroll="body" maxWidth="md">
+    }} open={isDialogOpen} scroll="body" maxWidth="md">
       <DialogTitle>タップ領域を{editingAreaIndex < areas.length ? "編集" : "追加"}</DialogTitle>
       <DialogContent sx={{ width: "688px" }}>
         <Typography variant="subtitle1">画像サイズ: {menuImage?.image.width}px × {menuImage?.image.height}px</Typography>
@@ -195,7 +193,7 @@ export default function TapAreaBoundsDialog(
       </DialogContent>
       <DialogActions>
         <Button onClick={() => {
-          setIsDialogOpened(false);
+          setIsDialogOpen(false);
           setTimeout(() => {
             setBounds([-1, -1, -1, -1, false]);
           }, 100);
@@ -220,9 +218,9 @@ export default function TapAreaBoundsDialog(
           ([newBounds.x, newBounds.y, newBounds.width, newBounds.height] = bounds.slice(0, 4) as number[]);
           setAreas(newAreas);
           setActiveAreaIndex(editingAreaIndex);
-          setIsDialogOpened(false);
+          setIsDialogOpen(false);
           setTimeout(() => {
-            setBounds([-1, -1, -1, -1, false]);
+            setBounds([0, 0, 0, 0, false]);
           }, 100);
         }} disabled={boundsRangeError.some(error => error)}
         variant="text">保存</Button>

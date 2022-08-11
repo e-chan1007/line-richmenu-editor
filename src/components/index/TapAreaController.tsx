@@ -1,5 +1,5 @@
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import Draggable, { DraggableEventHandler } from "react-draggable";
 
 export default function TapAreaController(
@@ -14,7 +14,7 @@ export default function TapAreaController(
   const { menuImage } = useContext(EditingRichMenuContext);
   const [diffColor, setDiffColor] = useState(["black", "black", "black", "black"]);
   const [viewBounds, setViewBounds] = useState([0, 0, viewWidth, 128]);
-  const [viewHeight, setViewHeight] = useState(0);
+  const viewHeight = useMemo(() => menuImage.image.height * (viewWidth / menuImage.image.width), [menuImage, viewWidth]);
   const canvas = useRef<HTMLCanvasElement>();
   const diffColorCalculator = useRef<Worker>();
   const adjustAndSetBounds = (_rect: number[]) => {
@@ -85,7 +85,6 @@ export default function TapAreaController(
 
   useEffect(() => {
     if (menuImage.image && canvas.current) {
-      setViewHeight(menuImage.image.height * (viewWidth / menuImage.image.width));
       canvas.current.width = viewWidth;
       canvas.current.height = viewHeight;
       const context = canvas.current.getContext("2d");
@@ -101,10 +100,11 @@ export default function TapAreaController(
   }, [viewBounds, menuImage, menuImage.image, canvas, calcDiffColor]);
   useEffect(() => {
     if (bounds[4]) {
-      const newBounds = (bounds[0] === -1) ? [0, 0, menuImage.image.width, menuImage.image.height]: bounds
+      const newBounds = bounds
         .slice(0, 4)
         .map(v => Number.isNaN(v)? 0 : v) as number[];
       if (bounds[0] === -1) setBounds([...newBounds, true]);
+      console.log("will set", [...newBounds].map(v => Math.round(v / ((menuImage.image.width || viewWidth) / viewWidth))));
       setViewBounds([...newBounds].map(v => Math.round(v / ((menuImage.image.width || viewWidth) / viewWidth))));
     }
   }, [bounds]);
@@ -126,10 +126,10 @@ export default function TapAreaController(
           width: `${viewWidth}px`,
           height: `${viewHeight}px`
         }} />
-        <svg width={viewWidth} height="100%" xmlns="http://www.w3.org/2000/svg" style={{
+        <svg width={viewWidth} height={viewHeight} xmlns="http://www.w3.org/2000/svg" style={{
           position: "absolute",
-          width: "100%",
-          height: "100%"
+          width: `${viewWidth}px`,
+          height: `${viewHeight}px`
         }}>
           <defs>
             <mask id="outsideBoundsMask">

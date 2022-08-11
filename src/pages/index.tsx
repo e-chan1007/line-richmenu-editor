@@ -1,3 +1,9 @@
+import CloudQueueIcon from "@mui/icons-material/CloudQueue";
+import CodeIcon from "@mui/icons-material/Code";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -9,12 +15,6 @@ import Tab from "@mui/material/Tab";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import CloudQueueIcon from "@mui/icons-material/CloudQueue";
-import CodeIcon from "@mui/icons-material/Code";
-import ViewModuleIcon from "@mui/icons-material/ViewModule";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
 import APIControlCard from "components/index/cards/APIControlCard";
 import BasicSettingsCard from "components/index/cards/BasicSettingsCard";
 import ImageSelectCard from "components/index/cards/ImageSelectCard";
@@ -29,7 +29,7 @@ import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import { PageLoadingStateContext } from "contexts/PageLoadingStateContext";
 import MainLayout from "layouts/main";
 import Head from "next/head";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function Index() {
   const theme = useTheme();
@@ -127,7 +127,7 @@ export default function Index() {
           )}
         </>
       </Box>
-      <BotSettingsDialog isDialogOpened={isBotSettingsDialogOpen} setIsDialogOpened={setIsBotSettingsDialogOpen} />
+      <BotSettingsDialog isDialogOpen={isBotSettingsDialogOpen} setIsDialogOpen={setIsBotSettingsDialogOpen} />
     </MainLayout>
   );
 }

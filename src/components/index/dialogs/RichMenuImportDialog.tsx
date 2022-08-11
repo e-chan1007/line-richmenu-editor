@@ -1,3 +1,7 @@
+import CheckIcon from "@mui/icons-material/Check";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -11,26 +15,22 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Tab from "@mui/material/Tab";
-import CheckIcon from "@mui/icons-material/Check";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
 import Ajv from "ajv";
 import axios from "axios";
 import { BotAccount, BotAccountContext } from "contexts/BotAccountContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import { PageLoadingStateContext } from "contexts/PageLoadingStateContext";
 import botAccountDatabase from "databases/BotAccount";
-import richMenuSchema from "../../../../public/schemas/richmenu.json";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
+import richMenuSchema from "../../../../public/schemas/richmenu.json";
 
 export default function RichMenuImportDialog(
-  { botId, isDialogOpened, setIsDialogOpened, handleMenuClose }:
+  { botId, isDialogOpen, setIsDialogOpen, handleMenuClose }:
   {
     botId: string,
-    isDialogOpened: boolean,
-    setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
+    isDialogOpen: boolean,
+    setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>,
     handleMenuClose: () => void
   }) {
   const { accounts, setAccounts } = useContext(BotAccountContext);
@@ -83,14 +83,14 @@ export default function RichMenuImportDialog(
 
   useEffect(() => {
     setIsFileSelected(false);
-  }, [isDialogOpened]);
+  }, [isDialogOpen]);
 
   useEffect(() => {
     if (remoteRichMenuList?.richmenus) setJSONToAdd(JSON.stringify(remoteRichMenuList.richmenus[selectedRichMenuIndex]));
   }, [remoteRichMenuList, selectedRichMenuIndex]);
 
   return (
-    <Dialog onClose={() => setIsDialogOpened(false)} open={isDialogOpened} maxWidth="sm" fullWidth>
+    <Dialog onClose={() => setIsDialogOpen(false)} open={isDialogOpen} maxWidth="sm" fullWidth>
       <DialogTitle>{(botToInsertRichMenu?.botName)}にリッチメニューをインポート</DialogTitle>
       <DialogContent>
         <TabContext value={tabIndex}>
@@ -142,7 +142,7 @@ export default function RichMenuImportDialog(
       </DialogContent>
       <DialogActions>
         <Button onClick={() => {
-          setIsDialogOpened(false);
+          setIsDialogOpen(false);
           handleMenuClose();
         }} variant="text">キャンセル</Button>
         <Button onClick={() => {
@@ -158,7 +158,7 @@ export default function RichMenuImportDialog(
             { ...currentAccount, richMenus: [...currentAccount.richMenus, newRichMenuId] }
           );
           setAccounts(newAccounts);
-          setIsDialogOpened(false);
+          setIsDialogOpen(false);
           handleMenuClose();
 
           Object.entries(JSON.parse(jsonToAdd)).forEach(([key, value]) => {

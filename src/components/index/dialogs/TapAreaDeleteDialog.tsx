@@ -1,3 +1,4 @@
+import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -8,11 +9,11 @@ import React, { useContext, useEffect, useState } from "react";
 import TapAreaController from "../TapAreaController";
 
 export default function TapAreaDeleteDialog(
-  { editingAreaIndex, isDialogOpened, setIsDialogOpened, setActiveAreaIndex }:
+  { editingAreaIndex, isDialogOpen, setIsDialogOpen, setActiveAreaIndex }:
   {
     editingAreaIndex: number,
-    isDialogOpened: boolean,
-    setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
+    isDialogOpen: boolean,
+    setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>,
     setActiveAreaIndex: React.Dispatch<React.SetStateAction<number>>
   }) {
   const { menuImage, menu: { areas }, setters: { setAreas }} = useContext(EditingRichMenuContext);
@@ -29,7 +30,7 @@ export default function TapAreaDeleteDialog(
     }
   }, [areas, editingAreaIndex]);
   return (
-    <Dialog onClose={() => setIsDialogOpened(false)} open={isDialogOpened} maxWidth="xs">
+    <Dialog onClose={() => setIsDialogOpen(false)} open={isDialogOpen} maxWidth="xs">
       <DialogTitle>タップ領域を削除</DialogTitle>
       <DialogContent>
         <TapAreaController {...{
@@ -39,14 +40,20 @@ export default function TapAreaDeleteDialog(
         readonly
         width={396} />
         <p>この領域を削除しますか?</p>
+        <Alert severity="warning" sx={{ my: 1 }}>
+          <ul style={{ margin: 0, padding: 0, marginLeft: "1em" }}>
+            <li>この操作は元に戻せません！</li>
+            <li>Shiftキーを押しながら削除ボタンを押すと、この画面を表示せずに直接削除できます。</li>
+          </ul>
+        </Alert>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setIsDialogOpened(false)} variant="text">キャンセル</Button>
+        <Button onClick={() => setIsDialogOpen(false)} variant="text">キャンセル</Button>
         <Button onClick={() => {
           const newAreas = [...areas];
           newAreas.splice(editingAreaIndex, 1);
           setAreas(newAreas);
-          setIsDialogOpened(false);
+          setIsDialogOpen(false);
           setActiveAreaIndex(null);
         }} color="error" variant="text">削除</Button>
       </DialogActions>

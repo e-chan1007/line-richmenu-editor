@@ -15,11 +15,11 @@ import React, { useEffect, useState } from "react";
 import { StoredRichMenu } from "types/RichMenu";
 
 export default function RichMenuExportDialog(
-  { richMenuId, isDialogOpened, setIsDialogOpened, handleMenuClose: handleMenuClose }:
+  { richMenuId, isDialogOpen, setIsDialogOpen, handleMenuClose: handleMenuClose }:
   {
     richMenuId: string,
-    isDialogOpened: boolean,
-    setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
+    isDialogOpen: boolean,
+    setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>,
     handleMenuClose: () => void
   }) {
   const [richMenuToExport, setRichMenuToExport] = useState<StoredRichMenu>(null);
@@ -42,7 +42,7 @@ export default function RichMenuExportDialog(
   }, [richMenuToExport]);
 
   return (
-    <Dialog onClose={() => setIsDialogOpened(false)} open={isDialogOpened} maxWidth="xs" fullWidth>
+    <Dialog onClose={() => setIsDialogOpen(false)} open={isDialogOpen} maxWidth="xs" fullWidth>
       <DialogTitle>リッチメニューをエクスポート</DialogTitle>
       <DialogContent>
         <Typography>エクスポートするファイル</Typography>
@@ -72,7 +72,7 @@ export default function RichMenuExportDialog(
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => { setIsDialogOpened(false); handleMenuClose(); }} variant="text">キャンセル</Button>
+        <Button onClick={() => { setIsDialogOpen(false); handleMenuClose(); }} variant="text">キャンセル</Button>
         <Button onClick={async () => {
           const files: Record<string, string> = {};
           const richMenuBody: Partial<RichMenuResponse> = { ...richMenuToExport.menu };
@@ -104,7 +104,7 @@ export default function RichMenuExportDialog(
           }
           downloadLink.click();
           handleMenuClose();
-          setIsDialogOpened(false);
+          setIsDialogOpen(false);
         }}
         variant="text"
         disabled={Object.values(exportFileList).every(v => !v)}>エクスポート</Button>

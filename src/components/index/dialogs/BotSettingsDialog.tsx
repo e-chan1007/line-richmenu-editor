@@ -1,3 +1,5 @@
+import InfoIcon from "@mui/icons-material/Info";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -7,15 +9,13 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
-import InfoIcon from "@mui/icons-material/Info";
-import LoadingButton from "@mui/lab/LoadingButton";
 import axios from "axios";
 import { BotAccountContext } from "contexts/BotAccountContext";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 
 export default function BotSettingsDialog(
-  { isDialogOpened, setIsDialogOpened }:
-  { isDialogOpened: boolean, setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>> }) {
+  { isDialogOpen, setIsDialogOpen }:
+  { isDialogOpen: boolean, setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
   const { editingBotId, accounts, setAccounts } = useContext(BotAccountContext);
   const [channelAccessToken, setChannelAccessToken] = useState(accounts[editingBotId]?.channelAccessToken || "");
   const [isChannelAccessTokenValid, setIsChannelAccessTokenValid] = useState(false);
@@ -29,7 +29,7 @@ export default function BotSettingsDialog(
     setChannelAccessTokenValidated(false);
   }, []);
   return (
-    <Dialog onClose={() => setIsDialogOpened(false)} open={isDialogOpened} maxWidth="xs" fullWidth>
+    <Dialog onClose={() => setIsDialogOpen(false)} open={isDialogOpen} maxWidth="xs" fullWidth>
       <DialogTitle>Botアカウントを{editingBotId.length > 0 ? "編集" : "追加"}</DialogTitle>
       <DialogContent>
         <Stack direction="row" alignItems="flex-end">
@@ -46,7 +46,7 @@ export default function BotSettingsDialog(
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setIsDialogOpened(false)} variant="text">キャンセル</Button>
+        <Button onClick={() => setIsDialogOpen(false)} variant="text">キャンセル</Button>
         <LoadingButton
           ref={saveButtonRef}
           onClick={async () => {
@@ -70,7 +70,7 @@ export default function BotSettingsDialog(
                 newAccounts.push(account);
               }
               setAccounts(newAccounts);
-              setIsDialogOpened(false);
+              setIsDialogOpen(false);
               setChannelAccessToken("");
             } else {
               setIsChannelAccessTokenValid(false);

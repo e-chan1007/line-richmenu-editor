@@ -11,11 +11,11 @@ import richMenuDatabase from "databases/RichMenu";
 import React, { useContext, useEffect, useState } from "react";
 
 export default function BotDeleteDialog(
-  { botId, isDialogOpened, setIsDialogOpened, handleMenuClose }:
+  { botId, isDialogOpen, setIsDialogOpen, handleMenuClose }:
   {
     botId: string,
-    isDialogOpened: boolean,
-    setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>,
+    isDialogOpen: boolean,
+    setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>,
     handleMenuClose: () => void
   }) {
   const { accounts, setAccounts } = useContext(BotAccountContext);
@@ -28,7 +28,7 @@ export default function BotDeleteDialog(
   }, [botId]);
 
   return (
-    <Dialog onClose={() => setIsDialogOpened(false)} open={isDialogOpened} maxWidth="xs">
+    <Dialog onClose={() => setIsDialogOpen(false)} open={isDialogOpen} maxWidth="xs">
       <DialogTitle>Botアカウントを削除</DialogTitle>
       <DialogContent>
         <p>{(botToDelete?.botName)}をエディタ上から削除しますか?</p>
@@ -40,7 +40,7 @@ export default function BotDeleteDialog(
         </Alert>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => { setIsDialogOpened(false); handleMenuClose(); }} variant="text">キャンセル</Button>
+        <Button onClick={() => { setIsDialogOpen(false); handleMenuClose(); }} variant="text">キャンセル</Button>
         <Button onClick={() => {
           if (botToDelete.richMenus.includes(editingRichMenuId)) changeRichMenuId("DELETED");
           richMenuDatabase.menus.where("richMenuId").anyOfIgnoreCase(botToDelete.richMenus).delete();
@@ -49,7 +49,7 @@ export default function BotDeleteDialog(
           newAccounts.splice(newAccounts.findIndex(({ basicId }) => basicId === botId), 1);
           setAccounts(newAccounts);
           handleMenuClose();
-          setIsDialogOpened(false);
+          setIsDialogOpen(false);
         }} color="error" variant="text">削除</Button>
       </DialogActions>
     </Dialog>

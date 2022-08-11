@@ -1,3 +1,8 @@
+import { LocalizationProvider } from "@mui/lab";
+import AdapterDayjs from "@mui/lab/AdapterDayjs";
+import DatePicker from "@mui/lab/DatePicker";
+import DateTimePicker from "@mui/lab/DateTimePicker";
+import TimePicker from "@mui/lab/TimePicker";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -9,11 +14,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
-import { LocalizationProvider } from "@mui/lab";
-import AdapterDayjs from "@mui/lab/AdapterDayjs";
-import DatePicker from "@mui/lab/DatePicker";
-import DateTimePicker from "@mui/lab/DateTimePicker";
-import TimePicker from "@mui/lab/TimePicker";
 import { actionTypes, postbackInputOptions } from "constants/RichMenuAction";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import dayjs from "dayjs";
@@ -23,11 +23,11 @@ import { Action } from "types/RichMenu";
 import TapAreaController from "../TapAreaController";
 
 export default function TapAreaActionDialog(
-  { editingAreaIndex, isDialogOpened, setIsDialogOpened }:
+  { editingAreaIndex, isDialogOpen, setIsDialogOpen }:
   {
     editingAreaIndex: number,
-    isDialogOpened: boolean,
-    setIsDialogOpened: React.Dispatch<React.SetStateAction<boolean>>
+    isDialogOpen: boolean,
+    setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
   }) {
   const { menuImage, menu: { areas }, setters: { setAreas }} = useContext(EditingRichMenuContext);
   const [bounds, setBounds] = useState<(number|boolean)[]>([]);
@@ -52,7 +52,7 @@ export default function TapAreaActionDialog(
     }
   }, [areas, editingAreaIndex]);
   return (
-    <Dialog onClose={() => setIsDialogOpened(false)} open={isDialogOpened} scroll="body" maxWidth="xs">
+    <Dialog onClose={() => setIsDialogOpen(false)} open={isDialogOpen} scroll="body" maxWidth="xs">
       <DialogTitle>アクションを編集</DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
@@ -193,7 +193,7 @@ export default function TapAreaActionDialog(
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setIsDialogOpened(false)} variant="text">キャンセル</Button>
+        <Button onClick={() => setIsDialogOpen(false)} variant="text">キャンセル</Button>
         <Button onClick={() => {
           const newAreas = [...areas];
           newAreas[editingAreaIndex].action = { ...newAreas[editingAreaIndex].action, ...action };
@@ -210,7 +210,7 @@ export default function TapAreaActionDialog(
             }
           });
           setAreas(newAreas);
-          setIsDialogOpened(false);
+          setIsDialogOpen(false);
         }} disabled={
           action.type === "" ||
           actionTypes[action.type]?.requires?.some(key => !action[key] || action[key].trim?.() === "")

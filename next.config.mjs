@@ -3,9 +3,10 @@
 
 import withPWA from "next-pwa";
 
+const isDev = process.env.NODE_ENV === "development";
+
 export default withPWA({
-  cssModules: true,
   eslint: { ignoreDuringBuilds: true },
-  pwa: { dest: "public" },
+  pwa: { dest: "public", disable: isDev },
   serverRuntimeConfig: { GTM_ID: process.env.GTM_ID || "GTM_ID" }
 });

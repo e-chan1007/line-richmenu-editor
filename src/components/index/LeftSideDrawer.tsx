@@ -48,10 +48,10 @@ export default function LeftSideDrawer(
     mouseY: number;
     target: string;
   } | null>(null);
-  const [isRichMenuDeleteDialogOpened, setIsRichMenuDeleteDialogOpened] = useState(false);
-  const [isBotDeleteDialogOpened, setIsBotDeleteDialogOpened] = useState(false);
-  const [isRichMenuImportDialogOpened, setIsRichMenuImportDialogOpened] = useState(false);
-  const [isRichMenuExportDialogOpened, setIsRichMenuExportDialogOpened] = useState(false);
+  const [isRichMenuDeleteDialogOpen, setIsRichMenuDeleteDialogOpen] = useState(false);
+  const [isBotDeleteDialogOpen, setIsBotDeleteDialogOpen] = useState(false);
+  const [isRichMenuImportDialogOpen, setIsRichMenuImportDialogOpen] = useState(false);
+  const [isRichMenuExportDialogOpen, setIsRichMenuExportDialogOpen] = useState(false);
 
   const handleContextMenu = (event: React.MouseEvent) => {
     const findTarget = (target: HTMLElement) => {
@@ -77,7 +77,7 @@ export default function LeftSideDrawer(
   const handleMenuClose = () => {
     setContextMenu(null);
   };
-  const [accounts, setAccounts] = useState<(Weaken<BotAccount, "richMenus"> & { isOpened: boolean, richMenus: RichMenuResponse[] })[]>([]);
+  const [accounts, setAccounts] = useState<(Weaken<BotAccount, "richMenus"> & { isOpen: boolean, richMenus: RichMenuResponse[] })[]>([]);
   useEffect(() => {
     (async () => {
       const accounts = await botAccountDatabase.accounts.toArray();
@@ -102,7 +102,7 @@ export default function LeftSideDrawer(
     setTimeout(async () => {
       setAccounts((await Promise.all(_accounts.map(async (account, i) => ({
         ...account,
-        isOpened: (accounts[i]?.isOpened || account.richMenus.includes(editingRichMenuId)),
+        isOpen: (accounts[i]?.isOpen || account.richMenus.includes(editingRichMenuId)),
         richMenus: (await richMenuDatabase.menus.where("richMenuId").anyOf(account.richMenus).toArray())
           .map(({ richMenuId, menu }): RichMenuResponse => ({ ...menu, richMenuId }))
           .sort(({ richMenuId: a }, { richMenuId: b }) => (
@@ -157,7 +157,7 @@ export default function LeftSideDrawer(
             } disablePadding>
               <ListItemButton onClick={() => {
                 setAccounts(accounts.map(vAccount => {
-                  if (account === vAccount) return { ...account, isOpened: !account.isOpened };
+                  if (account === vAccount) return { ...account, isOpen: !account.isOpen };
                   else return vAccount;
                 }));
               }}
@@ -172,10 +172,10 @@ export default function LeftSideDrawer(
                   </ListItemIcon>
                 )}
                 <ListItemText primary={`${account?.botName}`} />
-                {account.isOpened ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                {account.isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </ListItemButton>
             </ListItem>
-            <Collapse in={account.isOpened} timeout="auto" unmountOnExit>
+            <Collapse in={account.isOpen} timeout="auto" unmountOnExit>
               <List component="div" disablePadding dense>
                 {account.richMenus.map((richMenu, i) => (
                   <ListItemButton
@@ -225,14 +225,14 @@ export default function LeftSideDrawer(
           </ListItemIcon>
           <ListItemText>新しいリッチメニュー</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => { setIsRichMenuImportDialogOpened(true); }}>
+        <MenuItem onClick={() => { setIsRichMenuImportDialogOpen(true); }}>
           <ListItemIcon>
             <DriveFileMoveIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>リッチメニューをインポート</ListItemText>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={() => { setIsBotDeleteDialogOpened(true); }} >
+        <MenuItem onClick={() => { setIsBotDeleteDialogOpen(true); }} >
           <ListItemIcon>
             <DeleteIcon color="error" fontSize="small" />
           </ListItemIcon>
@@ -256,14 +256,14 @@ export default function LeftSideDrawer(
           </MenuItem>
         </>
         )}
-        <MenuItem onClick={() => { setIsRichMenuExportDialogOpened(true); }}>
+        <MenuItem onClick={() => { setIsRichMenuExportDialogOpen(true); }}>
           <ListItemIcon>
             <FileDownloadIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>ファイルとして出力</ListItemText>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={() => { setIsRichMenuDeleteDialogOpened(true); }}>
+        <MenuItem onClick={() => { setIsRichMenuDeleteDialogOpen(true); }}>
           <ListItemIcon>
             <DeleteIcon color="error" fontSize="small" />
           </ListItemIcon>
@@ -273,23 +273,23 @@ export default function LeftSideDrawer(
     </List>
 
     <RichMenuDeleteDialog
-      isDialogOpened={isRichMenuDeleteDialogOpened}
-      setIsDialogOpened={setIsRichMenuDeleteDialogOpened}
+      isDialogOpen={isRichMenuDeleteDialogOpen}
+      setIsDialogOpen={setIsRichMenuDeleteDialogOpen}
       richMenuId={contextMenu?.target}
       handleMenuClose={handleMenuClose} />
     <RichMenuImportDialog
-      isDialogOpened={isRichMenuImportDialogOpened}
-      setIsDialogOpened={setIsRichMenuImportDialogOpened}
+      isDialogOpen={isRichMenuImportDialogOpen}
+      setIsDialogOpen={setIsRichMenuImportDialogOpen}
       botId={contextMenu?.target}
       handleMenuClose={handleMenuClose} />
     <RichMenuExportDialog
-      isDialogOpened={isRichMenuExportDialogOpened}
-      setIsDialogOpened={setIsRichMenuExportDialogOpened}
+      isDialogOpen={isRichMenuExportDialogOpen}
+      setIsDialogOpen={setIsRichMenuExportDialogOpen}
       richMenuId={contextMenu?.target}
       handleMenuClose={handleMenuClose} />
     <BotDeleteDialog
-      isDialogOpened={isBotDeleteDialogOpened}
-      setIsDialogOpened={setIsBotDeleteDialogOpened}
+      isDialogOpen={isBotDeleteDialogOpen}
+      setIsDialogOpen={setIsBotDeleteDialogOpen}
       botId={contextMenu?.target}
       handleMenuClose={handleMenuClose} />
   </>;
