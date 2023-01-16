@@ -1,6 +1,10 @@
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import Draggable, { DraggableEventHandler } from "react-draggable";
+
+import Draggable from "react-draggable";
+
+import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
+
+import type { DraggableEventHandler } from "react-draggable";
 
 export default function TapAreaController(
   { bounds, setBounds, readonly = false, width: viewWidth = 640 }

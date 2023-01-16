@@ -1,3 +1,6 @@
+import type { MouseEvent } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -8,10 +11,10 @@ import { useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
 import { actionTypes } from "constants/RichMenuAction";
 import { BotAccountContext } from "contexts/BotAccountContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import React, { MouseEvent, useContext, useEffect, useRef, useState } from "react";
 import styles from "styles/LINEScreen.module.scss";
 
 export default function LINEScreen(
@@ -22,7 +25,7 @@ export default function LINEScreen(
   }
 ) {
   const theme = useTheme();
-  const { menuImage, richMenuId, menu: { areas, chatBarText }} = useContext(EditingRichMenuContext);
+  const { menuImage, richMenuId, menu: { areas, chatBarText } } = useContext(EditingRichMenuContext);
   const { accounts, editingBotId } = useContext(BotAccountContext);
   const [messages, setMessages] = useState<{from: "user" | "bot", text: string}[]>([]);
   const [imageScale, setImageScale] = useState(1);

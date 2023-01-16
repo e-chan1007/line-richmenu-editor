@@ -1,3 +1,5 @@
+import React, { useContext, useRef, useState } from "react";
+
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import BrightnessAutoIcon from "@mui/icons-material/BrightnessAuto";
@@ -23,12 +25,12 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as zip from "@zip.js/zip.js";
+
 import AllDataExportDialog from "components/index/dialogs/AllDataExportDialog";
 import { PageLoadingStateContext } from "contexts/PageLoadingStateContext";
 import botAccountDatabase from "databases/BotAccount";
 import richMenuDatabase from "databases/RichMenu";
 import { ThemeColorContext } from "pages/_app";
-import React, { useContext, useRef, useState } from "react";
 
 export default function MainLayout({
   children,
@@ -52,7 +54,7 @@ export default function MainLayout({
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2, display: { xl: "none" }}}
+            sx={{ mr: 2, display: { xl: "none" } }}
             onClick={onMenuButtonClick}
           >
             <MenuIcon />
@@ -121,7 +123,7 @@ export default function MainLayout({
                           <Button onClick={() => setIsAllDataExportDialogOpen(true)}>エクスポート</Button>
                           <Button onClick={async () => {
                             try {
-                              const file: File | null = await window.showOpenFilePicker({ types: [{ accept: { "application/zip": [".zip"] }}] }).then(([file]) => file.getFile()).catch(() => null);
+                              const file: File | null = await window.showOpenFilePicker({ types: [{ accept: { "application/zip": [".zip"] } }] }).then(([file]) => file.getFile()).catch(() => null);
                               if (!file) return;
                               setIsPageLoading(true);
                               const blobReader = new zip.ZipReader(new zip.BlobReader(file));

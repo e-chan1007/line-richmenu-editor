@@ -1,3 +1,5 @@
+import React, { useContext, useMemo, useRef, useState } from "react";
+
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Button from "@mui/material/Button";
@@ -10,10 +12,11 @@ import Input from "@mui/material/Input";
 import InputLabel from "@mui/material/InputLabel";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import React, { useContext, useMemo, useRef, useState } from "react";
 import styles from "styles/TapAreaBulkCreateDialog.module.scss";
-import { Area } from "types/RichMenu";
+
+import type { Area } from "types/RichMenu";
 
 export default function TapAreaBulkCreateDialog(
   { isDialogOpen, setIsDialogOpen }:
@@ -22,7 +25,7 @@ export default function TapAreaBulkCreateDialog(
     setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
   }) {
   const viewWidth = 640;
-  const { menuImage, menu: { areas }, setters: { setAreas }} = useContext(EditingRichMenuContext);
+  const { menuImage, menu: { areas }, setters: { setAreas } } = useContext(EditingRichMenuContext);
 
   const viewHeight = useMemo(() => menuImage?.image
     ? menuImage.image.height * (viewWidth / menuImage.image.width)
@@ -103,7 +106,8 @@ export default function TapAreaBulkCreateDialog(
           </FormControl>
         </Stack>
         <div className={styles["bounds-grid-wrapper"]}>
-          <img ref={menuImageRef} src={menuImage?.image.src} width={viewWidth} />
+          { /* eslint-disable-next-line @next/next/no-img-element */ }
+          <img alt="メニュー画像" ref={menuImageRef} src={menuImage?.image.src} width={viewWidth} />
           { !(isHorizontalSplitSettingsWrong || isVerticalSplitSettingsWrong || areBoundsTooMuch) && (
             <table className={[styles["bounds-grid"], styles[horizontalSplitSettings.length % 2 === 0 ? "is-2n" : "is-2n-1"]].join(" ")} style={{ height: viewHeight }}>
               <tbody>

@@ -1,5 +1,6 @@
-import { APIResponse } from "constants/RichMenuAPI";
 import React, { createContext, useContext, useState } from "react";
+
+import type { APIResponse } from "constants/RichMenuAPI";
 
 type DataStoreType = {
   results: APIResponse[],

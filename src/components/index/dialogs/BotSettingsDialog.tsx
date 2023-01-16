@@ -1,3 +1,5 @@
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+
 import InfoIcon from "@mui/icons-material/Info";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
@@ -10,8 +12,8 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 import axios from "axios";
+
 import { BotAccountContext } from "contexts/BotAccountContext";
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 
 export default function BotSettingsDialog(
   { isDialogOpen, setIsDialogOpen }:
@@ -51,7 +53,7 @@ export default function BotSettingsDialog(
           ref={saveButtonRef}
           onClick={async () => {
             setChannelAccessTokenValidating(true);
-            const result = await axios.get("/api/line?target=api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${channelAccessToken.trim()}` }}).catch(({ response }) => response);
+            const result = await axios.get("/api/line?target=api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${channelAccessToken.trim()}` } }).catch(({ response }) => response);
             setChannelAccessTokenValidating(false);
             setChannelAccessTokenValidated(true);
             if (result.status === 200) {

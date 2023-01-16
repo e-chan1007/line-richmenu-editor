@@ -1,13 +1,16 @@
+import React, { useContext, useEffect } from "react";
+
 import Alert from "@mui/material/Alert";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
+
 import { apiList } from "constants/RichMenuAPI";
 import { APIControllerContext } from "contexts/APIControllerContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import React, { useContext, useEffect } from "react";
+
 import APIController from "../APIController";
 
 export default function APIControlCard() {
@@ -16,7 +19,7 @@ export default function APIControlCard() {
   useEffect(() => {
     const newDataStore = { ...controllerContext.dataStore };
     apiList.forEach(({ key }) => {
-      if (!newDataStore.key) newDataStore[key] = { results: [], params: {}};
+      if (!newDataStore.key) newDataStore[key] = { results: [], params: {} };
     });
     controllerContext._setStoreValue(newDataStore);
   }, [apiList]);
@@ -38,7 +41,7 @@ export default function APIControlCard() {
             multiline
             rows={3}
             value={controllerContext.dataStore.linkRichMenuToUsers?.params?.userIds as string || ""}
-            onChange={e => controllerContext.setStoreValue("linkRichMenuToUsers", { ...controllerContext.dataStore.linkRichMenuToUsers, params: { ...controllerContext.dataStore.linkRichMenuToUsers.params, userIds: e.target.value }})}
+            onChange={e => controllerContext.setStoreValue("linkRichMenuToUsers", { ...controllerContext.dataStore.linkRichMenuToUsers, params: { ...controllerContext.dataStore.linkRichMenuToUsers.params, userIds: e.target.value } })}
             sx={{ width: "100%" }}
           />
         </APIController>
@@ -47,7 +50,7 @@ export default function APIControlCard() {
           <TextField
             label="リッチメニューエイリアス"
             value={controllerContext.dataStore.addRichMenuAlias?.params?.alias as string || ""}
-            onChange={e => controllerContext.setStoreValue("addRichMenuAlias", { ...controllerContext.dataStore.addRichMenuAlias, params: { ...controllerContext.dataStore.addRichMenuAlias.params, alias: e.target.value }})}
+            onChange={e => controllerContext.setStoreValue("addRichMenuAlias", { ...controllerContext.dataStore.addRichMenuAlias, params: { ...controllerContext.dataStore.addRichMenuAlias.params, alias: e.target.value } })}
             sx={{ width: "100%" }}
           />
         </APIController>
@@ -56,7 +59,7 @@ export default function APIControlCard() {
           <TextField
             label="リッチメニューエイリアス"
             value={controllerContext.dataStore.deleteRichMenuAlias?.params?.alias as string || ""}
-            onChange={e => controllerContext.setStoreValue("deleteRichMenuAlias", { ...controllerContext.dataStore.deleteRichMenuAlias, params: { ...controllerContext.dataStore.deleteRichMenuAlias.params, alias: e.target.value }})}
+            onChange={e => controllerContext.setStoreValue("deleteRichMenuAlias", { ...controllerContext.dataStore.deleteRichMenuAlias, params: { ...controllerContext.dataStore.deleteRichMenuAlias.params, alias: e.target.value } })}
             sx={{ width: "100%" }}
           />
         </APIController>
@@ -66,7 +69,7 @@ export default function APIControlCard() {
             <FormControlLabel
               control={<Checkbox
                 checked={controllerContext.dataStore.deleteRichMenu?.params?.checked as boolean}
-                onChange={e => controllerContext.setStoreValue("deleteRichMenu", { ...controllerContext.dataStore.deleteRichMenu, params: { ...controllerContext.dataStore.deleteRichMenu.params, checked: e.target.checked }})}
+                onChange={e => controllerContext.setStoreValue("deleteRichMenu", { ...controllerContext.dataStore.deleteRichMenu, params: { ...controllerContext.dataStore.deleteRichMenu.params, checked: e.target.checked } })}
                 disabled={!menuContext.richMenuId.startsWith("richmenu-")}
               />}
               label="エディタ上からも削除する" sx={{ mt: 1 }} />

@@ -1,3 +1,5 @@
+import React, { useContext, useEffect, useState } from "react";
+
 import { LocalizationProvider } from "@mui/lab";
 import AdapterDayjs from "@mui/lab/AdapterDayjs";
 import DatePicker from "@mui/lab/DatePicker";
@@ -13,14 +15,18 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
-import { actionTypes, postbackInputOptions } from "constants/RichMenuAction";
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
+import TextField from "@mui/material/TextField";
 import dayjs from "dayjs";
 import jaLocale from "dayjs/locale/ja";
-import React, { useContext, useEffect, useState } from "react";
-import { Action } from "types/RichMenu";
+
+import { actionTypes, postbackInputOptions } from "constants/RichMenuAction";
+import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
+
 import TapAreaController from "../TapAreaController";
+
+import type { TextFieldProps } from "@mui/material/TextField";
+import type { Action } from "types/RichMenu";
+
 
 export default function TapAreaActionDialog(
   { editingAreaIndex, isDialogOpen, setIsDialogOpen }:
@@ -29,7 +35,7 @@ export default function TapAreaActionDialog(
     isDialogOpen: boolean,
     setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
   }) {
-  const { menuImage, menu: { areas }, setters: { setAreas }} = useContext(EditingRichMenuContext);
+  const { menuImage, menu: { areas }, setters: { setAreas } } = useContext(EditingRichMenuContext);
   const [bounds, setBounds] = useState<(number|boolean)[]>([]);
   const [action, setAction] = useState<Action>({ } as Action);
   const setActionProp = (key: string, value: unknown) => {

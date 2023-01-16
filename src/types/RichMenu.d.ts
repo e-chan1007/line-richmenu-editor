@@ -1,4 +1,4 @@
-import { Area as Bounds, Action as ActionBase, PostbackAction as PostbackActionBase, RichMenu as RichMenuBase, Size } from "@line/bot-sdk";
+import type { Area as Bounds, Action as ActionBase, PostbackAction as PostbackActionBase, RichMenu as RichMenuBase, Size } from "@line/bot-sdk";
 
 export type ActionType = "postback" | "message" | "uri" | "datetimepicker" | "richmenuswitch"
 export type ActionPropKey = "label" | "data" | "displayText" | "text" | "inputOption" | "fillInText" | "uri" | "mode" | "initial" | "max" | "min" | "richMenuAliasId";

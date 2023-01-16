@@ -1,12 +1,15 @@
-import Alert from "@mui/material/Alert";
-import { useTheme } from "@mui/material/styles";
+import React, { useContext } from "react";
+
 import AspectRatioIcon from "@mui/icons-material/AspectRatio";
 import DescriptionIcon from "@mui/icons-material/Description";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
 import PhotoSizeSelectLargeIcon from "@mui/icons-material/PhotoSizeSelectLarge";
+import Alert from "@mui/material/Alert";
+import { useTheme } from "@mui/material/styles";
+
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import React, { useContext } from "react";
+
 
 const LIMIT_FILE_SIZE = 1; // MB
 const LIMIT_MIN_WIDTH = 800; // px

@@ -1,5 +1,6 @@
 import Dexie from "dexie";
-import { StoredRichMenu } from "types/RichMenu";
+
+import type { StoredRichMenu } from "types/RichMenu";
 
 class RichMenuDatabase extends Dexie {
   menus: Dexie.Table<StoredRichMenu, string>;

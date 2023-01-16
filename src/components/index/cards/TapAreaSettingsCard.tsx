@@ -1,3 +1,5 @@
+import React, { useContext, useState } from "react";
+
 import AddIcon from "@mui/icons-material/Add";
 import CalendarViewMonthIcon from "@mui/icons-material/CalendarViewMonth";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -15,9 +17,10 @@ import { useTheme } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+
 import { actionTypes } from "constants/RichMenuAction";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import React, { useContext, useState } from "react";
+
 import TapAreaActionDialog from "../dialogs/TapAreaActionDialog";
 import TapAreaBoundsDialog from "../dialogs/TapAreaBoundsDialog";
 import TapAreaBulkCreateDialog from "../dialogs/TapAreaBulkCreateDialog";
@@ -31,7 +34,7 @@ export default function TapAreaSettingsPanel(
     setActiveAreaIndex: React.Dispatch<React.SetStateAction<number>>
   }) {
   const theme = useTheme();
-  const { menuImage, menu: { areas }, setters: { setAreas }} = useContext(EditingRichMenuContext);
+  const { menuImage, menu: { areas }, setters: { setAreas } } = useContext(EditingRichMenuContext);
   const [editingAreaIndex, setEditingAreaIndex] = useState(0);
   const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
   const [isBoundsDialogOpen, setIsBoundsDialogOpen] = useState(false);

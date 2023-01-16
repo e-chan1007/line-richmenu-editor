@@ -1,11 +1,13 @@
+import React, { useContext } from "react";
+
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import React, { useContext } from "react";
 
 export default function TapAreaBulkDeleteDialog(
   { isDialogOpen: [isDialogOpen, forBulkCreate], setIsDialogOpen, onDeleted }:
@@ -15,7 +17,7 @@ export default function TapAreaBulkDeleteDialog(
     onDeleted: () => void
   }
 ) {
-  const { setters: { setAreas }} = useContext(EditingRichMenuContext);
+  const { setters: { setAreas } } = useContext(EditingRichMenuContext);
   return (
     <Dialog onClose={() => setIsDialogOpen([false, forBulkCreate])} open={isDialogOpen} maxWidth="xs" fullWidth>
       <DialogTitle>領域の一括削除</DialogTitle>

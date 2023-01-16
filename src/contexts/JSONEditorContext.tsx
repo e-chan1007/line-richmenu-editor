@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+
 import { EditingRichMenuContext } from "./EditingRichMenuContext";
 
 type JSONEditorContextType = {

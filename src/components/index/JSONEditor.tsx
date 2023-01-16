@@ -1,23 +1,20 @@
-// etc
+import React, { useContext, useEffect, useRef, useState } from "react";
+
+import loader from "@monaco-editor/loader";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import ContentCutIcon from "@mui/icons-material/ContentCut";
-import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import Ajv from "ajv";
+
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import { JSONEditorContext } from "contexts/JSONEditorContext";
-import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 import { ThemeColorContext } from "pages/_app";
+
 import richMenuSchema from "../../../public/schemas/richmenu.json";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import loader from "@monaco-editor/loader";
+
+import type * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
+
 
 export default function JSONEditor() {
   const { editorMode, systemMode } = useContext(ThemeColorContext);
@@ -34,7 +31,7 @@ export default function JSONEditor() {
     let windowResizeListener;
     let monacoCreateListener;
     let monacoChangeModelListener;
-    loader.config({ "vs/nls": { availableLanguages: { "*": "ja" }}});
+    loader.config({ "vs/nls": { availableLanguages: { "*": "ja" } } });
     loader.init().then(monaco => {
       try {
         if (isMonacoLoading) {
@@ -67,7 +64,6 @@ export default function JSONEditor() {
           });
         }
       } catch (_) {
-        console.error(_);
       }
     });
     return function cleanup() {

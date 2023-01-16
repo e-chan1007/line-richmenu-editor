@@ -1,15 +1,18 @@
+import React, { createContext, useEffect, useMemo, useState } from "react";
+
+import "@mui/lab/themeAugmentation";
 import { orange } from "@mui/material/colors";
 import CssBaseline from "@mui/material/CssBaseline";
-import { createTheme, ThemeProvider, Theme, StyledEngineProvider } from "@mui/material/styles";
+import { createTheme, StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import "@mui/lab/themeAugmentation";
+
 import { APIControllerContextProvider } from "contexts/APIControllerContext";
 import { BotAccountContextProvider } from "contexts/BotAccountContext";
 import { EditingRichMenuContextProvider } from "contexts/EditingRichMenuContext";
 import { JSONEditorContextProvider } from "contexts/JSONEditorContext";
 import { PageLoadingStateContextProvider } from "contexts/PageLoadingStateContext";
-import { AppProps } from "next/app";
-import React, { createContext, useEffect, useMemo, useState } from "react";
+
+import type { AppProps } from "next/app";
 
 export type UIMode = "light" | "dark";
 
@@ -58,10 +61,10 @@ export default function App({ Component, pageProps }: AppProps) {
       },
       typography: { fontFamily: "Roboto, Noto Sans JP, sans-serif" },
       components: {
-        MuiButton: { defaultProps: { variant: (uiMode === "system" ? systemMode : uiMode) === "light" ? "contained" : "outlined" }},
-        MuiFormControl: { defaultProps: { variant: "standard" }},
-        MuiSelect: { defaultProps: { variant: "standard" }},
-        MuiTextField: { defaultProps: { variant: "standard" }}
+        MuiButton: { defaultProps: { variant: (uiMode === "system" ? systemMode : uiMode) === "light" ? "contained" : "outlined" } },
+        MuiFormControl: { defaultProps: { variant: "standard" } },
+        MuiSelect: { defaultProps: { variant: "standard" } },
+        MuiTextField: { defaultProps: { variant: "standard" } }
       }
     }),
     [uiMode, systemMode]

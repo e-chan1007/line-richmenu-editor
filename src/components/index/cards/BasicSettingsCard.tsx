@@ -1,14 +1,16 @@
+import React, { useContext } from "react";
+
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import React, { useContext } from "react";
 
 export default function BasicSettingsCard() {
-  const { menu: { name, chatBarText, selected }, setters: { setName, setChatBarText, setSelected }} = useContext(EditingRichMenuContext);
+  const { menu: { name, chatBarText, selected }, setters: { setName, setChatBarText, setSelected } } = useContext(EditingRichMenuContext);
   return (
     <Card>
       <CardContent>

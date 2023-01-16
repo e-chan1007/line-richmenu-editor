@@ -1,3 +1,5 @@
+import React, { useContext, useEffect, useMemo, useState } from "react";
+
 import CheckIcon from "@mui/icons-material/Check";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -17,13 +19,17 @@ import Select from "@mui/material/Select";
 import Tab from "@mui/material/Tab";
 import Ajv from "ajv";
 import axios from "axios";
-import { BotAccount, BotAccountContext } from "contexts/BotAccountContext";
+import useSWR from "swr";
+
+import { BotAccountContext } from "contexts/BotAccountContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import { PageLoadingStateContext } from "contexts/PageLoadingStateContext";
 import botAccountDatabase from "databases/BotAccount";
-import React, { useContext, useEffect, useMemo, useState } from "react";
-import useSWR from "swr";
+
+
 import richMenuSchema from "../../../../public/schemas/richmenu.json";
+
+import type { BotAccount } from "contexts/BotAccountContext";
 
 export default function RichMenuImportDialog(
   { botId, isDialogOpen, setIsDialogOpen, handleMenuClose }:
@@ -39,7 +45,7 @@ export default function RichMenuImportDialog(
   const [botToInsertRichMenu, setBotToInsertRichMenu] = useState<BotAccount>(null);
   const [tabIndex, setTabIndex] = useState("0");
   const currentAccount = useMemo(() => accounts.find(({ basicId }) => basicId === botId), [accounts, botId]);
-  const { data: remoteRichMenuList } = useSWR<{ richmenus: { [key: string]: string }[] }>(() => (currentAccount.channelAccessToken) ? `/api/line?target=api.line.me/v2/bot/richmenu/list` : null, url => axios.get(url, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` }}).then(({ data }) => data), { dedupingInterval: 5000 });
+  const { data: remoteRichMenuList } = useSWR<{ richmenus: { [key: string]: string }[] }>(() => (currentAccount.channelAccessToken) ? `/api/line?target=api.line.me/v2/bot/richmenu/list` : null, url => axios.get(url, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` } }).then(({ data }) => data), { dedupingInterval: 5000 });
   const [selectedRichMenuIndex, setSelectedRichMenuIndex] = useState(0);
   const [isFileSelected, setIsFileSelected] = useState(false);
   const [isJSONValid, setIsJSONValid] = useState(true);

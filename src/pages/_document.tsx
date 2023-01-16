@@ -1,7 +1,8 @@
+import React from "react";
+
 import getConfig from "next/config";
 import Document, { Head, Html, Main, NextScript } from "next/document";
 import Script from "next/script";
-import React from "react";
 
 const { serverRuntimeConfig } = getConfig();
 

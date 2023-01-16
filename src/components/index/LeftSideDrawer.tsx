@@ -1,4 +1,5 @@
-import { RichMenuResponse } from "@line/bot-sdk";
+import React, { useContext, useEffect, useState } from "react";
+
 import AddIcon from "@mui/icons-material/Add";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -25,15 +26,19 @@ import MenuItem from "@mui/material/MenuItem";
 import { useTheme } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
 import axios from "axios";
-import { BotAccount, BotAccountContext } from "contexts/BotAccountContext";
+
+import { BotAccountContext } from "contexts/BotAccountContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import botAccountDatabase from "databases/BotAccount";
 import richMenuDatabase from "databases/RichMenu";
-import React, { useContext, useEffect, useState } from "react";
+
 import BotDeleteDialog from "./dialogs/BotDeleteDialog";
 import RichMenuDeleteDialog from "./dialogs/RichMenuDeleteDialog";
 import RichMenuExportDialog from "./dialogs/RichMenuExportDialog";
 import RichMenuImportDialog from "./dialogs/RichMenuImportDialog";
+
+import type { RichMenuResponse } from "@line/bot-sdk";
+import type { BotAccount } from "contexts/BotAccountContext";
 
 export default function LeftSideDrawer(
   { setIsBotSettingsDialogOpen }: { setIsBotSettingsDialogOpen: React.Dispatch<React.SetStateAction<boolean>> }
@@ -83,7 +88,7 @@ export default function LeftSideDrawer(
       const accounts = await botAccountDatabase.accounts.toArray();
       const newAccounts = [];
       await Promise.allSettled(accounts.map(async account => {
-        const result = await axios.get("/api/line?target=api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${account.channelAccessToken}` }}).catch(({ response }) => response);
+        const result = await axios.get("/api/line?target=api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${account.channelAccessToken}` } }).catch(({ response }) => response);
         if (result.status === 200) {
           const newAccount = {
             ...account,

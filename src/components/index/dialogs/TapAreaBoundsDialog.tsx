@@ -1,3 +1,5 @@
+import React, { useContext, useEffect, useState } from "react";
+
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -8,15 +10,18 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
-import Input, { InputProps } from "@mui/material/Input";
+import Input from "@mui/material/Input";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import React, { useContext, useEffect, useState } from "react";
+
 import TapAreaController from "../TapAreaController";
+
+import type { InputProps } from "@mui/material/Input";
 
 type AreaRangeError = {
   type: "BELOW" | "ABOVE" | "EMPTY",
@@ -32,7 +37,7 @@ export default function TapAreaBoundsDialog(
     setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>,
     setActiveAreaIndex: React.Dispatch<React.SetStateAction<number>>
   }) {
-  const { menuImage, menu: { areas }, setters: { setAreas }} = useContext(EditingRichMenuContext);
+  const { menuImage, menu: { areas }, setters: { setAreas } } = useContext(EditingRichMenuContext);
   const [bounds, setBounds] = useState<(number | boolean)[]>([0, 0, 0, 0, false]);
   const [boundsRangeError, setBoundsRangeError] = useState<(AreaRangeError)[]>([null, null, null, null]);
   const [isBoundsPosAbsolute, setBoundsAreaPosAbsolute] = useState(false);

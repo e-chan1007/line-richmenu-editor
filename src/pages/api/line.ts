@@ -1,5 +1,7 @@
+import axios from "axios";
+
+import type { AxiosError, AxiosRequestHeaders } from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
-import axios, { AxiosError, AxiosRequestHeaders } from "axios";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!/^api(-data)?\.line\.me/.test(req.query.target as string)) {
@@ -32,4 +34,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   res.send(apiResult.data);
 }
 
-export const config = { api: { bodyParser: false }};
+export const config = { api: { bodyParser: false } };

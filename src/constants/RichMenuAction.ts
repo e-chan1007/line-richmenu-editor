@@ -1,4 +1,4 @@
-import { ActionPropKey, ActionType, PostbackAction } from "types/RichMenu";
+import type { ActionPropKey, ActionType, PostbackAction } from "types/RichMenu";
 
 export const actionProp: {
   [key in ActionPropKey]: { label: string, description: string }

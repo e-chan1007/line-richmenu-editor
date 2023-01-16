@@ -1,6 +1,9 @@
-import axios, { AxiosError } from "axios";
-import { EditingRichMenuContextType } from "types/RichMenu";
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+
+import type { AxiosError } from "axios";
+import type { EditingRichMenuContextType } from "types/RichMenu";
+
 
 const errorMessages = {
   "NEED_UPLOADING": "リッチメニューのアップロードを先にしてください",
@@ -18,7 +21,7 @@ const toBlob = (base64: string, type: string) => {
   return new Blob([buffer.buffer], { type });
 };
 
-const authHeader = (channelAccessToken: string) => ({ headers: { Authorization: `Bearer ${channelAccessToken}` }});
+const authHeader = (channelAccessToken: string) => ({ headers: { Authorization: `Bearer ${channelAccessToken}` } });
 
 export type APIResponse = { label?: string, endpoint?: string, status: number, result: string, imageSrc?: string };
 export type ParamsValidateResult = { isSucceeded: boolean, messages: string[] };
@@ -53,7 +56,7 @@ export const apiList = new APIList([
     },
     callAPI: async (
       channelAccessToken,
-      { menu, menuImage, setters: { changeRichMenuId }}: EditingRichMenuContextType
+      { menu, menuImage, setters: { changeRichMenuId } }: EditingRichMenuContextType
     ): Promise<APIResponse[]> => {
       const responses: APIResponse[] = [];
       const createRichMenuResponse = await axios.post("/api/line?target=api.line.me/v2/bot/richmenu", menu, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
@@ -64,7 +67,7 @@ export const apiList = new APIList([
         const uploadRichMenuImageResponse = await axios.post(
           `/api/line?target=api-data.line.me/v2/bot/richmenu/${createRichMenuResponse.data.richMenuId}/content`,
           toBlob(menuImage.image.src, contentType),
-          { headers: { ...authHeader(channelAccessToken).headers, "Content-Type": contentType }}
+          { headers: { ...authHeader(channelAccessToken).headers, "Content-Type": contentType } }
         ).catch(({ response }: AxiosError<unknown>) => response);
         responses.push({ label: "画像アップロードAPI", endpoint: `https://api-data.line.me/v2/bot/richmenu/${createRichMenuResponse.data.richMenuId}/content`, status: uploadRichMenuImageResponse.status, result: JSON.stringify(uploadRichMenuImageResponse.data) });
       }
@@ -163,7 +166,7 @@ export const apiList = new APIList([
     validateParams: () => ({ isSucceeded: true, messages: [] }),
     callAPI: async (
       channelAccessToken,
-      { richMenuId, deleteFromLocal, setters: { changeRichMenuId }}: EditingRichMenuContextType & { deleteFromLocal: boolean }
+      { richMenuId, deleteFromLocal, setters: { changeRichMenuId } }: EditingRichMenuContextType & { deleteFromLocal: boolean }
     ): Promise<APIResponse[]> => {
       const responses: APIResponse[] = [];
       if (richMenuId.startsWith("richmenu-")) {

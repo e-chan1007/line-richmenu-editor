@@ -1,4 +1,5 @@
-import { RichMenuResponse } from "@line/bot-sdk";
+import React, { useEffect, useState } from "react";
+
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -10,9 +11,11 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Typography from "@mui/material/Typography";
 import * as zip from "@zip.js/zip.js";
+
 import richMenuDatabase from "databases/RichMenu";
-import React, { useEffect, useState } from "react";
-import { StoredRichMenu } from "types/RichMenu";
+
+import type { RichMenuResponse } from "@line/bot-sdk";
+import type { StoredRichMenu } from "types/RichMenu";
 
 export default function RichMenuExportDialog(
   { richMenuId, isDialogOpen, setIsDialogOpen, handleMenuClose: handleMenuClose }:

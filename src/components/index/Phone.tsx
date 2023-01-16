@@ -1,6 +1,8 @@
+import React from "react";
+
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
-import React from "react";
+
 import styles from "styles/Phone.module.scss";
 
 export default function Phone({ children }: {children}) {

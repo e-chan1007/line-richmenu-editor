@@ -1,11 +1,15 @@
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+
+import rfdc from "rfdc/default";
+import { v4 as uuidv4 } from "uuid";
+
 import botAccountDatabase from "databases/BotAccount";
 import richMenuDatabase from "databases/RichMenu";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import rfdc from "rfdc/default";
-import { EditingRichMenuContextType, StoredRichMenu } from "types/RichMenu";
-import { v4 as uuidv4 } from "uuid";
+
 import { BotAccountContext } from "./BotAccountContext";
 import { PageLoadingStateContext } from "./PageLoadingStateContext";
+
+import type { EditingRichMenuContextType, StoredRichMenu } from "types/RichMenu";
 
 export const EditingRichMenuContext = createContext<EditingRichMenuContextType>({
   richMenuId: null,

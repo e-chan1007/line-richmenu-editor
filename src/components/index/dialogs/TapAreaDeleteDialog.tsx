@@ -1,11 +1,14 @@
+import React, { useContext, useEffect, useState } from "react";
+
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import React, { useContext, useEffect, useState } from "react";
+
 import TapAreaController from "../TapAreaController";
 
 export default function TapAreaDeleteDialog(
@@ -16,7 +19,7 @@ export default function TapAreaDeleteDialog(
     setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>,
     setActiveAreaIndex: React.Dispatch<React.SetStateAction<number>>
   }) {
-  const { menuImage, menu: { areas }, setters: { setAreas }} = useContext(EditingRichMenuContext);
+  const { menuImage, menu: { areas }, setters: { setAreas } } = useContext(EditingRichMenuContext);
   const [bounds, setBounds] = useState<(number|boolean)[]>([]);
   useEffect(() => {
     if (areas[editingAreaIndex]) {

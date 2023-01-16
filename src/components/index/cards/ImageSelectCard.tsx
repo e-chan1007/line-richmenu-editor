@@ -1,18 +1,23 @@
+import type { ChangeEvent } from "react";
+import React, { useContext } from "react";
+
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import React, { ChangeEvent, useContext } from "react";
+
+
 import ImageChecker from "../ImageChecker";
 
 const JPEG_HEADER = "/9j";
 const PNG_HEADER = "iVBORw0KGgo";
 
 export default function ImageSelectCard() {
-  const { setters: { setMenuImage, setSize }} = useContext(EditingRichMenuContext);
+  const { setters: { setMenuImage, setSize } } = useContext(EditingRichMenuContext);
   const theme = useTheme();
   const onImageSelected = (event: ChangeEvent<HTMLInputElement>): void => {
     const file = (event.target.files as FileList)[0];

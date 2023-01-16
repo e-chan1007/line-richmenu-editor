@@ -1,3 +1,5 @@
+import React, { useContext, useEffect, useState } from "react";
+
 import CloudQueueIcon from "@mui/icons-material/CloudQueue";
 import CodeIcon from "@mui/icons-material/Code";
 import ViewModuleIcon from "@mui/icons-material/ViewModule";
@@ -15,6 +17,8 @@ import Tab from "@mui/material/Tab";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Head from "next/head";
+
 import APIControlCard from "components/index/cards/APIControlCard";
 import BasicSettingsCard from "components/index/cards/BasicSettingsCard";
 import ImageSelectCard from "components/index/cards/ImageSelectCard";
@@ -28,8 +32,6 @@ import { APIControllerContext } from "contexts/APIControllerContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import { PageLoadingStateContext } from "contexts/PageLoadingStateContext";
 import MainLayout from "layouts/main";
-import Head from "next/head";
-import { useContext, useEffect, useState } from "react";
 
 export default function Index() {
   const theme = useTheme();

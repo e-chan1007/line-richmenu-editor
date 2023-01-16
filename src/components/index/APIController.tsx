@@ -1,21 +1,24 @@
+import React, { useContext, useEffect, useMemo, useState } from "react";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { APIResponse, APISpecification } from "constants/RichMenuAPI";
+import Prism from "prismjs";
+import "prismjs/plugins/custom-class/prism-custom-class.min.js";
+
 import { APIControllerContext } from "contexts/APIControllerContext";
 import { BotAccountContext } from "contexts/BotAccountContext";
 import { ThemeColorContext } from "pages/_app";
-import Prism from "prismjs";
-import "prismjs/plugins/custom-class/prism-custom-class.min.js";
-import React, { useContext, useEffect, useMemo, useState } from "react";
 import prismVSStyles from "styles/prism-vs.module.scss";
 import prismVSDarkStyles from "styles/prism-vsc-dark-plus.module.scss";
+
+import type { APIResponse, APISpecification } from "constants/RichMenuAPI";
+
 
 export default function APIController(
   { children, apiSpec, ...params }: { children?: React.ReactNode, apiSpec: APISpecification, [key: string]: unknown }

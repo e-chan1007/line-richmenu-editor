@@ -1,14 +1,18 @@
+import React, { useContext, useEffect, useState } from "react";
+
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { BotAccount, BotAccountContext } from "contexts/BotAccountContext";
+
+import { BotAccountContext } from "contexts/BotAccountContext";
 import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
 import botAccountDatabase from "databases/BotAccount";
 import richMenuDatabase from "databases/RichMenu";
-import React, { useContext, useEffect, useState } from "react";
+
+import type { BotAccount } from "contexts/BotAccountContext";
 
 export default function BotDeleteDialog(
   { botId, isDialogOpen, setIsDialogOpen, handleMenuClose }:
@@ -20,7 +24,7 @@ export default function BotDeleteDialog(
   }) {
   const { accounts, setAccounts } = useContext(BotAccountContext);
   const [botToDelete, setBotToDelete] = useState<BotAccount>(null);
-  const { richMenuId: editingRichMenuId, setters: { changeRichMenuId }} = useContext(EditingRichMenuContext);
+  const { richMenuId: editingRichMenuId, setters: { changeRichMenuId } } = useContext(EditingRichMenuContext);
   useEffect(() => {
     (async () => {
       if (botId) setBotToDelete(await botAccountDatabase.accounts.where("basicId").equalsIgnoreCase(botId).first());
