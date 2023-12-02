@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 
 import Alert from "@mui/material/Alert";
 import Card from "@mui/material/Card";
@@ -35,6 +35,10 @@ export default function APIControlCard() {
 
         <APIController apiSpec={apiList.get("setRichMenuAsDefault")} {...menuContext} />
 
+        <APIController apiSpec={apiList.get("unsetRichMenuAsDefault")} {...menuContext}>
+          この機能の実行に引数は不要です。
+        </APIController>
+
         <APIController apiSpec={apiList.get("linkRichMenuToUsers")} {...menuContext}>
           <TextField
             label="ユーザーID (改行区切りで複数指定可能)"
@@ -42,6 +46,16 @@ export default function APIControlCard() {
             rows={3}
             value={controllerContext.dataStore.linkRichMenuToUsers?.params?.userIds as string || ""}
             onChange={e => controllerContext.setStoreValue("linkRichMenuToUsers", { ...controllerContext.dataStore.linkRichMenuToUsers, params: { ...controllerContext.dataStore.linkRichMenuToUsers.params, userIds: e.target.value } })}
+            sx={{ width: "100%" }}
+          />
+        </APIController>
+        <APIController apiSpec={apiList.get("unlinkRichMenuToUsers")} {...menuContext}>
+        <TextField
+            label="ユーザーID (改行区切りで複数指定可能)"
+            multiline
+            rows={3}
+            value={controllerContext.dataStore.unlinkRichMenuToUsers?.params?.userIds as string || ""}
+            onChange={e => controllerContext.setStoreValue("unlinkRichMenuToUsers", { ...controllerContext.dataStore.unlinkRichMenuToUsers, params: { ...controllerContext.dataStore.unlinkRichMenuToUsers.params, userIds: e.target.value } })}
             sx={{ width: "100%" }}
           />
         </APIController>
