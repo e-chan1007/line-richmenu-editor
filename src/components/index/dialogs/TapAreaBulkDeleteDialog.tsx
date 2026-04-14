@@ -7,7 +7,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
 
 export default function TapAreaBulkDeleteDialog(
   { isDialogOpen: [isDialogOpen, forBulkCreate], setIsDialogOpen, onDeleted }:

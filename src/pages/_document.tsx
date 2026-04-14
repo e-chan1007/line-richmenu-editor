@@ -1,10 +1,7 @@
 import React from "react";
 
-import getConfig from "next/config";
 import Document, { Head, Html, Main, NextScript } from "next/document";
 import Script from "next/script";
-
-const { serverRuntimeConfig } = getConfig();
 
 export default class MyDocument extends Document {
   render() {
@@ -33,14 +30,11 @@ export default class MyDocument extends Document {
               new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
               j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-              })(window,document,'script','dataLayer','${serverRuntimeConfig.GTM_ID}');
+              })(window,document,'script','dataLayer','${process.env.GTM_ID || "GTM_ID"}');
             `}
           </Script>
         </Head>
         <body>
-          <noscript>
-            <iframe src={`https://www.googletagmanager.com/ns.html?id=${serverRuntimeConfig.GTM_ID}`} height="0" width="0" style={{ display: "none", visibility: "hidden" }} />
-          </noscript>
           <Main />
           <NextScript />
         </body>

@@ -18,18 +18,17 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Tab from "@mui/material/Tab";
 import Ajv from "ajv";
-import axios from "axios";
 import useSWR from "swr";
 
-import { BotAccountContext } from "contexts/BotAccountContext";
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import { PageLoadingStateContext } from "contexts/PageLoadingStateContext";
-import botAccountDatabase from "databases/BotAccount";
+import { BotAccountContext } from "@/contexts/BotAccountContext";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
+import { PageLoadingStateContext } from "@/contexts/PageLoadingStateContext";
+import botAccountDatabase from "@/databases/BotAccount";
 
 
 import richMenuSchema from "../../../../public/schemas/richmenu.json";
 
-import type { BotAccount } from "contexts/BotAccountContext";
+import type { BotAccount } from "@/contexts/BotAccountContext";
 
 export default function RichMenuImportDialog(
   { botId, isDialogOpen, setIsDialogOpen, handleMenuClose }:
@@ -42,18 +41,18 @@ export default function RichMenuImportDialog(
   const { accounts, setAccounts } = useContext(BotAccountContext);
   const { setIsPageLoading } = useContext(PageLoadingStateContext);
   const { reset: resetRichMenu, setters: richMenuSetters } = useContext(EditingRichMenuContext);
-  const [botToInsertRichMenu, setBotToInsertRichMenu] = useState<BotAccount>(null);
+  const [botToInsertRichMenu, setBotToInsertRichMenu] = useState<BotAccount>();
   const [tabIndex, setTabIndex] = useState("0");
   const currentAccount = useMemo(() => accounts.find(({ basicId }) => basicId === botId), [accounts, botId]);
-  const { data: remoteRichMenuList } = useSWR<{ richmenus: { [key: string]: string }[] }>(() => (currentAccount.channelAccessToken) ? `/api/line?target=api.line.me/v2/bot/richmenu/list` : null, url => axios.get(url, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` } }).then(({ data }) => data), { dedupingInterval: 5000 });
+  const { data: remoteRichMenuList } = useSWR<{ richmenus: { [key: string]: string }[] }>(() => (currentAccount?.channelAccessToken) ? `/api/line?target=api.line.me/v2/bot/richmenu/list` : null, url => fetch(url, { headers: { Authorization: `Bearer ${currentAccount?.channelAccessToken}` } }).then(res => res.json()), { dedupingInterval: 5000 });
   const [selectedRichMenuIndex, setSelectedRichMenuIndex] = useState(0);
   const [isFileSelected, setIsFileSelected] = useState(false);
   const [isJSONValid, setIsJSONValid] = useState(true);
   const [jsonToAdd, setJSONToAdd] = useState("");
   const [isMenuOverriden, setIsMenuOverriden] = useState(true);
 
-  const onFileSelected = e => {
-    if (!e.target.files[0]) return;
+  const onFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.[0]) return;
     const fileReader = new FileReader();
     fileReader.readAsText(e.target.files[0]);
     fileReader.onload = () => {
@@ -135,7 +134,7 @@ export default function RichMenuImportDialog(
             </Select>
             {
               currentAccount?.richMenus &&
-              currentAccount.richMenus.includes(remoteRichMenuList?.richmenus?.[selectedRichMenuIndex]?.richMenuId) && (
+              currentAccount.richMenus.includes(remoteRichMenuList?.richmenus?.[selectedRichMenuIndex]?.richMenuId || "") && (
                 <Alert severity="warning" sx={{ my: 1 }}>
                   同一IDのメニューがエディタ上に存在します。<br />
                   エディタ上のメニューを上書きせず、別のメニューとして保存する場合はチェックを外してください。<br />
@@ -152,6 +151,7 @@ export default function RichMenuImportDialog(
           handleMenuClose();
         }} variant="text">キャンセル</Button>
         <Button onClick={() => {
+          if(!currentAccount) return;
           const newRichMenuId = (
             isMenuOverriden ?
               resetRichMenu(remoteRichMenuList?.richmenus?.[selectedRichMenuIndex]?.richMenuId) :
@@ -168,23 +168,23 @@ export default function RichMenuImportDialog(
           handleMenuClose();
 
           Object.entries(JSON.parse(jsonToAdd)).forEach(([key, value]) => {
-            if (key !== "richMenuId") richMenuSetters[`set${key.slice(0, 1).toUpperCase()}${key.slice(1)}`](value);
+            if (key !== "richMenuId") richMenuSetters[`set${key.slice(0, 1).toUpperCase()}${key.slice(1)}` as keyof typeof richMenuSetters](value as any);
           });
 
           if (tabIndex === "1" && remoteRichMenuList?.richmenus?.[selectedRichMenuIndex]?.richMenuId) {
             (async () => {
               setIsPageLoading(true);
-              const imageData = await axios.get<Blob>(`/api/line?target=api-data.line.me/v2/bot/richmenu/${remoteRichMenuList.richmenus[selectedRichMenuIndex].richMenuId}/content`, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` }, responseType: "blob" });
+              const imageData = await fetch(`/api/line?target=api-data.line.me/v2/bot/richmenu/${remoteRichMenuList.richmenus[selectedRichMenuIndex].richMenuId}/content`, { headers: { Authorization: `Bearer ${currentAccount.channelAccessToken}` } }).then(res => res.blob());
               const reader = new FileReader();
-              reader.readAsDataURL(imageData.data);
+              reader.readAsDataURL(imageData);
               await new Promise(resolve => { reader.onload = resolve; });
               const image = document.createElement("img");
               image.src = reader.result as string;
               await new Promise(resolve => { image.onload = resolve; });
               richMenuSetters.setMenuImage({
                 fileName: remoteRichMenuList.richmenus[selectedRichMenuIndex].richMenuId,
-                fileType: imageData.headers.contentType === "image/jpeg" ? "JPEG" : "PNG",
-                fileSize: Math.floor(imageData.data.size / 1024),
+                fileType: imageData.type === "image/jpeg" ? "JPEG" : "PNG",
+                fileSize: Math.floor(imageData.size / 1024),
                 image
               });
               setIsPageLoading(false);

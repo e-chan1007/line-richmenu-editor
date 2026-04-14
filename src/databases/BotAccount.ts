@@ -1,6 +1,6 @@
 import Dexie from "dexie";
 
-import type { BotAccount } from "contexts/BotAccountContext";
+import type { BotAccount } from "@/contexts/BotAccountContext";
 
 class BotAccountDatabase extends Dexie {
   accounts: Dexie.Table<BotAccount, string>;

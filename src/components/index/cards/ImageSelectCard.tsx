@@ -1,5 +1,5 @@
 import type { ChangeEvent } from "react";
-import React, { useContext } from "react";
+import { useContext } from "react";
 
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import Button from "@mui/material/Button";
@@ -8,7 +8,7 @@ import CardContent from "@mui/material/CardContent";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
 
 
 import ImageChecker from "../ImageChecker";

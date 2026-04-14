@@ -2,7 +2,7 @@
  * VS theme by Andrew Lock (https://andrewlock.net)
  * Inspired by Visual Studio syntax coloring
  */
-@import "prism-base.scss";
+@use "prism-base.scss";
 
 .prism {
   @extend .prism-base;

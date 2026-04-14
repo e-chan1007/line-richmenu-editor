@@ -15,10 +15,14 @@ export function JSONEditorContextProvider({ children }: {children: React.ReactNo
   const [jsonEditorValue, setJSONEditorValue] = useState(context.jsonEditorValue);
   const newContext = { jsonEditorValue, setJSONEditorValue };
   useEffect(() => {
-    if (JSON.stringify(menu, null, 2) !== JSON.stringify(JSON.parse(jsonEditorValue), null, 2)) {
+    try {
+      if (JSON.stringify(menu, null, 2) !== JSON.stringify(JSON.parse(jsonEditorValue), null, 2)) {
+        setJSONEditorValue(JSON.stringify(menu, null, 2));
+      }
+    } catch (_) {
       setJSONEditorValue(JSON.stringify(menu, null, 2));
     }
-  }, [menu]);
+  }, [JSON.stringify(menu)]);
   return (
     <JSONEditorContext.Provider value={newContext}>
       {children}

@@ -12,10 +12,10 @@ import FormGroup from "@mui/material/FormGroup";
 import Typography from "@mui/material/Typography";
 import * as zip from "@zip.js/zip.js";
 
-import richMenuDatabase from "databases/RichMenu";
+import richMenuDatabase from "@/databases/RichMenu";
 
-import type { RichMenuResponse } from "@line/bot-sdk";
-import type { StoredRichMenu } from "types/RichMenu";
+import type { messagingApi } from "@line/bot-sdk";
+import type { StoredRichMenu } from "@/types/RichMenu";
 
 export default function RichMenuExportDialog(
   { richMenuId, isDialogOpen, setIsDialogOpen, handleMenuClose: handleMenuClose }:
@@ -25,7 +25,7 @@ export default function RichMenuExportDialog(
     setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>,
     handleMenuClose: () => void
   }) {
-  const [richMenuToExport, setRichMenuToExport] = useState<StoredRichMenu>(null);
+  const [richMenuToExport, setRichMenuToExport] = useState<StoredRichMenu>();
   useEffect(() => {
     (async () => {
       if (richMenuId) setRichMenuToExport(await richMenuDatabase.menus.where("richMenuId").equalsIgnoreCase(richMenuId).first());
@@ -77,8 +77,9 @@ export default function RichMenuExportDialog(
       <DialogActions>
         <Button onClick={() => { setIsDialogOpen(false); handleMenuClose(); }} variant="text">キャンセル</Button>
         <Button onClick={async () => {
+          if (!richMenuToExport) return;
           const files: Record<string, string> = {};
-          const richMenuBody: Partial<RichMenuResponse> = { ...richMenuToExport.menu };
+          const richMenuBody= { ...richMenuToExport.menu } as Partial<messagingApi.RichMenuResponse> ;
           const downloadLink = document.createElement("a");
 
           if (richMenuToExport.richMenuId.startsWith("richmenu-")) richMenuBody.richMenuId = richMenuToExport.richMenuId;
@@ -89,7 +90,7 @@ export default function RichMenuExportDialog(
           if (exportFileList.minJSON) {
             files["richmenu-structure.min.json"] = JSON.stringify(richMenuBody);
           }
-          if (exportFileList.image) {
+          if (exportFileList.image && richMenuToExport.menuImage.imageSrc) {
             files[`richmenu-image.${richMenuToExport.menuImage.fileType === "JPEG" ? "jpg" : "png"}`] = richMenuToExport.menuImage.imageSrc;
           }
           if (Object.keys(files).length > 1) {

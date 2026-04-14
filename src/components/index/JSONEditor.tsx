@@ -1,80 +1,88 @@
+"use client";
 import React, { useContext, useEffect, useRef, useState } from "react";
 
-import loader from "@monaco-editor/loader";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 import Ajv from "ajv";
 
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import { JSONEditorContext } from "contexts/JSONEditorContext";
-import { ThemeColorContext } from "pages/_app";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
+import { JSONEditorContext } from "@/contexts/JSONEditorContext";
+import { ThemeColorContext } from "@/pages/_app";
 
 import richMenuSchema from "../../../public/schemas/richmenu.json";
 
-import type * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
+import "monaco-editor/esm/nls.messages.ja"
+import * as monaco from "monaco-editor";
 
+self.MonacoEnvironment = {
+  getWorker(_, label) {
+    if (label === 'json') {
+      return new Worker(
+        new URL('monaco-editor/esm/vs/language/json/json.worker', import.meta.url)
+      );
+    }
+    return new Worker(
+      new URL('monaco-editor/esm/vs/editor/editor.worker', import.meta.url)
+    );
+  }
+};
 
 export default function JSONEditor() {
   const { editorMode, systemMode } = useContext(ThemeColorContext);
-  const { setters } = useContext(EditingRichMenuContext);
+  const { menu, setters } = useContext(EditingRichMenuContext);
   const { jsonEditorValue, setJSONEditorValue } = useContext(JSONEditorContext);
-  const monacoRef = useRef<monacoEditor.editor.IStandaloneCodeEditor>(null);
+  const monacoRef = useRef<monaco.editor.IStandaloneCodeEditor>(null);
   const [isJSONValid, setIsJSONValid] = useState(true);
   const [isMonacoLoading, setIsMonacoLoading] = useState(true);
 
-  const editorElementRef = useRef<HTMLDivElement>();
+  const editorElementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!editorElementRef.current) return;
-    let windowResizeListener;
-    let monacoCreateListener;
-    let monacoChangeModelListener;
-    loader.config({ "vs/nls": { availableLanguages: { "*": "ja" } } });
-    loader.init().then(monaco => {
-      try {
-        if (isMonacoLoading) {
-          monacoCreateListener = monaco.editor.onDidCreateEditor((editor: monacoEditor.editor.IStandaloneCodeEditor) => {
-            monacoRef.current = editor;
-            windowResizeListener = () => editor.layout();
-            window.addEventListener("resize", windowResizeListener);
-            setIsMonacoLoading(false);
-            monacoRef.current.setValue(jsonEditorValue);
-            monacoChangeModelListener = editor.onDidChangeModelContent(() => setJSONEditorValue(monacoRef.current.getValue()));
-          });
-          monaco.editor.create(editorElementRef.current, {
-            automaticLayout: true,
-            formatOnType: true,
-            formatOnPaste: true,
-            value: jsonEditorValue,
-            language: "json",
-            theme: { light: "vs", dark: "vs-dark" }[editorMode === "system" ? systemMode : editorMode],
-            contextmenu: true
-          });
+    let windowResizeListener: EventListener;
+    let monacoChangeModelListener: monaco.IDisposable;
 
-          monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-            schemaValidation: "error",
-            validate: true,
-            schemas: [{
-              uri: "https://richmenu.app.e-chan.me/schemas/richmenu.json",
-              fileMatch: ["*"],
-              schema: richMenuSchema
-            }]
-          });
-        }
-      } catch (_) {
+    try {
+      if (isMonacoLoading && editorElementRef.current && !monacoRef.current) {
+        const editor = monaco.editor.create(editorElementRef.current, {
+          automaticLayout: true,
+          formatOnType: true,
+          formatOnPaste: true,
+          value: jsonEditorValue,
+          language: "json",
+          theme: { light: "vs", dark: "vs-dark" }[editorMode === "system" ? systemMode : editorMode],
+          contextmenu: true
+        });
+        monacoRef.current = editor;
+        windowResizeListener = () => editor.layout();
+        window.addEventListener("resize", windowResizeListener);
+        setIsMonacoLoading(false);
+
+        monacoChangeModelListener = editor.onDidChangeModelContent(() => setJSONEditorValue(editor.getValue()));
+
+        monaco.json.jsonDefaults.setDiagnosticsOptions({
+          schemaValidation: "error",
+          validate: true,
+          schemas: [{
+            uri: "https://richmenu.app.e-chan.me/schemas/richmenu.json",
+            fileMatch: ["*"],
+            schema: richMenuSchema
+          }]
+        });
       }
-    });
+    } catch {
+    }
+
     return function cleanup() {
       window.removeEventListener("resize", windowResizeListener);
-      monacoCreateListener?.dispose?.();
       monacoChangeModelListener?.dispose();
       monacoRef.current?.getModel?.()?.dispose?.();
       monacoRef.current?.dispose?.();
       monacoRef.current = null;
     };
-  }, [editorElementRef]);
+  }, []);
 
   useEffect(() => {
     // if (monacoRef.current) monacoRef.current.setValue(jsonEditorValue);
@@ -90,7 +98,13 @@ export default function JSONEditor() {
 
     if (isJSONValid) {
       Object.entries(jsonEditorValueAsObject).forEach(([key, value]) => {
-        setters[`set${key.slice(0, 1).toUpperCase()}${key.slice(1)}`](value);
+        const setterKey = `set${key.slice(0, 1).toUpperCase()}${key.slice(1)}` as keyof typeof setters;
+        if (typeof setters[setterKey] === "function") {
+          const currentValue = menu[key as keyof typeof menu];
+          if (JSON.stringify(currentValue) !== JSON.stringify(value)) {
+            (setters[setterKey] as Function)(value);
+          }
+        }
       });
     }
   }, [jsonEditorValue]);
@@ -100,18 +114,18 @@ export default function JSONEditor() {
   }, [editorMode, systemMode]);
 
   const pasteText = async () => {
-    const selection = monacoRef.current.getSelection();
+    const selection = monacoRef.current?.getSelection()!;
     const text = await navigator.clipboard.readText();
-    monacoRef.current.executeEdits("my-source", [{ range: selection, text: text, forceMoveMarkers: true }]);
-    monacoRef.current.trigger("anyString", "editor.action.formatDocument", null);
+    monacoRef.current?.executeEdits("my-source", [{ range: selection, text: text, forceMoveMarkers: true }]);
+    monacoRef.current?.trigger("anyString", "editor.action.formatDocument", null);
   };
 
   const copyText = async (cut = false) => {
-    const selection = monacoRef.current.getSelection();
-    const text = monacoRef.current.getModel().getValueInRange(selection);
+    const selection = monacoRef.current?.getSelection()!;
+    const text = monacoRef.current?.getModel()?.getValueInRange(selection)!;
     await navigator.clipboard.writeText(text);
-    if (cut) monacoRef.current.executeEdits("my-source", [{ range: selection, text: "", forceMoveMarkers: true }]);
-    monacoRef.current.trigger("anyString", "editor.action.formatDocument", null);
+    if (cut) monacoRef.current?.executeEdits("my-source", [{ range: selection, text: "", forceMoveMarkers: true }]);
+    monacoRef.current?.trigger("anyString", "editor.action.formatDocument", null);
   };
 
   return (

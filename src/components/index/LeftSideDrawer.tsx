@@ -25,20 +25,19 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useTheme } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
-import axios from "axios";
 
-import { BotAccountContext } from "contexts/BotAccountContext";
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import botAccountDatabase from "databases/BotAccount";
-import richMenuDatabase from "databases/RichMenu";
+import { BotAccountContext } from "@/contexts/BotAccountContext";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
+import botAccountDatabase from "@/databases/BotAccount";
+import richMenuDatabase from "@/databases/RichMenu";
 
 import BotDeleteDialog from "./dialogs/BotDeleteDialog";
 import RichMenuDeleteDialog from "./dialogs/RichMenuDeleteDialog";
 import RichMenuExportDialog from "./dialogs/RichMenuExportDialog";
 import RichMenuImportDialog from "./dialogs/RichMenuImportDialog";
 
-import type { RichMenuResponse } from "@line/bot-sdk";
-import type { BotAccount } from "contexts/BotAccountContext";
+import type { messagingApi } from "@line/bot-sdk";
+import type { BotAccount } from "@/contexts/BotAccountContext";
 
 export default function LeftSideDrawer(
   { setIsBotSettingsDialogOpen }: { setIsBotSettingsDialogOpen: React.Dispatch<React.SetStateAction<boolean>> }
@@ -68,7 +67,7 @@ export default function LeftSideDrawer(
       return null;
     };
     const target = findTarget(event.target as HTMLElement);
-    if (!(target || (event.target as HTMLElement).classList.contains("MuiBackdrop-root"))) return;
+    if (!target || !(event.target as HTMLElement).classList.contains("MuiBackdrop-root")) return;
     event.preventDefault();
     setContextMenu(
       contextMenu === null ? {
@@ -82,20 +81,23 @@ export default function LeftSideDrawer(
   const handleMenuClose = () => {
     setContextMenu(null);
   };
-  const [accounts, setAccounts] = useState<(Weaken<BotAccount, "richMenus"> & { isOpen: boolean, richMenus: RichMenuResponse[] })[]>([]);
+  const [accounts, setAccounts] = useState<(Omit<BotAccount, "richMenus"> & { isOpen: boolean, richMenus: messagingApi.RichMenuResponse[] })[]>([]);
   useEffect(() => {
     (async () => {
       const accounts = await botAccountDatabase.accounts.toArray();
-      const newAccounts = [];
+      const newAccounts: BotAccount[] = [];
       await Promise.allSettled(accounts.map(async account => {
-        const result = await axios.get("/api/line?target=api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${account.channelAccessToken}` } }).catch(({ response }) => response);
+        const result = await fetch("/api/line?target=api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${account.channelAccessToken}` } })
+          .then(async res => ({ data: await res.json(), status: res.status }))
+          .catch(({ response }: any) => response);
         if (result.status === 200) {
+          const data = result.data;
           const newAccount = {
             ...account,
-            basicId: result.data.basicId,
-            botName: result.data.displayName,
+            basicId: data.basicId,
+            botName: data.displayName,
             channelAccessToken: account.channelAccessToken,
-            pictureUrl: result.data.pictureUrl
+            pictureUrl: data.pictureUrl
           };
           newAccounts.push(newAccount);
         }
@@ -109,7 +111,7 @@ export default function LeftSideDrawer(
         ...account,
         isOpen: (accounts[i]?.isOpen || account.richMenus.includes(editingRichMenuId)),
         richMenus: (await richMenuDatabase.menus.where("richMenuId").anyOf(account.richMenus).toArray())
-          .map(({ richMenuId, menu }): RichMenuResponse => ({ ...menu, richMenuId }))
+          .map(({ richMenuId, menu }): messagingApi.RichMenuResponse => ({ ...menu, richMenuId } as any))
           .sort(({ richMenuId: a }, { richMenuId: b }) => (
             account.richMenus.indexOf(a) - account.richMenus.indexOf(b)
           ))
@@ -131,7 +133,7 @@ export default function LeftSideDrawer(
 
   return <>
     <List sx={{ paddingBottom: "0px" }} onContextMenu={handleContextMenu}>
-      <Box display="flex" flexDirection="column">
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
         {
           location.hostname === "richmenu.app.e-chan.cf" && (
             <>
@@ -154,7 +156,7 @@ export default function LeftSideDrawer(
                 <IconButton
                   edge="end"
                   aria-label="delete"
-                  onClick={() => { createNewRichMenu(_accounts.find(({ basicId }) => basicId === account.basicId)); }}
+                  onClick={() => { createNewRichMenu(_accounts.find(({ basicId }) => basicId === account.basicId) as BotAccount); }}
                   size="large">
                   <AddIcon />
                 </IconButton>
@@ -168,7 +170,7 @@ export default function LeftSideDrawer(
               }}
               selected={account.richMenus.some(({ richMenuId }) => richMenuId === editingRichMenuId)}>
                 {account.pictureUrl ? (
-                  <ListItemAvatar sx={{ width: 24 }}>
+                  <ListItemAvatar>
                     <Avatar src={account.pictureUrl} sx={{ width: 24, height: 24 }} />
                   </ListItemAvatar>
                 ) : (
@@ -218,11 +220,11 @@ export default function LeftSideDrawer(
         onClose={handleMenuClose}
         anchorReference="anchorPosition"
         anchorPosition={
-          contextMenu !== null ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : null
+          contextMenu !== null ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : undefined
         }
       >
         <MenuItem onClick={() => {
-          createNewRichMenu(_accounts.find(({ basicId }) => basicId === contextMenu.target));
+          createNewRichMenu(_accounts.find(({ basicId }) => basicId === contextMenu?.target)!);
           handleMenuClose();
         }}>
           <ListItemIcon>
@@ -249,7 +251,7 @@ export default function LeftSideDrawer(
         onClose={handleMenuClose}
         anchorReference="anchorPosition"
         anchorPosition={
-          contextMenu !== null ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : null
+          contextMenu !== null ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : undefined
         }
       >
         {contextMenu?.target?.startsWith?.("richmenu-") && (<>
@@ -280,22 +282,22 @@ export default function LeftSideDrawer(
     <RichMenuDeleteDialog
       isDialogOpen={isRichMenuDeleteDialogOpen}
       setIsDialogOpen={setIsRichMenuDeleteDialogOpen}
-      richMenuId={contextMenu?.target}
+      richMenuId={contextMenu?.target as string}
       handleMenuClose={handleMenuClose} />
     <RichMenuImportDialog
       isDialogOpen={isRichMenuImportDialogOpen}
       setIsDialogOpen={setIsRichMenuImportDialogOpen}
-      botId={contextMenu?.target}
+      botId={contextMenu?.target as string}
       handleMenuClose={handleMenuClose} />
     <RichMenuExportDialog
       isDialogOpen={isRichMenuExportDialogOpen}
       setIsDialogOpen={setIsRichMenuExportDialogOpen}
-      richMenuId={contextMenu?.target}
+      richMenuId={contextMenu?.target as string}
       handleMenuClose={handleMenuClose} />
     <BotDeleteDialog
       isDialogOpen={isBotDeleteDialogOpen}
       setIsDialogOpen={setIsBotDeleteDialogOpen}
-      botId={contextMenu?.target}
+      botId={contextMenu?.target as string}
       handleMenuClose={handleMenuClose} />
   </>;
 }

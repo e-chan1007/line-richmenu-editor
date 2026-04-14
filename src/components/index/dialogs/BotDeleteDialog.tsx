@@ -7,12 +7,12 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import { BotAccountContext } from "contexts/BotAccountContext";
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import botAccountDatabase from "databases/BotAccount";
-import richMenuDatabase from "databases/RichMenu";
+import { BotAccountContext } from "@/contexts/BotAccountContext";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
+import botAccountDatabase from "@/databases/BotAccount";
+import richMenuDatabase from "@/databases/RichMenu";
 
-import type { BotAccount } from "contexts/BotAccountContext";
+import type { BotAccount } from "@/contexts/BotAccountContext";
 
 export default function BotDeleteDialog(
   { botId, isDialogOpen, setIsDialogOpen, handleMenuClose }:
@@ -23,7 +23,7 @@ export default function BotDeleteDialog(
     handleMenuClose: () => void
   }) {
   const { accounts, setAccounts } = useContext(BotAccountContext);
-  const [botToDelete, setBotToDelete] = useState<BotAccount>(null);
+  const [botToDelete, setBotToDelete] = useState<BotAccount>();
   const { richMenuId: editingRichMenuId, setters: { changeRichMenuId } } = useContext(EditingRichMenuContext);
   useEffect(() => {
     (async () => {
@@ -46,8 +46,8 @@ export default function BotDeleteDialog(
       <DialogActions>
         <Button onClick={() => { setIsDialogOpen(false); handleMenuClose(); }} variant="text">キャンセル</Button>
         <Button onClick={() => {
-          if (botToDelete.richMenus.includes(editingRichMenuId)) changeRichMenuId("DELETED");
-          richMenuDatabase.menus.where("richMenuId").anyOfIgnoreCase(botToDelete.richMenus).delete();
+          if (botToDelete?.richMenus.includes(editingRichMenuId)) changeRichMenuId("DELETED");
+          richMenuDatabase.menus.where("richMenuId").anyOfIgnoreCase(botToDelete?.richMenus ?? []).delete();
           botAccountDatabase.accounts.delete(botId);
           const newAccounts = [...accounts];
           newAccounts.splice(newAccounts.findIndex(({ basicId }) => basicId === botId), 1);

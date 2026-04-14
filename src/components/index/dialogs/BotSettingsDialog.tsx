@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 
 import InfoIcon from "@mui/icons-material/Info";
-import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -11,19 +10,18 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
-import axios from "axios";
 
-import { BotAccountContext } from "contexts/BotAccountContext";
+import { BotAccountContext } from "@/contexts/BotAccountContext";
 
 export default function BotSettingsDialog(
   { isDialogOpen, setIsDialogOpen }:
   { isDialogOpen: boolean, setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
   const { editingBotId, accounts, setAccounts } = useContext(BotAccountContext);
-  const [channelAccessToken, setChannelAccessToken] = useState(accounts[editingBotId]?.channelAccessToken || "");
+  const [channelAccessToken, setChannelAccessToken] = useState(accounts.find(account => account.basicId === editingBotId)?.channelAccessToken || "");
   const [isChannelAccessTokenValid, setIsChannelAccessTokenValid] = useState(false);
   const [channelAccessTokenValidated, setChannelAccessTokenValidated] = useState(false);
   const [isChannelAccessTokenValidating, setChannelAccessTokenValidating] = useState(false);
-  const saveButtonRef = useRef(null);
+  const saveButtonRef = useRef<HTMLButtonElement>(null);
   const existedAccount = useMemo(() => accounts.find(
     ({ channelAccessToken: accountChannelAccessToken }) => accountChannelAccessToken === channelAccessToken
   ), [accounts, channelAccessToken]);
@@ -32,10 +30,10 @@ export default function BotSettingsDialog(
   }, []);
   return (
     <Dialog onClose={() => setIsDialogOpen(false)} open={isDialogOpen} maxWidth="xs" fullWidth>
-      <DialogTitle>Botアカウントを{editingBotId.length > 0 ? "編集" : "追加"}</DialogTitle>
+      <DialogTitle>Botアカウントを追加</DialogTitle>
       <DialogContent>
-        <Stack direction="row" alignItems="flex-end">
-          <TextField label="チャネルアクセストークン" sx={{ flex: 1 }} value={channelAccessToken} onChange={e => setChannelAccessToken(e.target.value)} onKeyDown={e => e.key === "Enter" && saveButtonRef.current.click()} required />
+        <Stack direction="row" sx={{ alignItems: "flex-end" }}>
+          <TextField label="チャネルアクセストークン" sx={{ flex: 1 }} value={channelAccessToken} onChange={e => setChannelAccessToken(e.target.value)} onKeyDown={e => e.key === "Enter" && saveButtonRef.current?.click()} required />
           <Tooltip title={<span>チャネルアクセストークンは、<a href="https://developers.line.biz/console/" target="_blank" rel="noreferrer" style={{ color: "inherit" }}>LINE Developersのコンソール画面</a>から取得してください。エディタでのトークンの取り扱いについては、<a href="https://e-chan1007.notion.site/a566a179f3db4e78b1ae883be23aad38" target="_blank" rel="noopener noreferrer" style={{ color: "white" }}>プライバシーポリシー</a>をご覧ください。</span>} arrow>
             <InfoIcon sx={{ m: 1 }} />
           </Tooltip>
@@ -49,21 +47,23 @@ export default function BotSettingsDialog(
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setIsDialogOpen(false)} variant="text">キャンセル</Button>
-        <LoadingButton
+        <Button
           ref={saveButtonRef}
           onClick={async () => {
             setChannelAccessTokenValidating(true);
-            const result = await axios.get("/api/line?target=api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${channelAccessToken.trim()}` } }).catch(({ response }) => response);
+            const result = await fetch("/api/line?target=api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${channelAccessToken.trim()}` } });
             setChannelAccessTokenValidating(false);
             setChannelAccessTokenValidated(true);
             if (result.status === 200) {
+              console.log("Successfully validated channel access token:", result);
               setIsChannelAccessTokenValid(true);
+              const data = await result.json();
               const account = {
-                basicId: result.data.basicId,
-                botName: result.data.displayName,
+                basicId: data.basicId,
+                botName: data.displayName,
                 channelAccessToken: channelAccessToken.trim(),
                 richMenus: [],
-                pictureUrl: result.data.pictureUrl
+                pictureUrl: data.pictureUrl
               };
               const newAccounts = [...accounts];
               if (editingBotId) {
@@ -80,7 +80,7 @@ export default function BotSettingsDialog(
           }}
           disabled={channelAccessToken.length === 0 || Boolean(existedAccount)}
           loading={isChannelAccessTokenValidating}
-          variant="text">{editingBotId.length > 0 ? "編集" : "追加"}</LoadingButton>
+          variant="text">追加</Button>
       </DialogActions>
     </Dialog>
   );

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { LocalizationProvider } from "@mui/lab";
-import AdapterDayjs from "@mui/lab/AdapterDayjs";
-import DatePicker from "@mui/lab/DatePicker";
-import DateTimePicker from "@mui/lab/DateTimePicker";
-import TimePicker from "@mui/lab/TimePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -17,15 +17,14 @@ import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import dayjs from "dayjs";
-import jaLocale from "dayjs/locale/ja";
 
-import { actionTypes, postbackInputOptions } from "constants/RichMenuAction";
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
+import { actionTypes, postbackInputOptions } from "@/constants/RichMenuAction";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
 
 import TapAreaController from "../TapAreaController";
 
 import type { TextFieldProps } from "@mui/material/TextField";
-import type { Action } from "types/RichMenu";
+import type { Action } from "@/types/RichMenu";
 
 
 export default function TapAreaActionDialog(
@@ -54,7 +53,7 @@ export default function TapAreaActionDialog(
       ["initial", "max", "min"].forEach(key => {
         if (typeof newAction[key] === "string") newAction[key] = dayjs(newAction[key], newAction[key].replace(/\d{4}-\d{2}-\d{2}/, "YYYY-MM-DD").replace(/\d{2}:\d{2}/, "HH:mm"));
       });
-      setAction(newAction);
+      setAction(newAction as Action);
     }
   }, [areas, editingAreaIndex]);
   return (
@@ -79,13 +78,13 @@ export default function TapAreaActionDialog(
               )}
             </Select>
           </FormControl>
-          <TextField label="ラベル" value={action.label} onChange={e => setActionProp("label", e.target.value)} inputProps={{ maxLength: 40 }}/>
+          <TextField label="ラベル" value={action.label} onChange={e => setActionProp("label", e.target.value)} slotProps={{ htmlInput: { maxLength: 40 } }}/>
           {(action.type === "postback" || action.type === "datetimepicker" || action.type === "richmenuswitch") && (
-            <TextField multiline label="Webhookに送信するテキスト" value={action.data} onChange={e => setActionProp("data", e.target.value)} inputProps={{ maxLength: 300 }} required/>
+            <TextField multiline label="Webhookに送信するテキスト" value={action.data} onChange={e => setActionProp("data", e.target.value)} slotProps={{ htmlInput: { maxLength: 300 } }} required/>
           )}
           {action.type === "postback" && (
             <>
-              <TextField label="メッセージとして表示するテキスト" value={action.displayText} onChange={e => setActionProp("displayText", e.target.value)} inputProps={{ maxLength: 300 }} />
+              <TextField label="メッセージとして表示するテキスト" value={action.displayText} onChange={e => setActionProp("displayText", e.target.value)} slotProps={{ htmlInput: { maxLength: 300 } }} />
               <FormControl sx={{ width: "100%" }}>
                 <InputLabel>メニューの表示方法</InputLabel>
                 <Select
@@ -99,25 +98,25 @@ export default function TapAreaActionDialog(
                 </Select>
               </FormControl>
               { action.inputOption === "openKeyboard" && (
-                <TextField multiline label="あらかじめ入力するテキスト" value={action.fillInText} onChange={e => setActionProp("fillInText", e.target.value)} inputProps={{ maxLength: 300 }} />
+                <TextField multiline label="あらかじめ入力するテキスト" value={action.fillInText} onChange={e => setActionProp("fillInText", e.target.value)} slotProps={{ htmlInput: { maxLength: 300 } }} />
               )}
             </>
           )}
           {action.type === "message" && (
-            <TextField multiline label="送信されるメッセージ" value={action.text} onChange={e => setActionProp("text", e.target.value)} inputProps={{ maxLength: 300 }} required />
+            <TextField multiline label="送信されるメッセージ" value={action.text} onChange={e => setActionProp("text", e.target.value)} slotProps={{ htmlInput: { maxLength: 300 } }} required />
           )}
           {action.type === "uri" && (
             <TextField
               label="URI"
               value={action.uri}
               onChange={e => setActionProp("uri", e.target.value)}
-              inputProps={{ maxLength: 1000, pattern: "^(https?|tel):" }}
+              slotProps={{ htmlInput: { maxLength: 1000, pattern: "^(https?|tel):" } }}
               required
               error={!/^(https?|tel):/.test(action.uri)}
               helperText="http(s)://, tel: で始まるURI" />
           )}
           {action.type === "datetimepicker" && (
-            <LocalizationProvider dateAdapter={AdapterDayjs} locale={jaLocale}>
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ja">
               <FormControl sx={{ width: "100%" }} required>
                 <InputLabel>ダイアログの種類</InputLabel>
                 <Select
@@ -158,32 +157,29 @@ export default function TapAreaActionDialog(
                   };
                   switch (action.mode) {
                     case "datetime": {
-                      const mask ="____/__/__ __:__";
                       return <>
-                        <DateTimePicker {...createPickerProps("initial")} mask={mask}/>
+                        <DateTimePicker {...createPickerProps("initial")}/>
                         <Stack direction="row" spacing={1}>
-                          <DateTimePicker { ...createPickerProps("min")} mask={mask} />
-                          <DateTimePicker {...createPickerProps("max")} mask={mask}/>
+                          <DateTimePicker { ...createPickerProps("min")}  />
+                          <DateTimePicker {...createPickerProps("max")}/>
                         </Stack>
                       </>;
                     }
                     case "date": {
-                      const mask = "____/__/__";
                       return <>
-                        <DatePicker {...createPickerProps("initial")} mask={mask}/>
+                        <DatePicker {...createPickerProps("initial")} />
                         <Stack direction="row" spacing={1}>
-                          <DatePicker {...createPickerProps("min")} mask={mask} />
-                          <DatePicker {...createPickerProps("max")} mask={mask} />
+                          <DatePicker {...createPickerProps("min")}  />
+                          <DatePicker {...createPickerProps("max")} />
                         </Stack>
                       </>;
                     }
                     case "time": {
-                      const mask = "__:__";
                       return <>
-                        <TimePicker {...createPickerProps("initial")} mask={mask}/>
+                        <TimePicker {...createPickerProps("initial")}/>
                         <Stack direction="row" spacing={1}>
-                          <TimePicker {...createPickerProps("min")} mask={mask}/>
-                          <TimePicker {...createPickerProps("max")} mask={mask}/>
+                          <TimePicker {...createPickerProps("min")}/>
+                          <TimePicker {...createPickerProps("max")} />
                         </Stack>
                       </>;
                     }
@@ -215,7 +211,7 @@ export default function TapAreaActionDialog(
               delete newAreas[editingAreaIndex].action[key];
             }
           });
-          setAreas(newAreas);
+          setAreas(newAreas as any);
           setIsDialogOpen(false);
         }} disabled={
           action.type === "" ||

@@ -26,11 +26,11 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as zip from "@zip.js/zip.js";
 
-import AllDataExportDialog from "components/index/dialogs/AllDataExportDialog";
-import { PageLoadingStateContext } from "contexts/PageLoadingStateContext";
-import botAccountDatabase from "databases/BotAccount";
-import richMenuDatabase from "databases/RichMenu";
-import { ThemeColorContext } from "pages/_app";
+import AllDataExportDialog from "@/components/index/dialogs/AllDataExportDialog";
+import { PageLoadingStateContext } from "@/contexts/PageLoadingStateContext";
+import botAccountDatabase from "@/databases/BotAccount";
+import richMenuDatabase from "@/databases/RichMenu";
+import { ThemeColorContext } from "@/pages/_app";
 
 export default function MainLayout({
   children,
@@ -40,13 +40,13 @@ export default function MainLayout({
   onMenuButtonClick?: (event: React.MouseEvent) => void}
 ) {
   const theme = useTheme();
-  const settingsButtonRef = useRef();
+  const settingsButtonRef = useRef<HTMLButtonElement>(null);
   const [isSettingsPopoverOpen, setIsSettingsPopoverOpen] = useState(false);
   const [isAllDataExportDialogOpen, setIsAllDataExportDialogOpen] = useState(false);
   const { uiMode, setUIMode, editorMode, setEditorMode } = useContext(ThemeColorContext);
   const { isPageLoading, setIsPageLoading } = useContext(PageLoadingStateContext);
   return <>
-    <Box height="100vh">
+    <Box sx={{ height: "100vh" }}>
       <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
         <Toolbar variant="dense">
           <IconButton
@@ -60,8 +60,8 @@ export default function MainLayout({
             <MenuIcon />
           </IconButton>
           <Container maxWidth="xl">
-            <Box display="flex" flexDirection="row">
-              <Box display="flex" flexDirection="row" flexGrow={1} alignItems="center">
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <Box sx={{ display: "flex", flexDirection: "row", flexGrow: 1, alignItems: "center" }}>
                 <Typography variant="h6" >
                   リッチメニューエディタ
                 </Typography>
@@ -127,9 +127,9 @@ export default function MainLayout({
                               if (!file) return;
                               setIsPageLoading(true);
                               const blobReader = new zip.ZipReader(new zip.BlobReader(file));
-                              const entries = await blobReader.getEntries();
-                              const botAccountBlob = await entries.find(entry => entry.filename === "bot-account.json").getData(new zip.BlobWriter());
-                              const richMenuBlob = await entries.find(entry => entry.filename === "richmenu.json").getData(new zip.BlobWriter());
+                              const entries = await blobReader.getEntries() as zip.FileEntry[];
+                              const botAccountBlob = await entries.find(entry => entry.filename === "bot-account.json")?.getData(new zip.BlobWriter());
+                              const richMenuBlob = await entries.find(entry => entry.filename === "richmenu.json")?.getData(new zip.BlobWriter());
                               const { importInto } = await import("dexie-export-import");
                               await importInto(botAccountDatabase, botAccountBlob, { overwriteValues: true });
                               await importInto(richMenuDatabase, richMenuBlob, { overwriteValues: true });
@@ -153,7 +153,7 @@ export default function MainLayout({
           </Container>
         </Toolbar>
       </AppBar>
-      <Box sx={{ height: "calc(100vh - 48px)" }}>
+      <Box sx={{ height: "calc(100vh - 48px)", width: "100%" }}>
         <Toolbar variant="dense" />
         {children}
       </Box>

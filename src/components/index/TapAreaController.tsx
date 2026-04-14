@@ -1,8 +1,10 @@
+"use client";
+
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 import Draggable from "react-draggable";
 
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
 
 import type { DraggableEventHandler } from "react-draggable";
 
@@ -19,8 +21,13 @@ export default function TapAreaController(
   const [diffColor, setDiffColor] = useState(["black", "black", "black", "black"]);
   const [viewBounds, setViewBounds] = useState([0, 0, viewWidth, 128]);
   const viewHeight = useMemo(() => menuImage.image.height * (viewWidth / menuImage.image.width), [menuImage, viewWidth]);
-  const canvas = useRef<HTMLCanvasElement>();
-  const diffColorCalculator = useRef<Worker>();
+  const canvas = useRef<HTMLCanvasElement>(null);
+  const diffColorCalculator = useRef<Worker>(null);
+  const draggableRef1 = useRef<HTMLDivElement>(null);
+  const draggableRef2 = useRef<Element>(null);
+  const draggableRef3 = useRef<Element>(null);
+  const draggableRef4 = useRef<Element>(null);
+  const draggableRef5 = useRef<Element>(null);
   const adjustAndSetBounds = (_rect: number[]) => {
     const newBounds = _rect.map(v => Math.round(v * ((menuImage.image.width || viewWidth) / viewWidth)));
     if (newBounds[2] > menuImage.image.width - newBounds[0]) newBounds[2] = menuImage.image.width - newBounds[0];
@@ -155,14 +162,17 @@ export default function TapAreaController(
               top: 0,
               right: viewWidth - viewBounds[2],
               bottom: viewHeight - viewBounds[3]
-            }}>
+            }}
+            nodeRef={draggableRef1}>
             <div style={{
               position: "absolute",
               width: `${viewBounds[2]}px`,
               height: `${viewBounds[3]}px`,
               cursor: "move",
               boxSizing: "border-box"
-            }}></div>
+            }}
+            ref={draggableRef1}
+              ></div>
           </Draggable>
           <Draggable
             bounds={{
@@ -179,11 +189,12 @@ export default function TapAreaController(
               x: 0,
               y: 0
             }}
-            onDrag={handleDragNW}>
+            onDrag={handleDragNW}
+            nodeRef={draggableRef2 as React.RefObject<HTMLDivElement>}>
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 16 16" style={{
               display: "block",
               cursor: "nw-resize"
-            }}>
+            }} ref={draggableRef2 as React.RefObject<SVGSVGElement>}>
               <polygon points="0,0 16,0 16,3 3,3 3,16 0,16" fill={diffColor[0]} />
             </svg>
           </Draggable>
@@ -202,11 +213,12 @@ export default function TapAreaController(
               x: -16,
               y: -16
             }}
-            onDrag={handleDragNE}>
+            onDrag={handleDragNE}
+             nodeRef={draggableRef3 as React.RefObject<HTMLDivElement>}>
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 16 16" style={{
               display: "block",
               cursor: "ne-resize"
-            }}>
+            }} ref={draggableRef3 as React.RefObject<SVGSVGElement>}>
               <polygon points="0,0 16,0 16,16 13,16 13,3 0,3" fill={diffColor[1]} />
             </svg>
           </Draggable>
@@ -225,11 +237,14 @@ export default function TapAreaController(
               x: 0,
               y: -48
             }}
-            onDrag={handleDragSW}>
+            onDrag={handleDragSW}
+            nodeRef={draggableRef4 as React.RefObject<HTMLDivElement>}>
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 16 16" style={{
               display: "block",
               cursor: "sw-resize"
-            }}>
+            }}
+            ref={draggableRef4 as React.RefObject<SVGSVGElement>}
+            >
               <polygon points="0,0 3,0 3,13 16,13 16,16 0,16" fill={diffColor[2]} />
             </svg>
           </Draggable>
@@ -248,11 +263,13 @@ export default function TapAreaController(
               x: -16,
               y: -64
             }}
-            onDrag={handleDragSE}>
+            onDrag={handleDragSE}
+             nodeRef={draggableRef5 as React.RefObject<HTMLDivElement>}>
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 16 16" style={{
               display: "block",
               cursor: "se-resize"
-            }}>
+            }}
+            ref={draggableRef5 as React.RefObject<SVGSVGElement>}>
               <polygon points="13,0 16,0 16,16 0,16 0,13 13,13" fill={diffColor[3]} />
             </svg>
           </Draggable>

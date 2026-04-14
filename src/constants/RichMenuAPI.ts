@@ -1,8 +1,6 @@
-import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
-import type { AxiosError } from "axios";
-import type { EditingRichMenuContextType } from "types/RichMenu";
+import type { EditingRichMenuContextType } from "@/types/RichMenu";
 
 
 const errorMessages = {
@@ -59,16 +57,26 @@ export const apiList = new APIList([
       { menu, menuImage, setters: { changeRichMenuId } }: EditingRichMenuContextType
     ): Promise<APIResponse[]> => {
       const responses: APIResponse[] = [];
-      const createRichMenuResponse = await axios.post("/api/line?target=api.line.me/v2/bot/richmenu", menu, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
+      const createRichMenuResponse = await fetch("/api/line?target=api.line.me/v2/bot/richmenu", {
+        method: "POST",
+        headers: { ...authHeader(channelAccessToken).headers, "Content-Type": "application/json" },
+        body: JSON.stringify(menu)
+      }).then(async res => ({ data: await res.json(), status: res.status })).catch((response: any) => {
+        return response;
+      });
       responses.push({ label: "リッチメニュー作成API", endpoint: "https://api.line.me/v2/bot/richmenu", status: createRichMenuResponse.status, result: JSON.stringify(createRichMenuResponse.data) });
       if (createRichMenuResponse.data.richMenuId) {
         changeRichMenuId(createRichMenuResponse.data.richMenuId);
         const contentType = { JPEG: "image/jpeg", PNG: "image/png" }[menuImage.fileType];
-        const uploadRichMenuImageResponse = await axios.post(
+        const uploadRichMenuImageResponse = await fetch(
           `/api/line?target=api-data.line.me/v2/bot/richmenu/${createRichMenuResponse.data.richMenuId}/content`,
-          toBlob(menuImage.image.src, contentType),
-          { headers: { ...authHeader(channelAccessToken).headers, "Content-Type": contentType } }
-        ).catch(({ response }: AxiosError<unknown>) => response);
+          {
+            method: "POST",
+            headers: { ...authHeader(channelAccessToken).headers, "Content-Type": contentType },
+            body: toBlob(menuImage.image.src, contentType)
+          }
+        ).then(async res => ({ data: await res.json(), status: res.status }))
+        .catch(({ response }: any) => response);
         responses.push({ label: "画像アップロードAPI", endpoint: `https://api-data.line.me/v2/bot/richmenu/${createRichMenuResponse.data.richMenuId}/content`, status: uploadRichMenuImageResponse.status, result: JSON.stringify(uploadRichMenuImageResponse.data) });
       }
       return responses;
@@ -82,7 +90,10 @@ export const apiList = new APIList([
     validateParams: ({ richMenuId }: { richMenuId: string }) => (richMenuId.startsWith("richmenu-") ? { isSucceeded: true, messages: [] } : { isSucceeded: false, messages: [errorMessages.NEED_UPLOADING] }),
     callAPI: async (channelAccessToken, { richMenuId }: { richMenuId: string }) => {
       const responses: APIResponse[] = [];
-      const setRichMenuAsDefaultResponse = await axios.post(`/api/line?target=api.line.me/v2/bot/user/all/richmenu/${richMenuId}`, null, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
+      const setRichMenuAsDefaultResponse = await fetch(`/api/line?target=api.line.me/v2/bot/user/all/richmenu/${richMenuId}`, {
+        method: "POST",
+        headers: authHeader(channelAccessToken).headers
+      }).then(async res => ({ data: await res.json(), status: res.status })).catch(({ response }: any) => response);
       responses.push({ label: "リッチメニュー設定API", endpoint: `https://api.line.me/v2/bot/user/all/richmenu/${richMenuId}`, status: setRichMenuAsDefaultResponse.status, result: JSON.stringify(setRichMenuAsDefaultResponse.data) });
       return responses;
     }
@@ -95,7 +106,10 @@ export const apiList = new APIList([
     validateParams: () => ({ isSucceeded: true, messages: [] }),
     callAPI: async (channelAccessToken) => {
       const responses: APIResponse[] = [];
-      const unsetRichMenuAsDefaultResponse = await axios.delete(`/api/line?target=api.line.me/v2/bot/user/all/richmenu`, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
+      const unsetRichMenuAsDefaultResponse = await fetch(`/api/line?target=api.line.me/v2/bot/user/all/richmenu`, {
+        method: "DELETE",
+        headers: authHeader(channelAccessToken).headers
+      }).then(async res => ({ data: await res.json(), status: res.status })).catch(({ response }: any) => response);
       responses.push({ label: "リッチメニュー設定API", endpoint: `https://api.line.me/v2/bot/user/all/richmenu`, status: unsetRichMenuAsDefaultResponse.status, result: JSON.stringify(unsetRichMenuAsDefaultResponse.data) });
       return responses;
     }
@@ -120,7 +134,11 @@ export const apiList = new APIList([
     },
     callAPI: async (channelAccessToken, { richMenuId, userIds }: { richMenuId: string, userIds: string }) => {
       const responses: APIResponse[] = [];
-      const linkRichMenuToUserResponse = await axios.post(`/api/line?target=api.line.me/v2/bot/richmenu/bulk/link`, { richMenuId, userIds: userIds.split("\n") }, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
+      const linkRichMenuToUserResponse = await fetch(`/api/line?target=api.line.me/v2/bot/richmenu/bulk/link`, {
+        method: "POST",
+        headers: { ...authHeader(channelAccessToken).headers, "Content-Type": "application/json" },
+        body: JSON.stringify({ richMenuId, userIds: userIds.split("\n") })
+      }).then(async res => ({ data: await res.json(), status: res.status })).catch(({ response }: any) => response);
       responses.push({ label: "リッチメニューリンクAPI", endpoint: "https://api.line.me/v2/bot/richmenu/bulk/link", status: linkRichMenuToUserResponse.status, result: JSON.stringify(linkRichMenuToUserResponse.data) });
       return responses;
     }
@@ -141,7 +159,11 @@ export const apiList = new APIList([
     },
     callAPI: async (channelAccessToken, { userIds }: { userIds: string }) => {
       const responses: APIResponse[] = [];
-      const unlinkRichMenuToUserResponse = await axios.post(`/api/line?target=api.line.me/v2/bot/richmenu/bulk/unlink`, { userIds: userIds.split("\n") }, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
+      const unlinkRichMenuToUserResponse = await fetch(`/api/line?target=api.line.me/v2/bot/richmenu/bulk/unlink`, {
+        method: "POST",
+        headers: { ...authHeader(channelAccessToken).headers, "Content-Type": "application/json" },
+        body: JSON.stringify({ userIds: userIds.split("\n") })
+      }).then(async res => ({ data: await res.json(), status: res.status })).catch(({ response }: any) => response);
       responses.push({ label: "リッチメニューリンクAPI", endpoint: "https://api.line.me/v2/bot/richmenu/bulk/unlink", status: unlinkRichMenuToUserResponse.status, result: JSON.stringify(unlinkRichMenuToUserResponse.data) });
       return responses;
     }
@@ -166,7 +188,11 @@ export const apiList = new APIList([
     },
     callAPI: async (channelAccessToken, { richMenuId, alias }: { richMenuId: string, alias: string }) => {
       const responses: APIResponse[] = [];
-      const addRichMenuAliasResponse = await axios.post(`/api/line?target=api.line.me/v2/bot/richmenu/alias`, { richMenuId, richMenuAliasId: alias }, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
+      const addRichMenuAliasResponse = await fetch(`/api/line?target=api.line.me/v2/bot/richmenu/alias`, {
+        method: "POST",
+        headers: { ...authHeader(channelAccessToken).headers, "Content-Type": "application/json" },
+        body: JSON.stringify({ richMenuId, richMenuAliasId: alias })
+      }).then(async res => ({ data: await res.json(), status: res.status })).catch(({ response }: any) => response);
       responses.push({ label: "リッチメニューエイリアス作成API", endpoint: "https://api.line.me/v2/bot/richmenu/alias", status: addRichMenuAliasResponse.status, result: JSON.stringify(addRichMenuAliasResponse.data) });
       return responses;
     }
@@ -187,7 +213,10 @@ export const apiList = new APIList([
     },
     callAPI: async (channelAccessToken, { alias }: { alias: string }) => {
       const responses: APIResponse[] = [];
-      const deleteRichMenuAliasResponse = await axios.delete(`/api/line?target=api.line.me/v2/bot/richmenu/alias/${alias}`, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
+      const deleteRichMenuAliasResponse = await fetch(`/api/line?target=api.line.me/v2/bot/richmenu/alias/${alias}`, {
+        method: "DELETE",
+        headers: authHeader(channelAccessToken).headers
+      }).then(async res => ({ data: await res.json(), status: res.status })).catch(({ response }: any) => response);
       responses.push({ label: "リッチメニューエイリアス削除API", endpoint: `https://api.line.me/v2/bot/richmenu/alias/${alias}`, status: deleteRichMenuAliasResponse.status, result: JSON.stringify(deleteRichMenuAliasResponse.data) });
       return responses;
     }
@@ -204,7 +233,10 @@ export const apiList = new APIList([
     ): Promise<APIResponse[]> => {
       const responses: APIResponse[] = [];
       if (richMenuId.startsWith("richmenu-")) {
-        const deleteRichMenuResponse = await axios.delete(`/api/line?target=api.line.me/v2/bot/richmenu/${richMenuId}`, authHeader(channelAccessToken)).catch(({ response }: AxiosError<unknown>) => response);
+        const deleteRichMenuResponse = await fetch(`/api/line?target=api.line.me/v2/bot/richmenu/${richMenuId}`, {
+          method: "DELETE",
+          headers: authHeader(channelAccessToken).headers
+        }).then(async res => ({ data: await res.json(), status: res.status })).catch(({ response }: any) => response);
         responses.push({ label: "リッチメニュー削除API", endpoint: "https://api.line.me/v2/bot/richmenu", status: deleteRichMenuResponse.status, result: JSON.stringify(deleteRichMenuResponse.data) });
       }
       changeRichMenuId((deleteFromLocal || !richMenuId.startsWith("richmenu-")) ? "DELETED" : uuidv4());

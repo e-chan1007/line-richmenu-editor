@@ -12,10 +12,10 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { actionTypes } from "constants/RichMenuAction";
-import { BotAccountContext } from "contexts/BotAccountContext";
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import styles from "styles/LINEScreen.module.scss";
+import { actionTypes } from "@/constants/RichMenuAction";
+import { BotAccountContext } from "@/contexts/BotAccountContext";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
+import styles from "@/styles/LINEScreen.module.scss";
 
 export default function LINEScreen(
   { activeAreaIndex, setActiveAreaIndex }:
@@ -42,7 +42,7 @@ export default function LINEScreen(
     if (clickedArea) {
       setActiveAreaIndex(areas.indexOf(clickedArea));
       const newMessages = [...messages];
-      if (clickedArea.action.text || clickedArea.action.displayText) newMessages.push({ from: "user", text: clickedArea.action.text || clickedArea.action.displayText });
+      if ("text" in clickedArea.action) newMessages.push({ from: "user", text: clickedArea.action.text });
       if (clickedArea.action.label) {
         if (actionTypes[clickedArea.action.type]?.label) {
           newMessages.push({ from: "bot", text: `${clickedArea.action.label}(${actionTypes[clickedArea.action.type].label}アクション)` });
@@ -84,7 +84,7 @@ export default function LINEScreen(
   return (
     <div className={theme.palette.mode === "dark" ? [styles.line, styles["is-dark"]].join(" ") : styles.line}>
       <Toolbar variant="dense" disableGutters sx={{ px: 2 }}>
-        <Stack direction="row" spacing={2} sx={{ width: "100%" }} alignItems="center">
+        <Stack direction="row" spacing={2} sx={{ width: "100%", alignItems: "center" }}>
           <ArrowBackIosNewIcon />
           <Typography sx={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis" }}>{accounts.find(({ basicId }) => basicId === editingBotId)?.botName}</Typography>
           <Tooltip title="履歴を削除">

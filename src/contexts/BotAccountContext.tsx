@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-import botAccountDatabase from "databases/BotAccount";
+import botAccountDatabase from "@/databases/BotAccount";
 
 export type BotAccount = {
   basicId: string,

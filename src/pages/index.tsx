@@ -19,19 +19,19 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Head from "next/head";
 
-import APIControlCard from "components/index/cards/APIControlCard";
-import BasicSettingsCard from "components/index/cards/BasicSettingsCard";
-import ImageSelectCard from "components/index/cards/ImageSelectCard";
-import JSONEditorCard from "components/index/cards/JSONEditorCard";
-import TapAreaSettingsCard from "components/index/cards/TapAreaSettingsCard";
-import BotSettingsDialog from "components/index/dialogs/BotSettingsDialog";
-import LeftSideDrawer from "components/index/LeftSideDrawer";
-import LINEScreen from "components/index/LINEScreen";
-import Phone from "components/index/Phone";
-import { APIControllerContext } from "contexts/APIControllerContext";
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import { PageLoadingStateContext } from "contexts/PageLoadingStateContext";
-import MainLayout from "layouts/main";
+import APIControlCard from "@/components/index/cards/APIControlCard";
+import BasicSettingsCard from "@/components/index/cards/BasicSettingsCard";
+import ImageSelectCard from "@/components/index/cards/ImageSelectCard";
+import JSONEditorCard from "@/components/index/cards/JSONEditorCard";
+import TapAreaSettingsCard from "@/components/index/cards/TapAreaSettingsCard";
+import BotSettingsDialog from "@/components/index/dialogs/BotSettingsDialog";
+import LeftSideDrawer from "@/components/index/LeftSideDrawer";
+import LINEScreen from "@/components/index/LINEScreen";
+import Phone from "@/components/index/Phone";
+import { APIControllerContext } from "@/contexts/APIControllerContext";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
+import { PageLoadingStateContext } from "@/contexts/PageLoadingStateContext";
+import MainLayout from "@/layouts/main";
 
 export default function Index() {
   const theme = useTheme();
@@ -39,7 +39,7 @@ export default function Index() {
   const { richMenuId, isRichMenuIdReplaced } = useContext(EditingRichMenuContext);
   const { isPageLoading } = useContext(PageLoadingStateContext);
   const [tabIndex, setTabIndex] = useState("0");
-  const [activeAreaIndex, setActiveAreaIndex] = useState<number>(null);
+  const [activeAreaIndex, setActiveAreaIndex] = useState<number>(-1);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isImageWrong, setIsImageWrong] = useState(false);
   const [isBotSettingsDialogOpen, setIsBotSettingsDialogOpen] = useState(false);
@@ -54,7 +54,7 @@ export default function Index() {
       <Head>
         <title>リッチメニューエディタ</title>
       </Head>
-      <Box display="flex" sx={{ height: "100%" }}>
+      <Box sx={{ display: "flex", height: "100%" }}>
         <>
           <Drawer
             variant={useMediaQuery(theme.breakpoints.up("xl")) ? "permanent" : "temporary"}
@@ -70,8 +70,8 @@ export default function Index() {
             <LeftSideDrawer {...{ setIsBotSettingsDialogOpen }} />
           </Drawer>
           {richMenuId ? (
-            <Grid container padding="8px">
-              <Grid item xs={12} lg={8}>
+            <Grid container sx={{ padding: "8px", width: "100%" }}>
+              <Grid size={{xs: 12, lg: 8}}>
                 <TabContext value={tabIndex} >
                   <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 1 }}>
                     <TabList
@@ -101,7 +101,7 @@ export default function Index() {
                   </TabPanel>
                 </TabContext>
               </Grid>
-              <Grid item xs={12} lg={4} sx={{ display: "flex", justifyContent: "center", pr: 2 }} >
+              <Grid size={{xs: 12, lg: 4}} sx={{ display: "flex", justifyContent: "center", pr: 2 }} >
                 <Box sx={{ width: "80%" }}>
                   <Phone>
                     <LINEScreen {...{ activeAreaIndex, setActiveAreaIndex }} />

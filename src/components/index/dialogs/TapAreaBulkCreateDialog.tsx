@@ -13,10 +13,10 @@ import InputLabel from "@mui/material/InputLabel";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
-import styles from "styles/TapAreaBulkCreateDialog.module.scss";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
+import styles from "@/styles/TapAreaBulkCreateDialog.module.scss";
 
-import type { Area } from "types/RichMenu";
+import type { Area } from "@/types/RichMenu";
 
 export default function TapAreaBulkCreateDialog(
   { isDialogOpen, setIsDialogOpen }:
@@ -75,10 +75,10 @@ export default function TapAreaBulkCreateDialog(
     [horizontalSplitSettings, verticalSplitSettings]
   );
 
-  const menuImageRef = useRef<HTMLImageElement>();
+  const menuImageRef = useRef<HTMLImageElement>(null);
 
   return (
-    <Dialog onClose={() => setIsDialogOpen(false)} onBackdropClick={() => {
+    <Dialog onClose={() => {
       setIsDialogOpen(false);
       setTimeout(() => {
         setHorizontalSplitSettingsBase("1");
@@ -89,7 +89,7 @@ export default function TapAreaBulkCreateDialog(
       <DialogContent sx={{ width: "688px" }}>
         <Typography variant="subtitle1">画像サイズ: {menuImage?.image.width}px × {menuImage?.image.height}px</Typography>
         <p>分割数を整数(最大20)で指定することも、比(2:1など)で指定することもできます。</p>
-        <Stack direction="row" alignItems="flex-end" spacing={2} sx={{ mb: 1 }}>
+        <Stack direction="row" spacing={2} sx={{ alignItems: "flex-end", mb: 1 }}>
           <FormControl sx={{ flex: 1 }}>
             <InputLabel>横の分割設定</InputLabel>
             <Input

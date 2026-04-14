@@ -17,11 +17,12 @@ import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
 
 import TapAreaController from "../TapAreaController";
 
 import type { InputProps } from "@mui/material/Input";
+import { Area } from "@/types/RichMenu";
 
 type AreaRangeError = {
   type: "BELOW" | "ABOVE" | "EMPTY",
@@ -44,14 +45,14 @@ export default function TapAreaBoundsDialog(
   const detectAreaRangeError = () => {
     const newBoundsRangeError = [...boundsRangeError];
     const numBounds = bounds as number[];
-    bounds.forEach((value, index) => {
+    numBounds.forEach((value, index) => {
       if (index >= 4) return;
       const minValue = [0, 0, 0, 0] as number[];
       const maxValue = [
         menuImage?.image.width ?? 0,
         menuImage?.image.height ?? 0,
-        menuImage?.image.width - numBounds[0] ?? 0,
-        menuImage?.image.height - numBounds[1] ?? 0
+        menuImage?.image.width - numBounds[0],
+        menuImage?.image.height - numBounds[1]
       ] as number[];
       if (maxValue[index] < value) {
         newBoundsRangeError[index] = {
@@ -99,7 +100,7 @@ export default function TapAreaBoundsDialog(
     }
   }, [areas, editingAreaIndex, isDialogOpen]);
   return (
-    <Dialog onClose={() => setIsDialogOpen(false)} onBackdropClick={() => {
+    <Dialog onClose={() => {
       setIsDialogOpen(false);
       setTimeout(() => {
         setBounds([0, 0, 0, 0, false]);
@@ -108,7 +109,7 @@ export default function TapAreaBoundsDialog(
       <DialogTitle>タップ領域を{editingAreaIndex < areas.length ? "編集" : "追加"}</DialogTitle>
       <DialogContent sx={{ width: "688px" }}>
         <Typography variant="subtitle1">画像サイズ: {menuImage?.image.width}px × {menuImage?.image.height}px</Typography>
-        <Stack direction="row" alignItems="flex-end" spacing={2} sx={{ mb: 1 }}>
+        <Stack direction="row" spacing={2} sx={{ alignItems: "flex-end", mb: 1 }}>
           <FormControl sx={{ flex: 1 }} error={Boolean(boundsRangeError[0])}>
             <InputLabel>{boundsPosAlias(0)}</InputLabel>
             <Input
@@ -202,7 +203,7 @@ export default function TapAreaBoundsDialog(
           }, 100);
         }} variant="text">キャンセル</Button>
         <Button onClick={() => {
-          const newAreas = [...areas];
+          const newAreas = [...areas] as Area[];
           if (!newAreas[editingAreaIndex]) {
             newAreas[editingAreaIndex] = {
               bounds: {
@@ -215,7 +216,7 @@ export default function TapAreaBoundsDialog(
                 type: "",
                 data: ""
               }
-            };
+            } as Area;
           }
           const newBounds = newAreas[editingAreaIndex].bounds;
           ([newBounds.x, newBounds.y, newBounds.width, newBounds.height] = bounds.slice(0, 4) as number[]);

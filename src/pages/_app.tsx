@@ -6,11 +6,11 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { APIControllerContextProvider } from "contexts/APIControllerContext";
-import { BotAccountContextProvider } from "contexts/BotAccountContext";
-import { EditingRichMenuContextProvider } from "contexts/EditingRichMenuContext";
-import { JSONEditorContextProvider } from "contexts/JSONEditorContext";
-import { PageLoadingStateContextProvider } from "contexts/PageLoadingStateContext";
+import { APIControllerContextProvider } from "@/contexts/APIControllerContext";
+import { BotAccountContextProvider } from "@/contexts/BotAccountContext";
+import { EditingRichMenuContextProvider } from "@/contexts/EditingRichMenuContext";
+import { JSONEditorContextProvider } from "@/contexts/JSONEditorContext";
+import { PageLoadingStateContextProvider } from "@/contexts/PageLoadingStateContext";
 
 import type { AppProps } from "next/app";
 

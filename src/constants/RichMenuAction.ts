@@ -1,4 +1,4 @@
-import type { ActionPropKey, ActionType, PostbackAction } from "types/RichMenu";
+import type { ActionPropKey, ActionType, PostbackAction } from "@/types/RichMenu";
 
 export const actionProp: {
   [key in ActionPropKey]: { label: string, description: string }
@@ -89,7 +89,7 @@ export const actionTypes: {
   }
 };
 
-export const postbackInputOptions: Record<PostbackAction["inputOption"], string> = {
+export const postbackInputOptions: Record<Exclude<PostbackAction["inputOption"], undefined>, string> = {
   closeRichMenu: "リッチメニューを閉じる",
   openRichMenu: "リッチメニューを開く",
   openKeyboard: "キーボードを開く",

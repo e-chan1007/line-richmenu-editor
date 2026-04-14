@@ -7,7 +7,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
 
 import TapAreaController from "../TapAreaController";
 
@@ -55,7 +55,7 @@ export default function TapAreaDeleteDialog(
         <Button onClick={() => {
           const newAreas = [...areas];
           newAreas.splice(editingAreaIndex, 1);
-          setAreas(newAreas);
+          setAreas(newAreas as any);
           setIsDialogOpen(false);
           setActiveAreaIndex(null);
         }} color="error" variant="text">削除</Button>

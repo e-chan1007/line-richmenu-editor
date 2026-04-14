@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import LoadingButton from "@mui/lab/LoadingButton";
+import Button from "@mui/material/Button";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -11,13 +11,13 @@ import Typography from "@mui/material/Typography";
 import Prism from "prismjs";
 import "prismjs/plugins/custom-class/prism-custom-class.min.js";
 
-import { APIControllerContext } from "contexts/APIControllerContext";
-import { BotAccountContext } from "contexts/BotAccountContext";
-import { ThemeColorContext } from "pages/_app";
-import prismVSStyles from "styles/prism-vs.module.scss";
-import prismVSDarkStyles from "styles/prism-vsc-dark-plus.module.scss";
+import { APIControllerContext } from "@/contexts/APIControllerContext";
+import { BotAccountContext } from "@/contexts/BotAccountContext";
+import { ThemeColorContext } from "@/pages/_app";
+import prismVSStyles from "@/styles/prism-vs.module.scss";
+import prismVSDarkStyles from "@/styles/prism-vsc-dark-plus.module.scss";
 
-import type { APIResponse, APISpecification } from "constants/RichMenuAPI";
+import type { APIResponse, APISpecification } from "@/constants/RichMenuAPI";
 
 
 export default function APIController(
@@ -105,7 +105,7 @@ export default function APIController(
             </ul>
           </Alert>
         )}
-        <LoadingButton
+        <Button
           onClick={() => {
             setIsAPICalling(true);
             apiSpec.callAPI(
@@ -118,7 +118,7 @@ export default function APIController(
           loading={isAPICalling}
         >
           実行する
-        </LoadingButton>
+        </Button>
         {results.length > 0 && (
           <div className={prismTheme.prism}>
             <pre><code className="language-json" dangerouslySetInnerHTML={{ __html: prismHTML }}></code></pre>

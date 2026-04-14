@@ -3,13 +3,13 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 import rfdc from "rfdc/default";
 import { v4 as uuidv4 } from "uuid";
 
-import botAccountDatabase from "databases/BotAccount";
-import richMenuDatabase from "databases/RichMenu";
+import botAccountDatabase from "@/databases/BotAccount";
+import richMenuDatabase from "@/databases/RichMenu";
 
 import { BotAccountContext } from "./BotAccountContext";
 import { PageLoadingStateContext } from "./PageLoadingStateContext";
 
-import type { EditingRichMenuContextType, StoredRichMenu } from "types/RichMenu";
+import type { EditingRichMenuContextType, StoredRichMenu } from "@/types/RichMenu";
 
 export const EditingRichMenuContext = createContext<EditingRichMenuContextType>({
   richMenuId: null,
@@ -156,7 +156,6 @@ export function EditingRichMenuContextProvider({ children }: { children: React.R
             1,
             newContext.richMenuId);
             await botAccountDatabase.accounts.update(oldBotAccount.basicId, {
-              richMenuId: newContext.richMenuId,
               richMenus: oldBotAccount.richMenus
             });
             setAccounts(await botAccountDatabase.accounts.toArray());

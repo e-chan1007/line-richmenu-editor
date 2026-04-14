@@ -7,9 +7,9 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
 
-import { apiList } from "constants/RichMenuAPI";
-import { APIControllerContext } from "contexts/APIControllerContext";
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
+import { apiList } from "@/constants/RichMenuAPI";
+import { APIControllerContext } from "@/contexts/APIControllerContext";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
 
 import APIController from "../APIController";
 

@@ -1,12 +1,3 @@
 {
-  "typescript.tsdk": ".yarn/sdks/typescript/lib",
-  "search.exclude": {
-    "**/.yarn": true,
-    "**/.pnp.*": true
-  },
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": true
-  },
-  "eslint.nodePath": ".yarn/sdks",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "js/ts.tsdk.path": ".yarn/sdks/typescript/lib"
 }

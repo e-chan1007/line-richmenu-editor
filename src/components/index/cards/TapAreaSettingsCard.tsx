@@ -18,14 +18,15 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { actionTypes } from "constants/RichMenuAction";
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
+import { actionTypes } from "@/constants/RichMenuAction";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
 
 import TapAreaActionDialog from "../dialogs/TapAreaActionDialog";
 import TapAreaBoundsDialog from "../dialogs/TapAreaBoundsDialog";
 import TapAreaBulkCreateDialog from "../dialogs/TapAreaBulkCreateDialog";
 import TapAreaBulkDeleteDialog from "../dialogs/TapAreaBulkDeleteDialog";
 import TapAreaDeleteDialog from "../dialogs/TapAreaDeleteDialog";
+import { Area } from "@/types/RichMenu";
 
 export default function TapAreaSettingsPanel(
   { activeAreaIndex, setActiveAreaIndex }:
@@ -49,7 +50,7 @@ export default function TapAreaSettingsPanel(
       <CardContent>
         <Typography variant="h5" component="div">
           タップ領域
-          <Box display="inline-flex" columnGap={2} mt={-1} ml={2}>
+          <Box sx={{ display: "inline-flex", columnGap: 2, mt: -1, ml: 2 }}>
             {(() => {
               const addAreaButtons = <>
                 <Tooltip
@@ -100,7 +101,7 @@ export default function TapAreaSettingsPanel(
         <List sx={{ pb: 0 }}>
           {
             areas.map((area, index) => {
-              const areaActionButtons = index => (
+              const areaActionButtons = () => (
                 <Stack direction="row" spacing={2}>
                   <Button onClick={e => {
                     e.stopPropagation();
@@ -124,9 +125,9 @@ export default function TapAreaSettingsPanel(
                     onClick={e => {
                       e.stopPropagation();
                       if (e.shiftKey) {
-                        const newAreas = [...areas];
+                        const newAreas = [...areas] as Area[];
                         newAreas.splice(index, 1);
-                        setActiveAreaIndex(null);
+                        setActiveAreaIndex(-1);
                         setAreas(newAreas);
                       } else {
                         setActiveAreaIndex(index);
@@ -142,24 +143,26 @@ export default function TapAreaSettingsPanel(
                 <React.Fragment key={index}>
                   <ListItemButton dense
                     selected={activeAreaIndex === index}
-                    onClick={() => activeAreaIndex === index ? setActiveAreaIndex(null) : setActiveAreaIndex(index)}
+                    onClick={() => activeAreaIndex === index ? setActiveAreaIndex(-1) : setActiveAreaIndex(index)}
                   >
                     <ListItem
-                      secondaryAction={!isAreaActionButtonWrapped && areaActionButtons(index)}
+                      secondaryAction={!isAreaActionButtonWrapped && areaActionButtons()}
                     >
                       <ListItemText
                         primary={(() => {
-                          if (area.action.type === "") {
-                            if (area.action.label) return `${area.action.label} (アクション未設定)`;
+                          const action = area?.action;
+                          const actionType = area?.action?.type;
+                          if (!action || !actionType) {
+                            if (action?.label) return `${action.label} (アクション未設定)`;
                             return "アクション未設定";
                           }
-                          if (area.action.label) return `${area.action.label} (${actionTypes[area.action.type].label}アクション)`;
-                          return `${actionTypes[area.action.type].label}アクション`;
+                          if (action?.label) return `${action.label} (${actionTypes[actionType].label}アクション)`;
+                          return `${actionTypes[actionType]?.label || "不明"}アクション`;
                         })()}
-                        secondary={`X: ${area.bounds.x}px Y: ${area.bounds.y}px W: ${area.bounds.width}px H: ${area.bounds.height}px`} />
+                        secondary={`X: ${area.bounds?.x}px Y: ${area.bounds?.y}px W: ${area.bounds?.width}px H: ${area.bounds?.height}px`} />
                     </ListItem>
                   </ListItemButton>
-                  {isAreaActionButtonWrapped && <ListItem>{areaActionButtons(index)}</ListItem>}
+                  {isAreaActionButtonWrapped && <ListItem>{areaActionButtons()}</ListItem>}
                   <Divider />
                 </React.Fragment>
               );

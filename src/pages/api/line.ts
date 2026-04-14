@@ -1,6 +1,3 @@
-import axios from "axios";
-
-import type { AxiosError, AxiosRequestHeaders } from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -12,26 +9,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     Object
       .entries(req.headers)
       .filter(([key, value]) => ["content-type", "authorization"].includes(key))
-  ) as AxiosRequestHeaders;
+  );
 
   const buffers = [];
   for await (const chunk of req) {
     buffers.push(chunk);
   }
-  const body = Buffer.concat(buffers);
+  const body = ["GET", "HEAD"].includes(req.method) ? undefined : Buffer.concat(buffers);
 
-  const apiResult = await axios({
-    method: req.method,
-    url: `https://${req.query.target}`,
-    headers: filteredHeaders,
-    data: body,
-    timeout: 3000
-  }).catch((e: AxiosError) => e.response);
+  try {
+    const apiResult = await fetch(`https://${req.query.target}`, {
+      method: req.method,
+      headers: filteredHeaders as Record<string, string>,
+      body: body
+    });
 
-  Object.entries(apiResult.headers).forEach(([key, value]) => res.setHeader(key, value));
-  res.statusCode = apiResult.status || 500;
-  res.statusMessage = apiResult.statusText || "";
-  res.send(apiResult.data);
+    Object.entries(apiResult.headers).forEach(([key, value]) => res.setHeader(key, value as string));
+    res.statusCode = apiResult.status || 500;
+    res.statusMessage = apiResult.statusText || "";
+    const result = await apiResult.text();
+    res.setHeader("Content-Type", apiResult.headers.get("content-type") || "text/plain");
+    res.send(result);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message || "Unknown error" });
+    } else {
+      res.status(500).json({ error: "Unknown error" });
+    }
+  }
 }
 
 export const config = { api: { bodyParser: false } };

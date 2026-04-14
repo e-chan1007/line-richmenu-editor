@@ -19,6 +19,7 @@ export declare type PostbackAction = {
   fillInText?: string;
 };
 export type Action = (Exclude<ActionBase, PostbackActionBase> | ActionBase<PostbackAction> | { type: "" }) & {
+  type: ActionType | "";
   label?: string;
 };
 
@@ -27,7 +28,7 @@ export type Area = {
   action: Partial<Action>
 };
 
-export type RichMenu = Weaken<RichMenuBase, "areas"> & { areas?: Partial<Area>[] };
+export type RichMenu = Omit<RichMenuBase, "areas"> & { areas: Partial<Area>[] };
 
 export type EditingRichMenuContextType = {
   richMenuId: string | "DELETED",

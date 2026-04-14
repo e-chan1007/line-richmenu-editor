@@ -8,7 +8,7 @@ import PhotoSizeSelectLargeIcon from "@mui/icons-material/PhotoSizeSelectLarge";
 import Alert from "@mui/material/Alert";
 import { useTheme } from "@mui/material/styles";
 
-import { EditingRichMenuContext } from "contexts/EditingRichMenuContext";
+import { EditingRichMenuContext } from "@/contexts/EditingRichMenuContext";
 
 
 const LIMIT_FILE_SIZE = 1; // MB

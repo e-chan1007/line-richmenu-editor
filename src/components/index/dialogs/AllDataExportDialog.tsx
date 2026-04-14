@@ -8,8 +8,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import * as zip from "@zip.js/zip.js";
 
-import botAccountDatabase from "databases/BotAccount";
-import richMenuDatabase from "databases/RichMenu";
+import botAccountDatabase from "@/databases/BotAccount";
+import richMenuDatabase from "@/databases/RichMenu";
 
 export default function AllDataExportDialog(
   { isDialogOpen, setIsDialogOpen, handleMenuClose }:
